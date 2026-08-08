@@ -4,7 +4,6 @@ import { Experience } from '@/types';
 
 export const DEFAULT_EXPERIENCES: Experience[] = [
   {
-    _id: '1',
     company: 'Enterprise Product Studio',
     role: 'Senior UX Engineer & Frontend Architect',
     employmentType: 'Full-time',
@@ -27,7 +26,6 @@ export const DEFAULT_EXPERIENCES: Experience[] = [
     status: 'published',
   },
   {
-    _id: '2',
     company: 'Tech Innovators Inc.',
     role: 'Frontend Engineer & Interaction Specialist',
     employmentType: 'Full-time',
@@ -50,7 +48,6 @@ export const DEFAULT_EXPERIENCES: Experience[] = [
     status: 'published',
   },
   {
-    _id: '3',
     company: 'Digital Solutions Lab',
     role: 'UI/UX Designer & Web Developer',
     employmentType: 'Full-time',
@@ -73,35 +70,103 @@ export const DEFAULT_EXPERIENCES: Experience[] = [
   },
 ];
 
+function sanitizeExpDoc(doc: any): Experience {
+  return {
+    _id: doc._id.toString(),
+    company: doc.company,
+    role: doc.role,
+    employmentType: doc.employmentType,
+    location: doc.location,
+    startDate: doc.startDate,
+    endDate: doc.endDate,
+    current: doc.current,
+    summary: doc.summary,
+    responsibilities: doc.responsibilities || [],
+    achievements: doc.achievements || [],
+    technologies: doc.technologies || [],
+    order: doc.order,
+    status: doc.status,
+    createdAt: doc.createdAt ? new Date(doc.createdAt).toISOString() : undefined,
+    updatedAt: doc.updatedAt ? new Date(doc.updatedAt).toISOString() : undefined,
+  };
+}
+
+async function ensureSeedExperiences() {
+  const count = await ExperienceModel.countDocuments();
+  if (count === 0) {
+    await ExperienceModel.insertMany(DEFAULT_EXPERIENCES);
+  }
+}
+
 export async function getExperiences(): Promise<Experience[]> {
   try {
     const db = await connectToDatabase();
     if (!db) return DEFAULT_EXPERIENCES;
 
+    await ensureSeedExperiences();
+
     const docs = await ExperienceModel.find({ status: 'published' })
       .sort({ order: 1, startDate: -1 })
       .lean();
 
-    if (!docs || docs.length === 0) return DEFAULT_EXPERIENCES;
-
-    return docs.map((doc) => ({
-      _id: doc._id.toString(),
-      company: doc.company,
-      role: doc.role,
-      employmentType: doc.employmentType,
-      location: doc.location,
-      startDate: doc.startDate,
-      endDate: doc.endDate,
-      current: doc.current,
-      summary: doc.summary,
-      responsibilities: doc.responsibilities || [],
-      achievements: doc.achievements || [],
-      technologies: doc.technologies || [],
-      order: doc.order,
-      status: doc.status,
-    }));
+    return docs.map(sanitizeExpDoc);
   } catch (error) {
     console.error('Error fetching experiences:', error);
     return DEFAULT_EXPERIENCES;
   }
+}
+
+export async function getAllExperiencesForAdmin(): Promise<Experience[]> {
+  const db = await connectToDatabase();
+  if (!db) return DEFAULT_EXPERIENCES;
+
+  await ensureSeedExperiences();
+
+  const docs = await ExperienceModel.find().sort({ order: 1, startDate: -1 }).lean();
+  return docs.map(sanitizeExpDoc);
+}
+
+export async function getExperienceById(id: string): Promise<Experience | null> {
+  const db = await connectToDatabase();
+  if (!db) return null;
+
+  await ensureSeedExperiences();
+
+  const doc = await ExperienceModel.findById(id).lean();
+  if (!doc) return null;
+  return sanitizeExpDoc(doc);
+}
+
+export async function createExperience(data: Omit<Experience, '_id'>): Promise<{ success: boolean; experience?: Experience; error?: string }> {
+  const db = await connectToDatabase();
+  if (!db) return { success: false, error: 'Database connection unavailable' };
+
+  await ensureSeedExperiences();
+
+  const createdDoc = await ExperienceModel.create(data);
+  return { success: true, experience: sanitizeExpDoc(createdDoc.toObject()) };
+}
+
+export async function updateExperience(id: string, data: Partial<Experience>): Promise<{ success: boolean; experience?: Experience; error?: string }> {
+  const db = await connectToDatabase();
+  if (!db) return { success: false, error: 'Database connection unavailable' };
+
+  await ensureSeedExperiences();
+
+  const updatedDoc = await ExperienceModel.findByIdAndUpdate(id, { $set: data }, { new: true, runValidators: true }).lean();
+  if (!updatedDoc) return { success: false, error: 'Experience record not found' };
+
+  return { success: true, experience: sanitizeExpDoc(updatedDoc) };
+}
+
+export async function deleteExperience(id: string): Promise<{ success: boolean; error?: string }> {
+  const db = await connectToDatabase();
+  if (!db) return { success: false, error: 'Database connection unavailable' };
+
+  await ensureSeedExperiences();
+
+  const deleted = await ExperienceModel.findByIdAndDelete(id).lean();
+  if (!deleted) return { success: false, error: 'Experience record not found' };
+
+  return { success: true };
 }

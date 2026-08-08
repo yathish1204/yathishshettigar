@@ -3,60 +3,113 @@ import { SkillModel } from '@/models/Skill';
 import { Skill } from '@/types';
 
 export const DEFAULT_SKILLS: Skill[] = [
-  // UX / Product Design
-  { _id: '1', name: 'User Research & Personas', category: 'UX / Product Design', yearsOfExperience: 5, order: 1, status: 'published' },
-  { _id: '2', name: 'Information Architecture', category: 'UX / Product Design', yearsOfExperience: 5, order: 2, status: 'published' },
-  { _id: '3', name: 'Wireframing & Prototyping', category: 'UX / Product Design', yearsOfExperience: 6, order: 3, status: 'published' },
-  { _id: '4', name: 'Design Systems & Tokens', category: 'UX / Product Design', yearsOfExperience: 5, order: 4, status: 'published' },
-  { _id: '5', name: 'Figma & Design Tools', category: 'UX / Product Design', yearsOfExperience: 6, order: 5, status: 'published' },
-
-  // Frontend
-  { _id: '6', name: 'React 19 / 18', category: 'Frontend', yearsOfExperience: 6, order: 6, status: 'published' },
-  { _id: '7', name: 'Next.js (App Router)', category: 'Frontend', yearsOfExperience: 4, order: 7, status: 'published' },
-  { _id: '8', name: 'TypeScript (Strict)', category: 'Frontend', yearsOfExperience: 5, order: 8, status: 'published' },
-  { _id: '9', name: 'Tailwind CSS v4 / v3', category: 'Frontend', yearsOfExperience: 4, order: 9, status: 'published' },
-  { _id: '10', name: 'HTML5 & Semantic Structure', category: 'Frontend', yearsOfExperience: 7, order: 10, status: 'published' },
-  { _id: '11', name: 'Web Accessibility (WCAG 2.1 AA)', category: 'Frontend', yearsOfExperience: 5, order: 11, status: 'published' },
-
-  // Backend & Database
-  { _id: '12', name: 'Next.js Server Actions & API', category: 'Backend', yearsOfExperience: 4, order: 12, status: 'published' },
-  { _id: '13', name: 'MongoDB & Mongoose', category: 'Database', yearsOfExperience: 4, order: 13, status: 'published' },
-  { _id: '14', name: 'Zod Validation Schema', category: 'Backend', yearsOfExperience: 3, order: 14, status: 'published' },
-
-  // Tools & Testing
-  { _id: '15', name: 'Playwright E2E Testing', category: 'Tools', yearsOfExperience: 3, order: 15, status: 'published' },
-  { _id: '16', name: 'Git & Version Control', category: 'Tools', yearsOfExperience: 7, order: 16, status: 'published' },
-  { _id: '17', name: 'ESLint & Code Standards', category: 'Tools', yearsOfExperience: 6, order: 17, status: 'published' },
-
-  // Motion / Interaction
-  { _id: '18', name: 'GSAP & ScrollTrigger', category: 'Motion / Interaction', yearsOfExperience: 3, order: 18, status: 'published' },
-  { _id: '19', name: 'Framer Motion', category: 'Motion / Interaction', yearsOfExperience: 4, order: 19, status: 'published' },
-  { _id: '20', name: 'Lenis Smooth Scroll', category: 'Motion / Interaction', yearsOfExperience: 2, order: 20, status: 'published' },
+  { name: 'UX / Product Design', category: 'UX / Product Design', yearsOfExperience: 5, order: 1, status: 'published' },
+  { name: 'User Research & Testing', category: 'UX / Product Design', yearsOfExperience: 4, order: 2, status: 'published' },
+  { name: 'Design Systems Architecture', category: 'UX / Product Design', yearsOfExperience: 4, order: 3, status: 'published' },
+  { name: 'Next.js App Router', category: 'Frontend', yearsOfExperience: 4, order: 4, status: 'published' },
+  { name: 'React 19 & Hooks', category: 'Frontend', yearsOfExperience: 5, order: 5, status: 'published' },
+  { name: 'TypeScript (Strict)', category: 'Frontend', yearsOfExperience: 4, order: 6, status: 'published' },
+  { name: 'Tailwind CSS v4', category: 'Frontend', yearsOfExperience: 4, order: 7, status: 'published' },
+  { name: 'WCAG 2.1 AA Accessibility', category: 'Frontend', yearsOfExperience: 4, order: 8, status: 'published' },
+  { name: 'Node.js Route Handlers', category: 'Backend', yearsOfExperience: 4, order: 9, status: 'published' },
+  { name: 'Zod Schema Validation', category: 'Backend', yearsOfExperience: 3, order: 10, status: 'published' },
+  { name: 'REST & GraphQL APIs', category: 'Backend', yearsOfExperience: 4, order: 11, status: 'published' },
+  { name: 'MongoDB & Mongoose', category: 'Database', yearsOfExperience: 3, order: 12, status: 'published' },
+  { name: 'Playwright E2E Testing', category: 'Tools', yearsOfExperience: 3, order: 13, status: 'published' },
+  { name: 'Git & GitHub Actions', category: 'Tools', yearsOfExperience: 5, order: 14, status: 'published' },
+  { name: 'GSAP & ScrollTrigger', category: 'Motion / Interaction', yearsOfExperience: 3, order: 15, status: 'published' },
+  { name: 'Lenis Smooth Scroll', category: 'Motion / Interaction', yearsOfExperience: 2, order: 16, status: 'published' },
+  { name: 'Framer Motion', category: 'Motion / Interaction', yearsOfExperience: 3, order: 17, status: 'published' },
 ];
+
+function sanitizeSkillDoc(doc: any): Skill {
+  return {
+    _id: doc._id.toString(),
+    name: doc.name,
+    category: doc.category,
+    proficiency: doc.proficiency,
+    yearsOfExperience: doc.yearsOfExperience,
+    icon: doc.icon,
+    order: doc.order,
+    status: doc.status,
+    createdAt: doc.createdAt ? new Date(doc.createdAt).toISOString() : undefined,
+    updatedAt: doc.updatedAt ? new Date(doc.updatedAt).toISOString() : undefined,
+  };
+}
+
+async function ensureSeedSkills() {
+  const count = await SkillModel.countDocuments();
+  if (count === 0) {
+    await SkillModel.insertMany(DEFAULT_SKILLS);
+  }
+}
 
 export async function getSkills(): Promise<Skill[]> {
   try {
     const db = await connectToDatabase();
     if (!db) return DEFAULT_SKILLS;
 
-    const docs = await SkillModel.find({ status: 'published' })
-      .sort({ order: 1 })
-      .lean();
+    await ensureSeedSkills();
 
-    if (!docs || docs.length === 0) return DEFAULT_SKILLS;
-
-    return docs.map((doc) => ({
-      _id: doc._id.toString(),
-      name: doc.name,
-      category: doc.category,
-      proficiency: doc.proficiency,
-      yearsOfExperience: doc.yearsOfExperience,
-      icon: doc.icon,
-      order: doc.order,
-      status: doc.status,
-    }));
+    const docs = await SkillModel.find({ status: 'published' }).sort({ order: 1, name: 1 }).lean();
+    return docs.map(sanitizeSkillDoc);
   } catch (error) {
     console.error('Error fetching skills:', error);
     return DEFAULT_SKILLS;
   }
+}
+
+export async function getAllSkillsForAdmin(): Promise<Skill[]> {
+  const db = await connectToDatabase();
+  if (!db) return DEFAULT_SKILLS;
+
+  await ensureSeedSkills();
+
+  const docs = await SkillModel.find().sort({ order: 1, name: 1 }).lean();
+  return docs.map(sanitizeSkillDoc);
+}
+
+export async function getSkillById(id: string): Promise<Skill | null> {
+  const db = await connectToDatabase();
+  if (!db) return null;
+
+  await ensureSeedSkills();
+
+  const doc = await SkillModel.findById(id).lean();
+  if (!doc) return null;
+  return sanitizeSkillDoc(doc);
+}
+
+export async function createSkill(data: Omit<Skill, '_id'>): Promise<{ success: boolean; skill?: Skill; error?: string }> {
+  const db = await connectToDatabase();
+  if (!db) return { success: false, error: 'Database connection unavailable' };
+
+  await ensureSeedSkills();
+
+  const createdDoc = await SkillModel.create(data);
+  return { success: true, skill: sanitizeSkillDoc(createdDoc.toObject()) };
+}
+
+export async function updateSkill(id: string, data: Partial<Skill>): Promise<{ success: boolean; skill?: Skill; error?: string }> {
+  const db = await connectToDatabase();
+  if (!db) return { success: false, error: 'Database connection unavailable' };
+
+  await ensureSeedSkills();
+
+  const updatedDoc = await SkillModel.findByIdAndUpdate(id, { $set: data }, { new: true, runValidators: true }).lean();
+  if (!updatedDoc) return { success: false, error: 'Skill not found' };
+
+  return { success: true, skill: sanitizeSkillDoc(updatedDoc) };
+}
+
+export async function deleteSkill(id: string): Promise<{ success: boolean; error?: string }> {
+  const db = await connectToDatabase();
+  if (!db) return { success: false, error: 'Database connection unavailable' };
+
+  await ensureSeedSkills();
+
+  const deleted = await SkillModel.findByIdAndDelete(id).lean();
+  if (!deleted) return { success: false, error: 'Skill not found' };
+
+  return { success: true };
 }

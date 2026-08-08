@@ -4,7 +4,6 @@ import { Project } from '@/types';
 
 export const DEFAULT_PROJECTS: Project[] = [
   {
-    _id: '1',
     title: 'US-FEX — Enterprise UX Engineering System',
     slug: 'us-fex',
     shortDescription:
@@ -48,7 +47,6 @@ export const DEFAULT_PROJECTS: Project[] = [
     ogImage: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200',
   },
   {
-    _id: '2',
     title: 'PulseAnalytics — Real-Time UX Metrics Dashboard',
     slug: 'pulse-analytics',
     shortDescription:
@@ -86,7 +84,6 @@ export const DEFAULT_PROJECTS: Project[] = [
       'Case study on building PulseAnalytics: real-time dashboard visualization and mobile-first performance optimization.',
   },
   {
-    _id: '3',
     title: 'AuraStudio — Creative Portfolio & Micro-Interaction Engine',
     slug: 'aura-studio',
     shortDescription:
@@ -136,7 +133,7 @@ function sanitizeProjectDoc(doc: any): Project {
     year: doc.year,
     thumbnail: doc.thumbnail,
     images: doc.images || [],
-    technologies: doc.technologies,
+    technologies: doc.technologies || [],
     responsibilities: doc.responsibilities || [],
     challenge: doc.challenge,
     research: doc.research,
@@ -156,16 +153,24 @@ function sanitizeProjectDoc(doc: any): Project {
   };
 }
 
+async function ensureSeedProjects() {
+  const count = await ProjectModel.countDocuments();
+  if (count === 0) {
+    await ProjectModel.insertMany(DEFAULT_PROJECTS);
+  }
+}
+
 export async function getPublishedProjects(): Promise<Project[]> {
   try {
     const db = await connectToDatabase();
     if (!db) return DEFAULT_PROJECTS;
 
+    await ensureSeedProjects();
+
     const docs = await ProjectModel.find({ status: 'published' })
       .sort({ order: 1, createdAt: -1 })
       .lean();
 
-    if (!docs || docs.length === 0) return DEFAULT_PROJECTS;
     return docs.map(sanitizeProjectDoc);
   } catch (error) {
     console.error('Error fetching published projects:', error);
@@ -185,21 +190,23 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       return DEFAULT_PROJECTS.find((p) => p.slug === slug) || null;
     }
 
+    await ensureSeedProjects();
+
     const doc = await ProjectModel.findOne({ slug, status: 'published' }).lean();
-    if (!doc) {
-      return DEFAULT_PROJECTS.find((p) => p.slug === slug) || null;
-    }
+    if (!doc) return null;
 
     return sanitizeProjectDoc(doc);
   } catch (error) {
     console.error(`Error fetching project slug "${slug}":`, error);
-    return DEFAULT_PROJECTS.find((p) => p.slug === slug) || null;
+    return null;
   }
 }
 
 export async function getAllProjectsForAdmin(status?: string): Promise<Project[]> {
   const db = await connectToDatabase();
   if (!db) return DEFAULT_PROJECTS;
+
+  await ensureSeedProjects();
 
   const query = status ? { status } : {};
   const docs = await ProjectModel.find(query).sort({ order: 1, createdAt: -1 }).lean();
@@ -212,6 +219,8 @@ export async function getProjectById(id: string): Promise<Project | null> {
     return DEFAULT_PROJECTS.find((p) => p._id === id) || null;
   }
 
+  await ensureSeedProjects();
+
   const doc = await ProjectModel.findById(id).lean();
   if (!doc) return null;
 
@@ -223,6 +232,8 @@ export async function createProject(data: Omit<Project, '_id'>): Promise<{ succe
   if (!db) {
     return { success: false, error: 'Database connection unavailable' };
   }
+
+  await ensureSeedProjects();
 
   const existingSlug = await ProjectModel.findOne({ slug: data.slug }).lean();
   if (existingSlug) {
@@ -238,6 +249,8 @@ export async function updateProject(id: string, data: Partial<Project>): Promise
   if (!db) {
     return { success: false, error: 'Database connection unavailable' };
   }
+
+  await ensureSeedProjects();
 
   if (data.slug) {
     const existingSlug = await ProjectModel.findOne({ slug: data.slug, _id: { $ne: id } }).lean();
@@ -259,6 +272,8 @@ export async function deleteProject(id: string): Promise<{ success: boolean; err
   if (!db) {
     return { success: false, error: 'Database connection unavailable' };
   }
+
+  await ensureSeedProjects();
 
   const deleted = await ProjectModel.findByIdAndDelete(id).lean();
   if (!deleted) {

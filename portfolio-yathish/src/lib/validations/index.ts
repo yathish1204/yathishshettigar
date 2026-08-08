@@ -122,6 +122,8 @@ export const profileSchema = z.object({
   shortBio: z.string().min(10, 'Short bio is required'),
   longBio: z.string().min(20, 'Long bio is required'),
   profileImage: z.string().url().or(z.literal('')).optional(),
+  heroVideoUrl: z.string().url().or(z.literal('')).optional(),
+  heroVideoPoster: z.string().url().or(z.literal('')).optional(),
   resumeUrl: z.string().optional(),
   email: z.string().email('Valid email is required'),
   phone: z.string().optional(),

@@ -16,6 +16,8 @@ export interface Profile {
   shortBio: string;
   longBio: string;
   profileImage?: string;
+  heroVideoUrl?: string;
+  heroVideoPoster?: string;
   resumeUrl?: string;
   email: string;
   phone?: string;

@@ -1,20 +1,21 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #09090b;
+  --background: #09090b;
+  --foreground: #fafafa;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #09090b;
-    --foreground: #fafafa;
-  }
+html:not(.dark) {
+  --background: #ffffff;
+  --foreground: #09090b;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans, system-ui, sans-serif);
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

@@ -11,6 +11,8 @@ export const DEFAULT_PROFILE: Profile = {
   longBio:
     'I design and build production web applications that blend human-centered UX design with clean, scalable frontend engineering. With expertise across design systems, web performance, web accessibility, and full-stack Next.js architecture, I partner with engineering and product leaders to deliver exceptional user experiences.',
   profileImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600',
+  heroVideoUrl: '',
+  heroVideoPoster: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1000',
   resumeUrl: '#resume',
   email: 'yathish.shettigar@example.com',
   location: 'Bengaluru, India',
@@ -39,6 +41,8 @@ export async function getProfile(): Promise<Profile> {
       shortBio: profileDoc.shortBio,
       longBio: profileDoc.longBio,
       profileImage: profileDoc.profileImage || DEFAULT_PROFILE.profileImage,
+      heroVideoUrl: profileDoc.heroVideoUrl || DEFAULT_PROFILE.heroVideoUrl,
+      heroVideoPoster: profileDoc.heroVideoPoster || DEFAULT_PROFILE.heroVideoPoster,
       resumeUrl: profileDoc.resumeUrl || DEFAULT_PROFILE.resumeUrl,
       email: profileDoc.email,
       phone: profileDoc.phone,
@@ -50,5 +54,46 @@ export async function getProfile(): Promise<Profile> {
   } catch (error) {
     console.error('Error fetching profile:', error);
     return DEFAULT_PROFILE;
+  }
+}
+
+export async function updateProfile(data: Partial<Profile>): Promise<{ success: boolean; profile?: Profile; error?: string }> {
+  try {
+    const db = await connectToDatabase();
+    if (!db) return { success: false, error: 'Database connection unavailable' };
+
+    const existing = await ProfileModel.findOne();
+    let updated;
+    if (existing) {
+      updated = await ProfileModel.findByIdAndUpdate(existing._id, { $set: data }, { new: true, runValidators: true }).lean();
+    } else {
+      updated = await ProfileModel.create(data);
+    }
+
+    if (!updated) return { success: false, error: 'Failed to update profile' };
+
+    return {
+      success: true,
+      profile: {
+        _id: updated._id.toString(),
+        name: updated.name,
+        title: updated.title,
+        tagline: updated.tagline,
+        shortBio: updated.shortBio,
+        longBio: updated.longBio,
+        profileImage: updated.profileImage,
+        heroVideoUrl: updated.heroVideoUrl,
+        heroVideoPoster: updated.heroVideoPoster,
+        resumeUrl: updated.resumeUrl,
+        email: updated.email,
+        phone: updated.phone,
+        location: updated.location,
+        socialLinks: updated.socialLinks,
+        availability: updated.availability,
+      },
+    };
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    return { success: false, error: 'Database error updating profile' };
   }
 }

@@ -5,11 +5,34 @@ import { Badge } from '@/components/Badge';
 
 export function HeroSection({ profile }: { profile: Profile }) {
   return (
-    <section className="relative min-h-[85vh] flex flex-col justify-center py-16 md:py-24 border-b border-zinc-900 overflow-hidden">
-      {/* Subtle Background Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+    <section className="relative w-full min-h-[calc(100vh-72px)] flex flex-col justify-center py-12 md:py-16 border-b border-zinc-900 overflow-hidden">
+      {/* Background Video or Image Poster Fallback (End-to-End Full Viewport Width) */}
+      {profile.heroVideoUrl ? (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={profile.heroVideoPoster || profile.profileImage}
+          className="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
+        >
+          <source src={profile.heroVideoUrl} type="video/mp4" />
+        </video>
+      ) : profile.heroVideoPoster ? (
+        <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center opacity-15 pointer-events-none"
+          style={{ backgroundImage: `url(${profile.heroVideoPoster})` }}
+        />
+      ) : (
+        /* Subtle Background Glow */
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+      )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+      {/* Bottom Linear Gradient Mask for Smooth Fade */}
+      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-transparent pointer-events-none z-10" />
+
+      {/* Inner Hero Content (Constrained to max-w-7xl) */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
         <div className="max-w-3xl space-y-6">
           {/* Availability Badge */}
           <div className="inline-flex items-center gap-2">
@@ -39,9 +62,17 @@ export function HeroSection({ profile }: { profile: Profile }) {
             <Button href="#projects" variant="primary" size="lg">
               View Selected Work
             </Button>
-            <Button href="#contact" variant="outline" size="lg">
+
+            {profile.resumeUrl && (
+              <Button href={profile.resumeUrl} external variant="outline" size="lg">
+                View Resume ↗
+              </Button>
+            )}
+
+            <Button href="#contact" variant="ghost" size="lg">
               Let's Talk
             </Button>
+
             {profile.socialLinks?.github && (
               <Button href={profile.socialLinks.github} external variant="ghost" size="lg">
                 GitHub ↗

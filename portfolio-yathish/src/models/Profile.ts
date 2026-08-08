@@ -11,6 +11,8 @@ const ProfileSchema = new Schema<IProfileDocument>(
     shortBio: { type: String, required: true },
     longBio: { type: String, required: true },
     profileImage: { type: String },
+    heroVideoUrl: { type: String },
+    heroVideoPoster: { type: String },
     resumeUrl: { type: String },
     email: { type: String, required: true },
     phone: { type: String },

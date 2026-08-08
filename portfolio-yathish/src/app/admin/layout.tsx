@@ -41,65 +41,69 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
-      {/* Admin Top Navigation */}
-      <header className="sticky top-0 z-50 bg-zinc-900 border-b border-zinc-800 px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href="/admin" className="font-bold text-lg text-emerald-400 tracking-tight flex items-center gap-2">
-            <span className="w-6 h-6 rounded bg-emerald-500 text-zinc-950 font-mono text-xs flex items-center justify-center font-extrabold">
-              CMS
-            </span>
-            <span>Portfolio Admin</span>
-          </Link>
+      {/* Admin Top Navigation: Fixed & End-to-End with max-w-7xl inner container */}
+      <header className="sticky top-0 z-50 w-full bg-zinc-900 border-b border-zinc-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <Link href="/admin" className="font-bold text-lg text-emerald-400 tracking-tight flex items-center gap-2">
+              <span className="w-6 h-6 rounded bg-emerald-500 text-zinc-950 font-mono text-xs flex items-center justify-center font-extrabold">
+                CMS
+              </span>
+              <span>Portfolio Admin</span>
+            </Link>
 
-          <nav className="hidden lg:flex items-center space-x-1" aria-label="Admin Navigation">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                  isActive(link.href)
-                    ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/80'
-                    : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-        </div>
+            <nav className="hidden lg:flex items-center space-x-1" aria-label="Admin Navigation">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    isActive(link.href)
+                      ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/80'
+                      : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
 
-        <div className="flex items-center gap-4">
-          <Link href="/" target="_blank" className="text-xs text-zinc-400 hover:text-zinc-200 font-mono">
-            View Live Site ↗
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="px-3 py-1.5 text-xs font-medium rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors"
-          >
-            Logout
-          </button>
+          <div className="flex items-center gap-4">
+            <Link href="/" target="_blank" className="text-xs text-zinc-400 hover:text-zinc-200 font-mono">
+              View Live Site ↗
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="px-3 py-1.5 text-xs font-medium rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors cursor-pointer"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Sub-nav for mobile screens */}
-      <div className="lg:hidden bg-zinc-900/60 border-b border-zinc-800 px-4 py-2 flex items-center gap-2 overflow-x-auto text-xs">
-        {navLinks.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`px-2.5 py-1 rounded whitespace-nowrap ${
-              isActive(link.href)
-                ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
-                : 'text-zinc-400'
-            }`}
-          >
-            {link.name}
-          </Link>
-        ))}
+      <div className="lg:hidden bg-zinc-900/60 border-b border-zinc-800 w-full">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center gap-2 overflow-x-auto text-xs">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`px-2.5 py-1 rounded whitespace-nowrap ${
+                isActive(link.href)
+                  ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                  : 'text-zinc-400'
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* Main Admin Body */}
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">{children}</main>
+      <main className="flex-1 w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">{children}</main>
     </div>
   );
 }

@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { getProfile } from '@/services/profile';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
+import { ConditionalLayout } from '@/components/ConditionalLayout';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { GSAPScroll } from '@/components/GSAPScroll';
 import { getPersonJsonLd, getWebSiteJsonLd } from '@/utils/jsonLd';
@@ -71,9 +70,7 @@ export default async function RootLayout({
       <body className="bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-emerald-500 selection:text-zinc-950 min-h-screen flex flex-col">
         <SmoothScroll>
           <GSAPScroll>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer profile={profile} />
+            <ConditionalLayout profile={profile}>{children}</ConditionalLayout>
           </GSAPScroll>
         </SmoothScroll>
       </body>

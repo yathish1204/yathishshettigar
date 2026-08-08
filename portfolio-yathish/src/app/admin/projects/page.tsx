@@ -70,7 +70,6 @@ export default function AdminProjectsListPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100">Projects Directory</h1>
-          <p className="text-xs text-zinc-400 font-mono mt-1">Manage, edit, publish, or preview portfolio case studies</p>
         </div>
 
         <Link
