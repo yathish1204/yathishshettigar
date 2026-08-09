@@ -9,6 +9,8 @@ export type SkillCategory =
   | 'Tools'
   | 'Motion / Interaction';
 
+export type ProjectStatus = 'draft' | 'published' | 'archived';
+
 export interface SocialLinks {
   github?: string;
   linkedin?: string;
