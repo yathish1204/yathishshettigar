@@ -28,5 +28,5 @@ if (mongoose.models && mongoose.models.Experience) {
 }
 
 export const ExperienceModel: Model<IExperienceDocument> =
-  mongoose.models.Experience || mongoose.model<ISkillDocument>('Experience', ExperienceSchema);
+  mongoose.models.Experience || mongoose.model<IExperienceDocument>('Experience', ExperienceSchema);
 
