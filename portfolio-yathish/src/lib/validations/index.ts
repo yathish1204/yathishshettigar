@@ -62,6 +62,9 @@ export const experienceUpdateSchema = experienceSchema.partial();
 export const skillSchema = z.object({
   name: z.string().min(2, 'Skill name is required'),
   category: z.enum([
+    'UX & Product Development',
+    'Front End Development',
+    'Tools & Technology',
     'UX / Product Design',
     'Frontend',
     'Backend',
@@ -86,6 +89,8 @@ export const certificationSchema = z.object({
   credentialId: z.string().optional(),
   credentialUrl: z.string().url().or(z.literal('')).optional(),
   certificateImage: z.string().url().or(z.literal('')).optional(),
+  thumbnail: z.string().url().or(z.literal('')).optional(),
+  featured: z.boolean().default(false),
   order: z.number().int().default(0),
   status: z.enum(['published', 'draft']).default('published'),
 });

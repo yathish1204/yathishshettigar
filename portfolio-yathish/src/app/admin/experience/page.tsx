@@ -3,6 +3,49 @@
 import React, { useEffect, useState } from 'react';
 import { Experience } from '@/types';
 
+// Convert dd/mm/yyyy or legacy format to yyyy-mm-dd (for HTML date input value)
+const toInputFormat = (dateStr?: string): string => {
+  if (!dateStr) return '';
+  const clean = dateStr.trim();
+  if (clean.toLowerCase() === 'present') return '';
+
+  // If already in yyyy-mm-dd
+  if (clean.includes('-')) {
+    const parts = clean.split('-');
+    if (parts.length === 3) return clean;
+    if (parts.length === 2) return `${clean}-01`;
+    return `${parts[0]}-01-01`;
+  }
+
+  // If in dd/mm/yyyy
+  if (clean.includes('/')) {
+    const parts = clean.split('/');
+    if (parts.length === 3) {
+      const [d, m, y] = parts;
+      return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+    }
+  }
+
+  // If it is just a year (e.g. 2024)
+  if (/^\d{4}$/.test(clean)) {
+    return `${clean}-01-01`;
+  }
+
+  return '';
+};
+
+// Convert yyyy-mm-dd to dd/mm/yyyy (for API / DB storage)
+const toDbFormat = (dateStr?: string): string => {
+  if (!dateStr) return '';
+  const clean = dateStr.trim();
+  const parts = clean.split('-'); // ["yyyy", "mm", "dd"]
+  if (parts.length === 3) {
+    const [y, m, d] = parts;
+    return `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+  }
+  return clean;
+};
+
 export default function AdminExperiencePage() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
@@ -16,14 +59,15 @@ export default function AdminExperiencePage() {
     role: '',
     employmentType: 'Full-time',
     location: 'Bengaluru, India',
-    startDate: '2024',
-    endDate: 'Present',
+    startDate: '',
+    endDate: '',
     current: true,
+    isLatestEmployer: false,
     summary: '',
     responsibilities: '',
     technologies: '',
     order: 0,
-    status: 'published' as const,
+    status: 'published' as 'published' | 'draft',
   };
 
   const [form, setForm] = useState(initialForm);
@@ -59,9 +103,10 @@ export default function AdminExperiencePage() {
       role: exp.role,
       employmentType: exp.employmentType || 'Full-time',
       location: exp.location || 'Bengaluru, India',
-      startDate: exp.startDate,
-      endDate: exp.endDate || 'Present',
+      startDate: toInputFormat(exp.startDate),
+      endDate: toInputFormat(exp.endDate),
       current: exp.current,
+      isLatestEmployer: !!exp.isLatestEmployer,
       summary: exp.summary,
       responsibilities: (exp.responsibilities || []).join('\n'),
       technologies: (exp.technologies || []).join(', '),
@@ -87,8 +132,13 @@ export default function AdminExperiencePage() {
     setError('');
     setSubmitting(true);
 
+    const isCurrent = !form.endDate;
+
     const payload = {
       ...form,
+      startDate: toDbFormat(form.startDate),
+      endDate: form.endDate ? toDbFormat(form.endDate) : '',
+      current: isCurrent,
       responsibilities: form.responsibilities.split('\n').map((s) => s.trim()).filter(Boolean),
       technologies: form.technologies.split(',').map((s) => s.trim()).filter(Boolean),
     };
@@ -133,9 +183,9 @@ export default function AdminExperiencePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Work Experience Management</h1>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Work Experience Management</h1>
         </div>
 
         <button
@@ -147,34 +197,34 @@ export default function AdminExperiencePage() {
       </div>
 
       {loading ? (
-        <div className="py-8 text-center text-xs font-mono text-zinc-400">Loading experience history...</div>
+        <div className="py-8 text-center text-xs font-mono text-zinc-500 dark:text-zinc-400">Loading experience history...</div>
       ) : experiences.length === 0 ? (
-        <div className="p-8 text-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs">
+        <div className="p-8 text-center rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs">
           No experience records found. Click "+ Add New Experience" to create one.
         </div>
       ) : (
         <div className="space-y-4">
           {experiences.map((exp) => (
-            <div key={exp._id || exp.company} className="p-5 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2 flex items-start justify-between">
+            <div key={exp._id || exp.company} className="p-5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-none space-y-2 flex items-start justify-between transition-colors">
               <div>
                 <div className="flex items-center gap-3">
-                  <h3 className="font-bold text-zinc-100">{exp.role} @ {exp.company}</h3>
-                  <span className="text-xs font-mono text-emerald-400">{exp.startDate} — {exp.endDate || 'Present'}</span>
+                  <h3 className="font-bold text-zinc-900 dark:text-zinc-100">{exp.role} @ {exp.company}</h3>
+                  <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold">{exp.startDate} — {exp.endDate || 'Present'}</span>
                 </div>
-                <p className="text-xs text-zinc-400 mt-1">{exp.summary}</p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">{exp.summary}</p>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleOpenEdit(exp)}
-                  className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-emerald-400 text-xs font-mono"
+                  className="px-2.5 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-medium"
                 >
                   Edit
                 </button>
                 {exp._id && (
                   <button
                     onClick={() => handleDelete(exp._id!, exp.role)}
-                    className="px-2.5 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 text-xs font-mono"
+                    className="px-2.5 py-1 rounded bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900 text-red-700 dark:text-red-300 text-xs font-mono font-medium border border-red-200 dark:border-red-800/60"
                   >
                     Delete
                   </button>
@@ -187,57 +237,74 @@ export default function AdminExperiencePage() {
 
       {/* Creation/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="w-full max-w-xl bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-              <h2 className="text-lg font-bold text-zinc-100">
+        <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">
+              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
                 {editingId ? 'Edit Experience Record' : '+ Add New Experience Record'}
               </h2>
-              <button onClick={() => setShowModal(false)} className="text-zinc-400 hover:text-zinc-100 font-mono text-xs">✕ Close</button>
+              <button onClick={() => setShowModal(false)} className="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 font-mono text-xs cursor-pointer">✕ Close</button>
             </div>
 
-            {error && <div className="p-3 rounded-lg bg-red-950/60 border border-red-800 text-red-300 text-xs">{error}</div>}
+            {error && <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 text-xs">{error}</div>}
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-mono uppercase text-zinc-300 mb-1">Company *</label>
-                  <input type="text" name="company" required value={form.company} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                  <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Company *</label>
+                  <input type="text" name="company" required value={form.company} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
                 </div>
                 <div>
-                  <label className="block font-mono uppercase text-zinc-300 mb-1">Role *</label>
-                  <input type="text" name="role" required value={form.role} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                  <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Role *</label>
+                  <input type="text" name="role" required value={form.role} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-mono uppercase text-zinc-300 mb-1">Start Date *</label>
-                  <input type="text" name="startDate" required value={form.startDate} onChange={handleChange} placeholder="e.g. Jan 2024" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                  <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Start Date *</label>
+                  <input type="date" name="startDate" required value={form.startDate} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
                 </div>
                 <div>
-                  <label className="block font-mono uppercase text-zinc-300 mb-1">End Date</label>
-                  <input type="text" name="endDate" value={form.endDate} onChange={handleChange} placeholder="Present" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                  <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">End Date</label>
+                  <input type="date" name="endDate" value={form.endDate} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
                 </div>
               </div>
 
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1">Summary *</label>
-                <textarea name="summary" rows={2} required value={form.summary} onChange={handleChange} placeholder="Overview of position..." className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Summary Points (One point per line) *</label>
+                <textarea name="summary" rows={4} required value={form.summary} onChange={handleChange} placeholder="• Spearheaded frontend architecture and design systems&#10;• Led cross-functional team of 8 engineers&#10;• Reduced page load times by 45%" className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500 font-sans text-xs leading-relaxed" />
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1 font-mono">
+                  Enter each summary item on a new line. Each line will be rendered as a bulleted summary point.
+                </p>
               </div>
 
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1">Responsibilities (One per line)</label>
-                <textarea name="responsibilities" rows={3} value={form.responsibilities} onChange={handleChange} placeholder="Built design token system..." className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Responsibilities (One per line)</label>
+                <textarea name="responsibilities" rows={3} value={form.responsibilities} onChange={handleChange} placeholder="Built design token system..." className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
               </div>
 
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1">Technologies Used (comma separated)</label>
-                <input type="text" name="technologies" value={form.technologies} onChange={handleChange} placeholder="Next.js, TypeScript, Tailwind" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Technologies Used (comma separated)</label>
+                <input type="text" name="technologies" value={form.technologies} onChange={handleChange} placeholder="Next.js, TypeScript, Tailwind" className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
-                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 font-mono">Cancel</button>
+              <div className="flex items-center gap-2 pt-1">
+                <input
+                  type="checkbox"
+                  id="isLatestEmployer"
+                  name="isLatestEmployer"
+                  checked={form.isLatestEmployer}
+                  onChange={handleChange}
+                  className="w-4 h-4 rounded bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-emerald-500"
+                />
+                <label htmlFor="isLatestEmployer" className="text-xs font-mono text-zinc-700 dark:text-zinc-300 font-medium cursor-pointer">
+                  Latest Employer (Show pulsating animation on stepper node)
+                </label>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono">Cancel</button>
                 <button type="submit" disabled={submitting} className="px-5 py-2 rounded-lg bg-emerald-500 text-zinc-950 font-bold">{submitting ? 'Saving...' : 'Save Experience'}</button>
               </div>
             </form>

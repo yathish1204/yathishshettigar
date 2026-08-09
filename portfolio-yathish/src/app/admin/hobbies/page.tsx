@@ -15,7 +15,7 @@ export default function AdminHobbiesPage() {
     name: '',
     description: '',
     order: 0,
-    status: 'published' as const,
+    status: 'published' as 'published' | 'draft',
   };
 
   const [form, setForm] = useState(initialForm);

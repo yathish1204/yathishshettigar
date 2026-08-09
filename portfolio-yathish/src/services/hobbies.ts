@@ -3,10 +3,15 @@ import { HobbyModel } from '@/models/Hobby';
 import { Hobby } from '@/types';
 
 export const DEFAULT_HOBBIES: Hobby[] = [
-  { _id: '1', name: 'Open-Source UI Libraries', description: 'Experimenting with zero-runtime CSS primitives, WCAG keyboard traps, and micro-interactions.', order: 1, status: 'published' },
-  { _id: '2', name: 'UI Motion & Canvas Visualizers', description: 'Crafting fluid GSAP timeline sequences and WebGL shaders for creative portfolio site experiences.', order: 2, status: 'published' },
-  { _id: '3', name: 'Generative AI & Data Pipelines', description: 'Building autonomous AI coding subagents and structured data extraction pipelines.', order: 3, status: 'published' },
+  { name: 'Open-Source UI Libraries', description: 'Experimenting with zero-runtime CSS primitives, WCAG keyboard traps, and micro-interactions.', icon: '⚛️', order: 1, status: 'published' },
+  { name: 'UX & Accessibility Research', description: 'Exploring screen reader patterns, high-contrast themes, and fluid typography systems.', icon: '🎨', order: 2, status: 'published' },
+  { name: 'Generative AI & Tooling', description: 'Building autonomous coding assistants, prompt workflows, and AI-powered interfaces.', icon: '⚡', order: 3, status: 'published' },
+  { name: 'Typography & Motion Design', description: 'Crafting responsive variable fonts, spring physics animations, and interactive prototypes.', icon: '✨', order: 4, status: 'published' },
 ];
+
+let cachedHobbies: Hobby[] | null = null;
+let lastHobbyFetch = 0;
+const CACHE_TTL = 30000;
 
 function sanitizeHobbyDoc(doc: any): Hobby {
   return {
@@ -22,17 +27,33 @@ function sanitizeHobbyDoc(doc: any): Hobby {
   };
 }
 
+async function ensureSeedHobbies() {
+  const count = await HobbyModel.countDocuments();
+  if (count === 0) {
+    await HobbyModel.insertMany(DEFAULT_HOBBIES);
+  }
+}
+
 export async function getHobbies(): Promise<Hobby[]> {
+  const now = Date.now();
+  if (cachedHobbies && now - lastHobbyFetch < CACHE_TTL) {
+    return cachedHobbies;
+  }
+
   try {
     const db = await connectToDatabase();
-    if (!db) return DEFAULT_HOBBIES;
+    if (!db) return cachedHobbies || DEFAULT_HOBBIES;
+
+    await ensureSeedHobbies();
 
     const docs = await HobbyModel.find({ status: 'published' }).sort({ order: 1, name: 1 }).lean();
-    if (!docs || docs.length === 0) return DEFAULT_HOBBIES;
-    return docs.map(sanitizeHobbyDoc);
+    const result = docs.map(sanitizeHobbyDoc);
+    cachedHobbies = result;
+    lastHobbyFetch = now;
+    return result;
   } catch (error) {
     console.error('Error fetching hobbies:', error);
-    return DEFAULT_HOBBIES;
+    return cachedHobbies || DEFAULT_HOBBIES;
   }
 }
 
@@ -40,13 +61,17 @@ export async function getAllHobbiesForAdmin(): Promise<Hobby[]> {
   const db = await connectToDatabase();
   if (!db) return DEFAULT_HOBBIES;
 
+  await ensureSeedHobbies();
+
   const docs = await HobbyModel.find().sort({ order: 1, name: 1 }).lean();
   return docs.map(sanitizeHobbyDoc);
 }
 
 export async function getHobbyById(id: string): Promise<Hobby | null> {
   const db = await connectToDatabase();
-  if (!db) return DEFAULT_HOBBIES.find((h) => h._id === id) || null;
+  if (!db) return null;
+
+  await ensureSeedHobbies();
 
   const doc = await HobbyModel.findById(id).lean();
   if (!doc) return null;
@@ -57,7 +82,11 @@ export async function createHobby(data: Omit<Hobby, '_id'>): Promise<{ success: 
   const db = await connectToDatabase();
   if (!db) return { success: false, error: 'Database connection unavailable' };
 
+  await ensureSeedHobbies();
+
   const createdDoc = await HobbyModel.create(data);
+  cachedHobbies = null;
+  lastHobbyFetch = 0;
   return { success: true, hobby: sanitizeHobbyDoc(createdDoc.toObject()) };
 }
 
@@ -65,9 +94,13 @@ export async function updateHobby(id: string, data: Partial<Hobby>): Promise<{ s
   const db = await connectToDatabase();
   if (!db) return { success: false, error: 'Database connection unavailable' };
 
+  await ensureSeedHobbies();
+
   const updatedDoc = await HobbyModel.findByIdAndUpdate(id, { $set: data }, { new: true, runValidators: true }).lean();
   if (!updatedDoc) return { success: false, error: 'Hobby record not found' };
 
+  cachedHobbies = null;
+  lastHobbyFetch = 0;
   return { success: true, hobby: sanitizeHobbyDoc(updatedDoc) };
 }
 
@@ -75,8 +108,12 @@ export async function deleteHobby(id: string): Promise<{ success: boolean; error
   const db = await connectToDatabase();
   if (!db) return { success: false, error: 'Database connection unavailable' };
 
+  await ensureSeedHobbies();
+
   const deleted = await HobbyModel.findByIdAndDelete(id).lean();
   if (!deleted) return { success: false, error: 'Hobby record not found' };
 
+  cachedHobbies = null;
+  lastHobbyFetch = 0;
   return { success: true };
 }

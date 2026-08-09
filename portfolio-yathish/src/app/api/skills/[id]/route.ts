@@ -41,8 +41,9 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     revalidatePath('/', 'layout');
     return apiSuccess(result.skill);
-  } catch (error) {
-    return apiError('SERVER_ERROR', 'Failed to update skill', 500);
+  } catch (error: any) {
+    console.error('Error updating skill:', error);
+    return apiError('SERVER_ERROR', error?.message || 'Failed to update skill', 500);
   }
 }
 

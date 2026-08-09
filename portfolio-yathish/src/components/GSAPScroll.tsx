@@ -12,8 +12,7 @@ export function GSAPScroll({ children }: { children: React.ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion || !containerRef.current) return;
+    if (!containerRef.current) return;
 
     const ctx = gsap.context(() => {
       // Subtle header/scroll progress bar effect
@@ -34,7 +33,8 @@ export function GSAPScroll({ children }: { children: React.ReactNode }) {
 
   return (
     <div ref={containerRef} className="relative">
-      <div className="scroll-progress-bar fixed top-0 left-0 right-0 h-[2px] bg-emerald-500 origin-left z-[100] scale-x-0 pointer-events-none" />
+      {/* Top horizontal scroll tracker bar hidden for now */}
+      <div className="scroll-progress-bar fixed top-0 left-0 right-0 h-[2px] bg-emerald-500 origin-left z-[100] scale-x-0 pointer-events-none hidden" />
       {children}
     </div>
   );

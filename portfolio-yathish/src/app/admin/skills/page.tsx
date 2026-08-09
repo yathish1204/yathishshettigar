@@ -13,10 +13,12 @@ export default function AdminSkillsPage() {
 
   const initialForm = {
     name: '',
-    category: 'Frontend' as SkillCategory,
+    category: 'Front End Development' as SkillCategory,
+    icon: '',
+    proficiency: 3,
     yearsOfExperience: 3,
     order: 0,
-    status: 'published' as const,
+    status: 'published' as 'published' | 'draft',
   };
 
   const [form, setForm] = useState(initialForm);
@@ -50,7 +52,9 @@ export default function AdminSkillsPage() {
     setForm({
       name: skill.name,
       category: skill.category,
-      yearsOfExperience: skill.yearsOfExperience || 1,
+      icon: skill.icon || '',
+      proficiency: skill.proficiency !== undefined ? Number(skill.proficiency) : 3,
+      yearsOfExperience: skill.yearsOfExperience !== undefined ? Number(skill.yearsOfExperience) : 3,
       order: skill.order || 0,
       status: (skill.status as 'published' | 'draft') || 'published',
     });
@@ -60,7 +64,7 @@ export default function AdminSkillsPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    if (name === 'yearsOfExperience' || name === 'order') {
+    if (name === 'yearsOfExperience' || name === 'proficiency' || name === 'order') {
       setForm((prev) => ({ ...prev, [name]: parseInt(value, 10) || 0 }));
     } else {
       setForm((prev) => ({ ...prev, [name]: value }));
@@ -89,7 +93,7 @@ export default function AdminSkillsPage() {
         setEditingId(null);
         fetchSkills();
       } else {
-        setError(json.error?.message || 'Failed to save skill.');
+        setError(json.error?.message || json.message || 'Failed to save skill.');
       }
     } catch (err) {
       setError('Connection error saving skill.');
@@ -112,9 +116,9 @@ export default function AdminSkillsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Skills & Tooling Management</h1>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Skills & Tooling Management</h1>
         </div>
 
         <button
@@ -126,25 +130,30 @@ export default function AdminSkillsPage() {
       </div>
 
       {loading ? (
-        <div className="py-8 text-center text-xs font-mono text-zinc-400">Loading skills...</div>
+        <div className="py-8 text-center text-xs font-mono text-zinc-500 dark:text-zinc-400">Loading skills...</div>
       ) : skills.length === 0 ? (
-        <div className="p-8 text-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs">
+        <div className="p-8 text-center rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs">
           No skills found. Click "+ Add New Skill" to create one.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {skills.map((skill) => (
-            <div key={skill._id || skill.name} className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-between">
-              <div>
-                <div className="font-bold text-sm text-zinc-100">{skill.name}</div>
-                <div className="text-[10px] font-mono text-emerald-400">{skill.category}</div>
+            <div key={skill._id || skill.name} className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-none flex items-center justify-between transition-colors">
+              <div className="flex items-center gap-3">
+                {skill.icon && (
+                  <img src={skill.icon} alt={skill.name} className="w-5 h-5 object-contain rounded-sm shrink-0" />
+                )}
+                <div>
+                  <div className="font-bold text-sm text-zinc-900 dark:text-zinc-100">{skill.name}</div>
+                  <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">{skill.category}</div>
+                </div>
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={() => handleOpenEdit(skill)} className="px-2 py-0.5 rounded bg-zinc-800 text-emerald-400 text-[10px] font-mono">
+                <button onClick={() => handleOpenEdit(skill)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-400 text-[10px] font-mono font-medium">
                   Edit
                 </button>
                 {skill._id && (
-                  <button onClick={() => handleDelete(skill._id!, skill.name)} className="px-2 py-0.5 rounded bg-red-950/60 text-red-300 text-[10px] font-mono">
+                  <button onClick={() => handleDelete(skill._id!, skill.name)} className="px-2 py-0.5 rounded bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 text-[10px] font-mono font-medium border border-red-200 dark:border-red-800/60">
                     Delete
                   </button>
                 )}
@@ -156,40 +165,59 @@ export default function AdminSkillsPage() {
 
       {/* Creation/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-              <h2 className="text-lg font-bold text-zinc-100">{editingId ? 'Edit Skill' : '+ Add New Skill'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-zinc-400 hover:text-zinc-100 font-mono text-xs">✕ Close</button>
+        <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">
+              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{editingId ? 'Edit Skill' : '+ Add New Skill'}</h2>
+              <button onClick={() => setShowModal(false)} className="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 font-mono text-xs cursor-pointer">✕ Close</button>
             </div>
 
-            {error && <div className="p-3 rounded-lg bg-red-950/60 border border-red-800 text-red-300 text-xs">{error}</div>}
+            {error && <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 text-xs">{error}</div>}
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1">Skill Name *</label>
-                <input type="text" name="name" required value={form.name} onChange={handleChange} placeholder="e.g. Next.js" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Skill Name *</label>
+                <input type="text" name="name" required value={form.name} onChange={handleChange} placeholder="e.g. Next.js" className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
               </div>
 
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1">Category *</label>
-                <select name="category" value={form.category} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100">
-                  <option value="UX / Product Design">UX / Product Design</option>
-                  <option value="Frontend">Frontend</option>
-                  <option value="Backend">Backend</option>
-                  <option value="Database">Database</option>
-                  <option value="Tools">Tools</option>
-                  <option value="Motion / Interaction">Motion / Interaction</option>
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Category *</label>
+                <select name="category" value={form.category} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500">
+                  <option value="UX & Product Development">UX & Product Development</option>
+                  <option value="Front End Development">Front End Development</option>
+                  <option value="Tools & Technology">Tools & Technology</option>
                 </select>
               </div>
 
-              <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1">Years of Experience</label>
-                <input type="number" name="yearsOfExperience" value={form.yearsOfExperience} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Proficiency Level *</label>
+                  <select name="proficiency" value={form.proficiency} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500">
+                    <option value={1}>1 - Basic</option>
+                    <option value={2}>2 - Intermediate</option>
+                    <option value={3}>3 - Proficient</option>
+                    <option value={4}>4 - Advanced</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Years of Exp</label>
+                  <input type="number" min={0} name="yearsOfExperience" value={form.yearsOfExperience} onChange={handleChange} placeholder="e.g. 4" className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
+                </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
-                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 font-mono">Cancel</button>
+              <div>
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Icon Image / SVG URL (Optional)</label>
+                <input type="text" name="icon" value={form.icon} onChange={handleChange} placeholder="e.g. https://... or /icons/custom.svg" className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500 font-mono text-xs" />
+              </div>
+
+              <div>
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Display Order</label>
+                <input type="number" name="order" value={form.order} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono">Cancel</button>
                 <button type="submit" disabled={submitting} className="px-5 py-2 rounded-lg bg-emerald-500 text-zinc-950 font-bold">{submitting ? 'Saving...' : 'Save Skill'}</button>
               </div>
             </form>

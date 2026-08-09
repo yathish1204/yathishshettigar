@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { getExperiences } from '@/services/experience';
 import { SectionHeading } from '@/components/SectionHeading';
-import { ExperienceItem } from '@/components/ExperienceItem';
+import { ExperienceList } from '@/components/ExperienceList';
 
 export const metadata: Metadata = {
   title: 'Work Experience & History | Yathish Shettigar',
@@ -22,11 +22,7 @@ export default async function ExperiencePage() {
         description="Comprehensive timeline highlighting enterprise leadership, accomplishments, and engineering contributions."
       />
 
-      <div className="space-y-4">
-        {experiences.map((exp) => (
-          <ExperienceItem key={exp._id || exp.company} experience={exp} />
-        ))}
-      </div>
+      <ExperienceList experiences={experiences} />
     </div>
   );
 }

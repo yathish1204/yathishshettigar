@@ -12,13 +12,18 @@ const CertificationSchema = new Schema<ICertificationDocument>(
     credentialId: { type: String },
     credentialUrl: { type: String },
     certificateImage: { type: String },
+    thumbnail: { type: String },
+    featured: { type: Boolean, default: false },
     order: { type: Number, default: 0, index: true },
     status: { type: String, enum: ['published', 'draft'], default: 'published', index: true },
   },
   { timestamps: true }
 );
 
+if (mongoose.models && mongoose.models.Certification) {
+  delete mongoose.models.Certification;
+}
+
 export const CertificationModel: Model<ICertificationDocument> =
-  (mongoose.models && mongoose.models.Certification) ||
-  mongoose.model<ICertificationDocument>('Certification', CertificationSchema);
+  mongoose.models.Certification || mongoose.model<ICertificationDocument>('Certification', CertificationSchema);
 

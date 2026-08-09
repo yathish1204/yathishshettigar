@@ -8,7 +8,17 @@ const SkillSchema = new Schema<ISkillDocument>(
     name: { type: String, required: true },
     category: {
       type: String,
-      enum: ['UX / Product Design', 'Frontend', 'Backend', 'Database', 'Tools', 'Motion / Interaction'],
+      enum: [
+        'UX & Product Development',
+        'Front End Development',
+        'Tools & Technology',
+        'UX / Product Design',
+        'Frontend',
+        'Backend',
+        'Database',
+        'Tools',
+        'Motion / Interaction',
+      ],
       required: true,
       index: true,
     },
@@ -21,7 +31,10 @@ const SkillSchema = new Schema<ISkillDocument>(
   { timestamps: true }
 );
 
+if (mongoose.models && mongoose.models.Skill) {
+  delete mongoose.models.Skill;
+}
+
 export const SkillModel: Model<ISkillDocument> =
-  (mongoose.models && mongoose.models.Skill) ||
-  mongoose.model<ISkillDocument>('Skill', SkillSchema);
+  mongoose.models.Skill || mongoose.model<ISkillDocument>('Skill', SkillSchema);
 

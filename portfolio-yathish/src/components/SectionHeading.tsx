@@ -6,6 +6,7 @@ export interface SectionHeadingProps {
   title: string;
   description?: string;
   align?: 'left' | 'center';
+  action?: React.ReactNode;
   className?: string;
 }
 
@@ -14,8 +15,35 @@ export function SectionHeading({
   title,
   description,
   align = 'left',
+  action,
   className,
 }: SectionHeadingProps) {
+  if (action) {
+    return (
+      <div
+        className={cn(
+          'mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 w-full',
+          align === 'center' ? 'text-center max-w-3xl mx-auto' : '',
+          className
+        )}
+      >
+        <div className="max-w-2xl">
+          {eyebrow && (
+            <span className="inline-block text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-2">
+              {eyebrow}
+            </span>
+          )}
+          <h2 className="text-xl md:text-2xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans">
+            {title}
+          </h2>
+        </div>
+        <div className="shrink-0 self-start md:self-auto">
+          {action}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={cn(
@@ -25,18 +53,13 @@ export function SectionHeading({
       )}
     >
       {eyebrow && (
-        <span className="inline-block text-xs font-bold uppercase tracking-widest text-emerald-400 mb-2">
+        <span className="inline-block text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-2">
           {eyebrow}
         </span>
       )}
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-100 font-sans">
+      <h2 className="text-xl md:text-2xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans">
         {title}
       </h2>
-      {description && (
-        <p className="mt-4 text-base md:text-lg text-zinc-400 leading-relaxed font-normal">
-          {description}
-        </p>
-      )}
     </div>
   );
 }

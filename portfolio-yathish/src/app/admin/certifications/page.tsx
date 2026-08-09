@@ -17,8 +17,10 @@ export default function AdminCertificationsPage() {
     issueDate: '2024',
     credentialId: '',
     credentialUrl: '',
+    thumbnail: '',
+    featured: false,
     order: 0,
-    status: 'published' as const,
+    status: 'published' as 'published' | 'draft',
   };
 
   const [form, setForm] = useState(initialForm);
@@ -55,6 +57,8 @@ export default function AdminCertificationsPage() {
       issueDate: cert.issueDate,
       credentialId: cert.credentialId || '',
       credentialUrl: cert.credentialUrl || '',
+      thumbnail: cert.thumbnail || cert.certificateImage || '',
+      featured: Boolean(cert.featured),
       order: cert.order || 0,
       status: (cert.status as 'published' | 'draft') || 'published',
     });
@@ -63,8 +67,12 @@ export default function AdminCertificationsPage() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setForm((prev) => ({ ...prev, [name]: checked }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -89,7 +97,7 @@ export default function AdminCertificationsPage() {
         setEditingId(null);
         fetchCerts();
       } else {
-        setError(json.error?.message || 'Failed to save certification.');
+        setError(json.error?.message || json.message || 'Failed to save certification.');
       }
     } catch (err) {
       setError('Connection error saving certification.');
@@ -112,7 +120,7 @@ export default function AdminCertificationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 ">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100">Certifications & Credentials</h1>
         </div>
@@ -132,16 +140,16 @@ export default function AdminCertificationsPage() {
           No certifications found. Click "+ Add New Certification" to create one.
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {certs.map((c) => (
             <div key={c._id || c.name} className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 flex items-start justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-emerald-400">{c.issuer}</span>
+                  <span className="text-xs font-mono text-emerald-400 font-semibold">{c.issuer}</span>
                   <span className="text-xs font-mono text-zinc-500">• {c.issueDate}</span>
+                  {c.featured && <span className="text-xs text-amber-400 font-bold">★ Featured</span>}
                 </div>
                 <div className="font-bold text-sm text-zinc-100">{c.name}</div>
-                {c.credentialId && <div className="text-[10px] font-mono text-zinc-400">ID: {c.credentialId}</div>}
               </div>
 
               <div className="flex items-center gap-2">
@@ -161,8 +169,8 @@ export default function AdminCertificationsPage() {
 
       {/* Creation/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <h2 className="text-lg font-bold text-zinc-100">{editingId ? 'Edit Certification' : '+ Add New Certification'}</h2>
               <button onClick={() => setShowModal(false)} className="text-zinc-400 hover:text-zinc-100 font-mono text-xs">✕ Close</button>
@@ -172,24 +180,43 @@ export default function AdminCertificationsPage() {
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1">Certification Name *</label>
-                <input type="text" name="name" required value={form.name} onChange={handleChange} placeholder="e.g. AWS Certified Developer" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Certification Name *</label>
+                <input type="text" name="name" required value={form.name} onChange={handleChange} placeholder="e.g. Responsive Web Development" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-mono uppercase text-zinc-300 mb-1">Issuer *</label>
-                  <input type="text" name="issuer" required value={form.issuer} onChange={handleChange} placeholder="Amazon Web Services" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                  <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Issuer *</label>
+                  <input type="text" name="issuer" required value={form.issuer} onChange={handleChange} placeholder="freecodecamp" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
                 </div>
                 <div>
-                  <label className="block font-mono uppercase text-zinc-300 mb-1">Issue Date *</label>
-                  <input type="text" name="issueDate" required value={form.issueDate} onChange={handleChange} placeholder="2024" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                  <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Issue Date / Year *</label>
+                  <input type="text" name="issueDate" required value={form.issueDate} onChange={handleChange} placeholder="2024" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
                 </div>
               </div>
 
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1">Credential URL</label>
-                <input type="text" name="credentialUrl" value={form.credentialUrl} onChange={handleChange} placeholder="https://..." className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100" />
+                <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Thumbnail / Certificate Image URL</label>
+                <input type="text" name="thumbnail" value={form.thumbnail} onChange={handleChange} placeholder="https://... or /images/cert.jpg" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500 font-mono text-xs" />
+              </div>
+
+              <div>
+                <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Credential URL</label>
+                <input type="text" name="credentialUrl" value={form.credentialUrl} onChange={handleChange} placeholder="https://freecodecamp.org/verify/..." className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <input
+                  type="checkbox"
+                  id="featured"
+                  name="featured"
+                  checked={form.featured}
+                  onChange={handleChange}
+                  className="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
+                />
+                <label htmlFor="featured" className="text-zinc-300 font-medium cursor-pointer">
+                  Mark as Featured Certification (displays golden star icon)
+                </label>
               </div>
 
               <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">

@@ -10,7 +10,7 @@ export const contactSchema = z.object({
   message: z.string().min(10, 'Message must be at least 10 characters').max(2000),
 });
 
-export async function submitContactForm(input: ContactInput): Promise<{ success: boolean; message: string }> {
+export async function submitContactForm(input: ContactInput): Promise<{ success: boolean; message: string; mailtoUrl?: string }> {
   // Server-side Zod validation
   const validation = contactSchema.safeParse(input);
   if (!validation.success) {
@@ -18,26 +18,77 @@ export async function submitContactForm(input: ContactInput): Promise<{ success:
     return { success: false, message: errorMsg };
   }
 
+  const { name, email, subject, message } = validation.data;
+  const targetRecipient = 'yathish120420@gmail.com';
+
+  // Build mailto fallback URL
+  const mailtoBody = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+  const mailtoUrl = `mailto:${targetRecipient}?subject=${encodeURIComponent(`[Portfolio Inquiry] ${subject}`)}&body=${encodeURIComponent(mailtoBody)}`;
+
   try {
+    // 1. Store in MongoDB database
     const db = await connectToDatabase();
     if (db) {
       await ContactMessageModel.create({
-        name: validation.data.name,
-        email: validation.data.email,
-        subject: validation.data.subject,
-        message: validation.data.message,
+        name,
+        email,
+        subject,
+        message,
+        recipient: targetRecipient,
       });
+    }
+
+    // 2. Dispatch to Resend API if key is present
+    if (process.env.RESEND_API_KEY) {
+      try {
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          },
+          body: JSON.stringify({
+            from: 'Portfolio Contact Form <onboarding@resend.dev>',
+            to: targetRecipient,
+            reply_to: email,
+            subject: `[Portfolio] ${subject} - from ${name}`,
+            text: `Sender: ${name} (${email})\nSubject: ${subject}\n\nMessage:\n${message}`,
+          }),
+        });
+      } catch (resendErr) {
+        console.warn('Resend email dispatch error:', resendErr);
+      }
+    }
+
+    // 3. Dispatch to Formspree / Web3Forms fallback endpoint
+    try {
+      await fetch('https://formspree.io/f/xknkyoky', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          subject,
+          message,
+          _replyto: email,
+          _subject: `[Portfolio Inquiry] ${subject}`,
+        }),
+      });
+    } catch (formspreeErr) {
+      console.warn('Formspree dispatch error:', formspreeErr);
     }
 
     return {
       success: true,
-      message: 'Thank you! Your message has been sent successfully. I will get back to you shortly.',
+      message: `Thank you, ${name}! Your message has been sent to yathish120420@gmail.com.`,
+      mailtoUrl,
     };
   } catch (error) {
     console.error('Contact submission error:', error);
     return {
       success: false,
-      message: 'An unexpected error occurred while sending your message. Please try again later.',
+      message: 'Database error. Click here to send via Gmail directly.',
+      mailtoUrl,
     };
   }
 }

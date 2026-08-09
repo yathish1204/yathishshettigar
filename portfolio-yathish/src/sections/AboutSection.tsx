@@ -1,57 +1,54 @@
 import React from 'react';
-import { Profile } from '@/types';
+import { Profile, Education } from '@/types';
 import { SectionHeading } from '@/components/SectionHeading';
 import { Button } from '@/components/Button';
+import { EducationCard } from '@/components/EducationCard';
+import { MethodologyGrid } from '@/components/MethodologyGrid';
 
-export function AboutSection({ profile }: { profile: Profile }) {
+export function AboutSection({ profile, education }: { profile: Profile; education: Education[] }) {
   return (
-    <section id="about" className="py-20 md:py-28 border-b border-zinc-900 bg-zinc-950/40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+    <section id="about" className="py-10 md:py-14 border-b border-zinc-200 dark:border-zinc-900 bg-slate-100/50 dark:bg-zinc-950/40 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        {/* Header & Concise Description (Under 100 words) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-5">
             <SectionHeading
               eyebrow="About Me"
               title="UX Design + Frontend Architecture"
-              description="Connecting human-centered product thinking with strict frontend engineering rigor."
+              className="mb-0"
             />
-
-            <div className="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4">
-              <div className="text-xs font-mono uppercase tracking-wider text-emerald-400">
-                Core Positioning
-              </div>
-              <ul className="space-y-2.5 text-sm text-zinc-300">
-                <li className="flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span> Human-Centered UX & Usability Engineering
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span> Next.js App Router & Server Architecture
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span> Design System Primitives & Automated Tokens
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span> Web Accessibility (WCAG 2.1 AA) & Performance
-                </li>
-              </ul>
-            </div>
           </div>
 
-          <div className="lg:col-span-7 space-y-6 text-zinc-300 leading-relaxed text-base md:text-lg">
-            <p>{profile.longBio}</p>
-            <p>
-              I believe that brilliant design is only as effective as the engineering behind it. By keeping performance, accessibility, and clean component interfaces at the foundation of development, I build web applications that look extraordinary, load fast, and remain maintainable over time.
+          <div className="lg:col-span-7 space-y-4">
+            <p className="text-base sm:text-lg md:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans font-normal">
+              Senior UX Engineer & Frontend Architect specializing in building performant, accessible web applications. By combining human-centered usability research with modern React, Next.js, and automated design token pipelines, I bridge the gap between design vision and production code — crafting web experiences that look exceptional and perform flawlessly.
             </p>
-
-            <div className="pt-4 flex flex-wrap gap-4">
+            <div className="pt-2 flex flex-wrap gap-4">
               <Button href="/about" variant="outline" size="md">
-                Read Full Methodology
-              </Button>
-              <Button href="/contact" variant="primary" size="md">
-                Get in Touch
+                Read Full Biography
               </Button>
             </div>
           </div>
         </div>
+
+        {/* Upfront UX Engineering Methodology (01 Discover, 02 Define, 03 Design, 04 Develop) */}
+        <div className="pt-2">
+          <MethodologyGrid />
+        </div>
+
+        {/* Education Details */}
+        {/* {education && education.length > 0 && (
+          <div className="">
+            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 font-sans">
+              Education
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {education.map((edu) => (
+                <EducationCard key={edu._id || edu.institution} education={edu} />
+              ))}
+            </div>
+          </div>
+        )} */}
       </div>
     </section>
   );

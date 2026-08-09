@@ -25,15 +25,28 @@ export const DEFAULT_PROFILE: Profile = {
   },
 };
 
+let cachedProfile: Profile | null = null;
+let lastProfileFetch = 0;
+const CACHE_TTL = 30000; // 30 seconds
+
 export async function getProfile(): Promise<Profile> {
+  const now = Date.now();
+  if (cachedProfile && now - lastProfileFetch < CACHE_TTL) {
+    return cachedProfile;
+  }
+
   try {
     const db = await connectToDatabase();
-    if (!db) return DEFAULT_PROFILE;
+    if (!db) return cachedProfile || DEFAULT_PROFILE;
 
     const profileDoc = await ProfileModel.findOne().lean();
-    if (!profileDoc) return DEFAULT_PROFILE;
+    if (!profileDoc) {
+      cachedProfile = DEFAULT_PROFILE;
+      lastProfileFetch = now;
+      return DEFAULT_PROFILE;
+    }
 
-    return {
+    const formatted: Profile = {
       _id: profileDoc._id.toString(),
       name: profileDoc.name,
       title: profileDoc.title,
@@ -51,9 +64,13 @@ export async function getProfile(): Promise<Profile> {
       availability: profileDoc.availability || DEFAULT_PROFILE.availability,
       updatedAt: profileDoc.updatedAt ? new Date(profileDoc.updatedAt).toISOString() : undefined,
     };
+
+    cachedProfile = formatted;
+    lastProfileFetch = now;
+    return formatted;
   } catch (error) {
     console.error('Error fetching profile:', error);
-    return DEFAULT_PROFILE;
+    return cachedProfile || DEFAULT_PROFILE;
   }
 }
 
@@ -71,6 +88,9 @@ export async function updateProfile(data: Partial<Profile>): Promise<{ success: 
     }
 
     if (!updated) return { success: false, error: 'Failed to update profile' };
+
+    cachedProfile = null;
+    lastProfileFetch = 0;
 
     return {
       success: true,

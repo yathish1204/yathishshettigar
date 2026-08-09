@@ -39,7 +39,8 @@ export async function POST(request: NextRequest) {
 
     revalidatePath('/', 'layout');
     return apiSuccess(result.skill, 201);
-  } catch (error) {
-    return apiError('SERVER_ERROR', 'Failed to create skill', 500);
+  } catch (error: any) {
+    console.error('Error creating skill:', error);
+    return apiError('SERVER_ERROR', error?.message || 'Failed to create skill', 500);
   }
 }

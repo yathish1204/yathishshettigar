@@ -2,6 +2,10 @@ export function formatDate(dateString?: string): string {
   if (!dateString) return 'Present';
   if (dateString.toLowerCase() === 'present') return 'Present';
 
+  if (dateString.includes('/')) {
+    return dateString;
+  }
+
   const parts = dateString.split('-');
   if (parts.length === 1) return parts[0];
 

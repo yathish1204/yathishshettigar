@@ -6,6 +6,10 @@ export const DEFAULT_EDUCATION: Education[] = [
   { _id: '1', institution: 'Visvesvaraya Technological University (VTU)', degree: 'Bachelor of Engineering (B.E.)', field: 'Computer Science & Engineering', startDate: '2019', endDate: '2023', description: 'Focused on algorithms, data structures, software engineering, database management systems, and interactive human-computer interfaces.', order: 1 },
 ];
 
+let cachedEdu: Education[] | null = null;
+let lastEduFetch = 0;
+const CACHE_TTL = 30000;
+
 function sanitizeEduDoc(doc: any): Education {
   return {
     _id: doc._id.toString(),
@@ -22,16 +26,24 @@ function sanitizeEduDoc(doc: any): Education {
 }
 
 export async function getEducation(): Promise<Education[]> {
+  const now = Date.now();
+  if (cachedEdu && now - lastEduFetch < CACHE_TTL) {
+    return cachedEdu;
+  }
+
   try {
     const db = await connectToDatabase();
-    if (!db) return DEFAULT_EDUCATION;
+    if (!db) return cachedEdu || DEFAULT_EDUCATION;
 
     const docs = await EducationModel.find().sort({ order: 1, startDate: -1 }).lean();
     if (!docs || docs.length === 0) return DEFAULT_EDUCATION;
-    return docs.map(sanitizeEduDoc);
+    const result = docs.map(sanitizeEduDoc);
+    cachedEdu = result;
+    lastEduFetch = now;
+    return result;
   } catch (error) {
     console.error('Error fetching education:', error);
-    return DEFAULT_EDUCATION;
+    return cachedEdu || DEFAULT_EDUCATION;
   }
 }
 
@@ -41,7 +53,7 @@ export async function getAllEducationForAdmin(): Promise<Education[]> {
 
 export async function getEducationById(id: string): Promise<Education | null> {
   const db = await connectToDatabase();
-  if (!db) return DEFAULT_EDUCATION.find((e) => e._id === id) || null;
+  if (!db) return null;
 
   const doc = await EducationModel.findById(id).lean();
   if (!doc) return null;
@@ -53,6 +65,8 @@ export async function createEducation(data: Omit<Education, '_id'>): Promise<{ s
   if (!db) return { success: false, error: 'Database connection unavailable' };
 
   const createdDoc = await EducationModel.create(data);
+  cachedEdu = null;
+  lastEduFetch = 0;
   return { success: true, education: sanitizeEduDoc(createdDoc.toObject()) };
 }
 
@@ -63,6 +77,8 @@ export async function updateEducation(id: string, data: Partial<Education>): Pro
   const updatedDoc = await EducationModel.findByIdAndUpdate(id, { $set: data }, { new: true, runValidators: true }).lean();
   if (!updatedDoc) return { success: false, error: 'Education record not found' };
 
+  cachedEdu = null;
+  lastEduFetch = 0;
   return { success: true, education: sanitizeEduDoc(updatedDoc) };
 }
 
@@ -73,5 +89,7 @@ export async function deleteEducation(id: string): Promise<{ success: boolean; e
   const deleted = await EducationModel.findByIdAndDelete(id).lean();
   if (!deleted) return { success: false, error: 'Education record not found' };
 
+  cachedEdu = null;
+  lastEduFetch = 0;
   return { success: true };
 }

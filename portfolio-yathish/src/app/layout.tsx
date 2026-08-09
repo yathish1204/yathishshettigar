@@ -5,6 +5,8 @@ import { ConditionalLayout } from '@/components/ConditionalLayout';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { GSAPScroll } from '@/components/GSAPScroll';
 import { getPersonJsonLd, getWebSiteJsonLd } from '@/utils/jsonLd';
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile();
@@ -73,6 +75,8 @@ export default async function RootLayout({
             <ConditionalLayout profile={profile}>{children}</ConditionalLayout>
           </GSAPScroll>
         </SmoothScroll>
+        <SpeedInsights/>
+        <Analytics/>
       </body>
     </html>
   );

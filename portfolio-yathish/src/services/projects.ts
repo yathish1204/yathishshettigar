@@ -47,78 +47,118 @@ export const DEFAULT_PROJECTS: Project[] = [
     ogImage: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200',
   },
   {
-    title: 'PulseAnalytics — Real-Time UX Metrics Dashboard',
-    slug: 'pulse-analytics',
+    title: 'Nova Analytics — Financial Analytics Dashboard',
+    slug: 'nova-analytics',
     shortDescription:
-      'High-performance real-time user behavior analytics platform featuring dynamic chart visualizer and responsive data tables.',
+      'A real-time financial monitoring web application built with Next.js, Recharts, and accessible dark mode UI primitives.',
     description:
-      'PulseAnalytics provides real-time visualization of digital product performance metrics, clickstreams, and user conversion funnels.',
-    role: 'Frontend Engineer & Interaction Specialist',
-    client: 'FinTech Analytics Corp',
+      'Nova Analytics provides institutional traders with low-latency financial visualizations, custom chart layouts, and stream updates.',
+    role: 'Senior UX Engineer',
+    client: 'FinTech Global Solutions',
     duration: '4 Months',
     year: 2024,
     thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000',
     images: [
       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000',
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000',
     ],
-    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'MongoDB', 'Recharts'],
+    technologies: ['React 19', 'Next.js', 'Tailwind CSS', 'Recharts', 'TypeScript'],
     responsibilities: [
-      'Built responsive dashboard layout with customizable widget grids.',
-      'Optimized heavy DOM data rendering with virtualized tables and incremental chart updates.',
+      'Built high-frequency data chart components with sub-100ms render performance.',
+      'Implemented fluid responsive dark mode theme primitives.',
     ],
     challenge:
-      'Large data payloads caused main thread freezing during real-time chart updates on mobile devices.',
-    research: 'Analyzed performance profiles identifying canvas redraw and layout thrashing issues.',
+      'Complex tabular data and dense financial charts overburdened user cognition on mobile displays.',
+    research:
+      'Analyzed user session recordings to optimize UI layout hierarchy and chart zoom controls.',
+    designProcess:
+      'Iterated card layouts with high-contrast color coding for real-time market trends.',
     solution:
-      'Implemented Web Worker data parsing and dynamic lazy loading of historical metric segments.',
+      'Streamlined dashboard layout with collapsible side panels and touch-optimized chart controls.',
     outcome:
-      'Achieved silky-smooth 60fps chart rendering and cut initial dashboard load time by 60%.',
-    liveUrl: 'https://pulseanalytics.example.com',
-    githubUrl: 'https://github.com/example/pulse-analytics',
-    featured: true,
+      'Increased mobile dashboard active session length by 38%.',
+    liveUrl: 'https://nova-analytics.example.com',
+    githubUrl: 'https://github.com/example/nova-analytics',
+    featured: false,
     status: 'published',
     order: 2,
-    seoTitle: 'PulseAnalytics — UX Metrics Platform Case Study | Yathish Shettigar',
-    seoDescription:
-      'Case study on building PulseAnalytics: real-time dashboard visualization and mobile-first performance optimization.',
   },
   {
-    title: 'AuraStudio — Creative Portfolio & Micro-Interaction Engine',
-    slug: 'aura-studio',
+    title: 'Pulse Health — Telehealth Care Platform',
+    slug: 'pulse-health',
     shortDescription:
-      'An immersive, scroll-driven interactive portfolio website showcasing custom GSAP animations and Lenis smooth scrolling.',
+      'A HIPAA-compliant mobile telehealth patient portal offering asynchronous doctor consultations and prescription management.',
     description:
-      'AuraStudio is a digital brand experience crafted to push the boundaries of modern browser interactions without sacrificing performance.',
-    role: 'UX Designer & Motion Developer',
-    client: 'Aura Digital Agency',
-    duration: '3 Months',
+      'Pulse Health streamlines virtual consultations for chronic care patients, featuring automated appointment reminders and secure chat.',
+    role: 'Lead Frontend Developer',
+    client: 'Pulse Healthcare Systems',
+    duration: '5 Months',
     year: 2024,
-    thumbnail: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1000',
+    thumbnail: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000',
     images: [
-      'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1000',
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000',
     ],
-    technologies: ['Next.js', 'TypeScript', 'GSAP', 'ScrollTrigger', 'Lenis', 'Tailwind CSS'],
+    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'WebRTC', 'Node.js'],
     responsibilities: [
-      'Designed interactive wireframes and motion choreography.',
-      'Developed GSAP timeline sequences and Lenis smooth scroll integration.',
+      'Developed real-time video consultation interface with fallback connection handling.',
+      'Ensured strict compliance with HIPAA security standards.',
     ],
     challenge:
-      'Balancing high-end visual animations with strict accessibility and reduced-motion user preferences.',
+      'Elderly patients struggled with convoluted registration forms and camera permission prompts.',
+    research:
+      'Conducted remote usability testing with 12 senior patients to refine onboarding flow.',
+    designProcess:
+      'Designed high-legibility typographic scale and single-tap appointment join buttons.',
     solution:
-      'Built custom motion hooks that automatically disable scroll scrubbing when `prefers-reduced-motion` is detected.',
+      'Engineered 3-step simplified appointment join workflow with visual diagnostic feedback.',
     outcome:
-      'Delivered an award-nominated visual experience with a 100/100 Lighthouse performance score.',
-    liveUrl: 'https://aurastudio.example.com',
-    githubUrl: 'https://github.com/example/aura-studio',
+      'Reduced missed virtual appointments by 52%.',
+    liveUrl: 'https://pulse-health.example.com',
+    githubUrl: 'https://github.com/example/pulse-health',
     featured: true,
     status: 'published',
     order: 3,
-    seoTitle: 'AuraStudio — Creative Portfolio Case Study | Yathish Shettigar',
-    seoDescription:
-      'Explore the design and implementation of AuraStudio: interactive GSAP animations, Lenis scroll, and accessible motion controls.',
+  },
+  {
+    title: 'OmniToken — Multi-Brand Design Token Engine',
+    slug: 'omni-token',
+    shortDescription:
+      'Automated design token transformation pipeline converting Figma styles into multi-platform CSS, Swift, and Android XML assets.',
+    description:
+      'OmniToken syncs design variables directly from Figma APIs and distributes audited design tokens across web, iOS, and Android codebases.',
+    role: 'Design System Architect',
+    client: 'Omni Digital Ecosystems',
+    duration: '3 Months',
+    year: 2023,
+    thumbnail: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&q=80&w=1000',
+    images: [
+      'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&q=80&w=1000',
+    ],
+    technologies: ['TypeScript', 'Style Dictionary', 'Node.js', 'Figma API', 'Tailwind CSS'],
+    responsibilities: [
+      'Authored automated Style Dictionary build transforms for web and mobile targets.',
+      'Integrated GitHub Actions CI pipeline for automated token publishing.',
+    ],
+    challenge:
+      'Manual copy-pasting of color hex codes and spacing tokens caused constant visual regressions.',
+    research:
+      'Audited 400+ color and typography tokens across 3 separate brand style guides.',
+    designProcess:
+      'Mapped semantic token names (`color.surface.primary`) to core primitive tokens.',
+    solution:
+      'Built CLI tool that builds and validates tokens on every Figma publish event.',
+    outcome:
+      'Eliminated token handoff friction completely across 6 engineering teams.',
+    liveUrl: 'https://omni-token.example.com',
+    githubUrl: 'https://github.com/example/omni-token',
+    featured: false,
+    status: 'published',
+    order: 4,
   },
 ];
+
+let cachedProjects: Project[] | null = null;
+let lastFetchTime = 0;
+const CACHE_TTL = 30000;
 
 function sanitizeProjectDoc(doc: any): Project {
   return {
@@ -161,9 +201,14 @@ async function ensureSeedProjects() {
 }
 
 export async function getPublishedProjects(): Promise<Project[]> {
+  const now = Date.now();
+  if (cachedProjects && now - lastFetchTime < CACHE_TTL) {
+    return cachedProjects;
+  }
+
   try {
     const db = await connectToDatabase();
-    if (!db) return DEFAULT_PROJECTS;
+    if (!db) return cachedProjects || DEFAULT_PROJECTS;
 
     await ensureSeedProjects();
 
@@ -171,10 +216,13 @@ export async function getPublishedProjects(): Promise<Project[]> {
       .sort({ order: 1, createdAt: -1 })
       .lean();
 
-    return docs.map(sanitizeProjectDoc);
+    const result = docs.map(sanitizeProjectDoc);
+    cachedProjects = result;
+    lastFetchTime = now;
+    return result;
   } catch (error) {
     console.error('Error fetching published projects:', error);
-    return DEFAULT_PROJECTS;
+    return cachedProjects || DEFAULT_PROJECTS;
   }
 }
 
@@ -184,20 +232,17 @@ export async function getFeaturedProjects(): Promise<Project[]> {
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  const projects = await getPublishedProjects();
+  const found = projects.find((p) => p.slug === slug);
+  if (found) return found;
+
   try {
     const db = await connectToDatabase();
-    if (!db) {
-      return DEFAULT_PROJECTS.find((p) => p.slug === slug) || null;
-    }
-
-    await ensureSeedProjects();
-
+    if (!db) return null;
     const doc = await ProjectModel.findOne({ slug, status: 'published' }).lean();
     if (!doc) return null;
-
     return sanitizeProjectDoc(doc);
   } catch (error) {
-    console.error(`Error fetching project slug "${slug}":`, error);
     return null;
   }
 }
@@ -215,9 +260,7 @@ export async function getAllProjectsForAdmin(status?: string): Promise<Project[]
 
 export async function getProjectById(id: string): Promise<Project | null> {
   const db = await connectToDatabase();
-  if (!db) {
-    return DEFAULT_PROJECTS.find((p) => p._id === id) || null;
-  }
+  if (!db) return null;
 
   await ensureSeedProjects();
 
@@ -229,9 +272,7 @@ export async function getProjectById(id: string): Promise<Project | null> {
 
 export async function createProject(data: Omit<Project, '_id'>): Promise<{ success: boolean; project?: Project; error?: string }> {
   const db = await connectToDatabase();
-  if (!db) {
-    return { success: false, error: 'Database connection unavailable' };
-  }
+  if (!db) return { success: false, error: 'Database connection unavailable' };
 
   await ensureSeedProjects();
 
@@ -241,14 +282,15 @@ export async function createProject(data: Omit<Project, '_id'>): Promise<{ succe
   }
 
   const createdDoc = await ProjectModel.create(data);
+  cachedProjects = null;
+  lastFetchTime = 0;
+
   return { success: true, project: sanitizeProjectDoc(createdDoc.toObject()) };
 }
 
 export async function updateProject(id: string, data: Partial<Project>): Promise<{ success: boolean; project?: Project; error?: string }> {
   const db = await connectToDatabase();
-  if (!db) {
-    return { success: false, error: 'Database connection unavailable' };
-  }
+  if (!db) return { success: false, error: 'Database connection unavailable' };
 
   await ensureSeedProjects();
 
@@ -260,25 +302,25 @@ export async function updateProject(id: string, data: Partial<Project>): Promise
   }
 
   const updatedDoc = await ProjectModel.findByIdAndUpdate(id, { $set: data }, { new: true, runValidators: true }).lean();
-  if (!updatedDoc) {
-    return { success: false, error: 'Project not found' };
-  }
+  if (!updatedDoc) return { success: false, error: 'Project not found' };
+
+  cachedProjects = null;
+  lastFetchTime = 0;
 
   return { success: true, project: sanitizeProjectDoc(updatedDoc) };
 }
 
 export async function deleteProject(id: string): Promise<{ success: boolean; error?: string }> {
   const db = await connectToDatabase();
-  if (!db) {
-    return { success: false, error: 'Database connection unavailable' };
-  }
+  if (!db) return { success: false, error: 'Database connection unavailable' };
 
   await ensureSeedProjects();
 
   const deleted = await ProjectModel.findByIdAndDelete(id).lean();
-  if (!deleted) {
-    return { success: false, error: 'Project not found' };
-  }
+  if (!deleted) return { success: false, error: 'Project not found' };
+
+  cachedProjects = null;
+  lastFetchTime = 0;
 
   return { success: true };
 }

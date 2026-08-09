@@ -1,5 +1,5 @@
 import { getProfile } from '@/services/profile';
-import { getFeaturedProjects } from '@/services/projects';
+import { getPublishedProjects } from '@/services/projects';
 import { getExperiences } from '@/services/experience';
 import { getSkills } from '@/services/skills';
 import { getCertifications } from '@/services/certifications';
@@ -18,7 +18,7 @@ export const revalidate = 60; // Revalidate static data every 60 seconds
 
 export default async function HomePage() {
   const profile = await getProfile();
-  const projects = await getFeaturedProjects();
+  const projects = await getPublishedProjects();
   const experiences = await getExperiences();
   const skills = await getSkills();
   const certifications = await getCertifications();
@@ -28,11 +28,11 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection profile={profile} />
-      <SelectedWorkSection projects={projects} />
-      <AboutSection profile={profile} />
-      <ExperienceSection experiences={experiences} />
+      <AboutSection profile={profile} education={education} />
       <SkillsSection skills={skills} />
-      <CertificationsSection certifications={certifications} education={education} />
+      <SelectedWorkSection projects={projects} />
+      <ExperienceSection experiences={experiences} />
+      <CertificationsSection certifications={certifications} />
       <HobbiesSection hobbies={hobbies} />
       <ContactSection profile={profile} />
     </>

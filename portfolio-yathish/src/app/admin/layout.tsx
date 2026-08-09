@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -10,7 +11,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   // Do not show admin navigation bar on login page
   if (pathname === '/admin/login') {
-    return <div className="min-h-screen bg-zinc-950 text-zinc-100">{children}</div>;
+    return <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors">{children}</div>;
   }
 
   const handleLogout = async () => {
@@ -40,12 +41,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans transition-colors">
       {/* Admin Top Navigation: Fixed & End-to-End with max-w-7xl inner container */}
-      <header className="sticky top-0 z-50 w-full bg-zinc-900 border-b border-zinc-800">
+      <header className="sticky top-0 z-50 w-full bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link href="/admin" className="font-bold text-lg text-emerald-400 tracking-tight flex items-center gap-2">
+            <Link href="/admin" className="font-bold text-lg text-emerald-600 dark:text-emerald-400 tracking-tight flex items-center gap-2">
               <span className="w-6 h-6 rounded bg-emerald-500 text-zinc-950 font-mono text-xs flex items-center justify-center font-extrabold">
                 CMS
               </span>
@@ -59,8 +60,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   href={link.href}
                   className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                     isActive(link.href)
-                      ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/80'
-                      : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/80'
+                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800'
                   }`}
                 >
                   {link.name}
@@ -70,12 +71,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="/" target="_blank" className="text-xs text-zinc-400 hover:text-zinc-200 font-mono">
+            <ThemeToggle />
+            <Link href="/" target="_blank" className="text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 font-mono">
               View Live Site ↗
             </Link>
             <button
               onClick={handleLogout}
-              className="px-3 py-1.5 text-xs font-medium rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors cursor-pointer"
+              className="px-3 py-1.5 text-xs font-medium rounded-md bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-300 transition-colors cursor-pointer"
             >
               Logout
             </button>
@@ -84,7 +86,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </header>
 
       {/* Sub-nav for mobile screens */}
-      <div className="lg:hidden bg-zinc-900/60 border-b border-zinc-800 w-full">
+      <div className="lg:hidden bg-white/80 dark:bg-zinc-900/60 border-b border-zinc-200 dark:border-zinc-800 w-full transition-colors">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center gap-2 overflow-x-auto text-xs">
           {navLinks.map((link) => (
             <Link
@@ -92,8 +94,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               href={link.href}
               className={`px-2.5 py-1 rounded whitespace-nowrap ${
                 isActive(link.href)
-                  ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
-                  : 'text-zinc-400'
+                  ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
+                  : 'text-zinc-600 dark:text-zinc-400'
               }`}
             >
               {link.name}

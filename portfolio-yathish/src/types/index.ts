@@ -1,11 +1,23 @@
-export type ProjectStatus = 'draft' | 'published' | 'archived';
-export type SkillCategory = 'UX / Product Design' | 'Frontend' | 'Backend' | 'Database' | 'Tools' | 'Motion / Interaction';
+export type SkillCategory =
+  | 'UX & Product Development'
+  | 'Front End Development'
+  | 'Tools & Technology'
+  | 'UX / Product Design'
+  | 'Frontend'
+  | 'Backend'
+  | 'Database'
+  | 'Tools'
+  | 'Motion / Interaction';
 
 export interface SocialLinks {
   github?: string;
   linkedin?: string;
   twitter?: string;
   website?: string;
+  instagram?: string;
+  behance?: string;
+  facebook?: string;
+  whatsapp?: string;
 }
 
 export interface Profile {
@@ -67,6 +79,7 @@ export interface Experience {
   startDate: string;
   endDate?: string;
   current: boolean;
+  isLatestEmployer?: boolean;
   summary: string;
   responsibilities?: string[];
   achievements?: string[];
@@ -86,6 +99,8 @@ export interface Skill {
   icon?: string;
   order: number;
   status: 'published' | 'draft';
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export interface Certification {
@@ -97,8 +112,12 @@ export interface Certification {
   credentialId?: string;
   credentialUrl?: string;
   certificateImage?: string;
+  thumbnail?: string;
+  featured?: boolean;
   order: number;
   status: 'published' | 'draft';
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export interface Education {
@@ -110,6 +129,8 @@ export interface Education {
   endDate?: string;
   description?: string;
   order: number;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export interface Hobby {
@@ -120,6 +141,8 @@ export interface Hobby {
   image?: string;
   order: number;
   status: 'published' | 'draft';
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export interface ContactInput {

@@ -12,6 +12,7 @@ const ExperienceSchema = new Schema<IExperienceDocument>(
     startDate: { type: String, required: true },
     endDate: { type: String },
     current: { type: Boolean, default: false },
+    isLatestEmployer: { type: Boolean, default: false },
     summary: { type: String, required: true },
     responsibilities: [{ type: String }],
     achievements: [{ type: String }],
@@ -22,7 +23,10 @@ const ExperienceSchema = new Schema<IExperienceDocument>(
   { timestamps: true }
 );
 
+if (mongoose.models && mongoose.models.Experience) {
+  delete mongoose.models.Experience;
+}
+
 export const ExperienceModel: Model<IExperienceDocument> =
-  (mongoose.models && mongoose.models.Experience) ||
-  mongoose.model<IExperienceDocument>('Experience', ExperienceSchema);
+  mongoose.models.Experience || mongoose.model<ISkillDocument>('Experience', ExperienceSchema);
 
