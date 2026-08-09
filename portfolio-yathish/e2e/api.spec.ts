@@ -37,8 +37,8 @@ test.describe('Backend API & Auth Workflows', () => {
   test('Admin POST /api/admin/login should set session cookie', async ({ request }) => {
     const response = await request.post('/api/admin/login', {
       data: {
-        username: 'admin',
-        password: 'admin123',
+        username: process.env.ADMIN_USERNAME || 'Yathish1234',
+        password: process.env.ADMIN_PASSWORD || 'Yathish@Yathish1234',
       },
     });
 

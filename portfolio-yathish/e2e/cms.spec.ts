@@ -7,8 +7,8 @@ test.describe('End-to-End CMS Admin & Publishing Flow', () => {
   test('Complete Admin CMS workflow: Login -> Draft -> Preview -> Publish -> Archive -> Delete', async ({ page }) => {
     // 1. Login
     await page.goto('/admin/login');
-    await page.fill('#admin-username', 'admin');
-    await page.fill('#admin-password', 'admin123');
+    await page.fill('#admin-username', process.env.ADMIN_USERNAME || 'Yathish1234');
+    await page.fill('#admin-password', process.env.ADMIN_PASSWORD || 'Yathish@Yathish1234');
     await page.getByRole('button', { name: 'Sign In to Admin' }).click();
 
     // Verify redirected to /admin

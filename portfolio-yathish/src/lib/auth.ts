@@ -3,9 +3,9 @@ import { NextRequest } from 'next/server';
 const AUTH_SECRET = process.env.AUTH_SECRET || 'fallback-secret-at-least-32-chars-long';
 export const ADMIN_COOKIE_NAME = 'admin_session_token';
 
-// Simple lightweight HMAC/Token helper for admin session verification
+// Simple lightweight HMAC/Token helper for admin session verification (2 hours timeout)
 export function signAdminToken(username: string): string {
-  const payload = { username, exp: Date.now() + 24 * 60 * 60 * 1000 };
+  const payload = { username, exp: Date.now() + 2 * 60 * 60 * 1000 }; // 2 hours expiration
   const encoded = Buffer.from(JSON.stringify(payload)).toString('base64url');
   // Simple signature check
   const signature = Buffer.from(`${encoded}:${AUTH_SECRET}`).toString('base64url').slice(0, 32);

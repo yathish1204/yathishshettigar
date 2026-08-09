@@ -1,10 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { adminLoginSchema } from '@/lib/validations';
 import { signAdminToken, ADMIN_COOKIE_NAME } from '@/lib/auth';
 import { apiSuccess, apiError } from '@/lib/api-response';
-
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,6 +14,13 @@ export async function POST(request: NextRequest) {
     }
 
     const { username, password } = validation.data;
+    const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+    if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
+      console.error('ADMIN_USERNAME or ADMIN_PASSWORD environment variable is not configured');
+      return apiError('SERVER_ERROR', 'Admin credentials not configured in environment', 500);
+    }
 
     if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
       return apiError('UNAUTHORIZED', 'Invalid username or password', 401);
@@ -31,7 +35,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 24 * 60 * 60, // 24 hours
+      maxAge: 2 * 60 * 60, // 2 hours session timeout
       path: '/',
     });
 
