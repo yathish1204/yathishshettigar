@@ -12,6 +12,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yathishshettigar.site';
 
+  const defaultSharingPhoto = 'https://res.cloudinary.com/ddzrfwfsl/image/upload/v1786337057/yathish-hero-poster-img_1_qfd3fd.png';
+  const shareImage = profile.profileImage && !profile.profileImage.includes('unsplash.com')
+    ? profile.profileImage
+    : defaultSharingPhoto;
+
   return {
     title: {
       default: `${profile.name} — ${profile.title}`,
@@ -28,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: 'website',
       images: [
         {
-          url: profile.profileImage || '/og-image.jpg',
+          url: shareImage,
           width: 1200,
           height: 630,
           alt: `${profile.name} — ${profile.title}`,
@@ -39,6 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: `${profile.name} — ${profile.title}`,
       description: profile.tagline,
+      images: [shareImage],
     },
     robots: {
       index: true,

@@ -319,7 +319,7 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
       {/* 16:8 Aspect Ratio Thumbnail Container */}
       <div className="relative aspect-[16/8] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-950">
         <Image
-          src={project.thumbnail || '/og-image.jpg'}
+          src={project.thumbnail || 'https://res.cloudinary.com/ddzrfwfsl/image/upload/v1786337057/yathish-hero-poster-img_1_qfd3fd.png'}
           alt={`Thumbnail for ${project.title}`}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

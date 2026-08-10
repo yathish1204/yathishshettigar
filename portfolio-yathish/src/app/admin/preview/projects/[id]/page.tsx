@@ -58,7 +58,7 @@ export default async function AdminProjectPreviewPage({ params }: PreviewProps) 
 
         <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800">
           <Image
-            src={project.thumbnail || '/og-image.jpg'}
+            src={project.thumbnail || 'https://res.cloudinary.com/ddzrfwfsl/image/upload/v1786337057/yathish-hero-poster-img_1_qfd3fd.png'}
             alt={project.title}
             fill
             className="object-cover object-top"
