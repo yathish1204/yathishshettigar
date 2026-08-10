@@ -14,8 +14,8 @@ export default async function ContactPage() {
   const profile = await getProfile();
 
   return (
-    <div className="py-12 md:py-16">
+    <article className="py-12 md:py-16">
       <ContactSection profile={profile} />
-    </div>
+    </article>
   );
 }

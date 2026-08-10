@@ -15,11 +15,10 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function AboutPage() {
-  const profile = await getProfile();
-  const education = await getEducation();
+  const [profile, education] = await Promise.all([getProfile(), getEducation()]);
 
   return (
-    <div className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <article className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
       <SectionHeading
         eyebrow="Biography & Philosophy"
         title="Engineering Human-Centered Web Applications"
@@ -27,26 +26,26 @@ export default async function AboutPage() {
       />
 
       <div className="space-y-12">
-        <div className="max-w-3xl space-y-6 text-zinc-300 leading-relaxed text-base md:text-lg">
+        <section aria-label="Biography" className="max-w-3xl space-y-6 text-zinc-300 leading-relaxed text-base md:text-lg">
           <p>{profile.longBio}</p>
-        </div>
+        </section>
 
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-zinc-100 mb-6 font-sans">
+        <section aria-labelledby="methodology-heading">
+          <h2 id="methodology-heading" className="text-2xl md:text-3xl font-bold text-zinc-100 mb-6 font-sans">
             UX Engineering Methodology
           </h2>
           <MethodologyGrid />
-        </div>
+        </section>
 
         {education && education.length > 0 && (
-          <div className="pt-8 border-t border-zinc-800">
-            <h2 className="text-2xl md:text-3xl font-bold text-zinc-100 mb-6 font-sans">Education</h2>
+          <section aria-labelledby="education-heading" className="pt-8 border-t border-zinc-800">
+            <h2 id="education-heading" className="text-2xl md:text-3xl font-bold text-zinc-100 mb-6 font-sans">Education</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {education.map((edu) => (
                 <EducationCard key={edu._id || edu.institution} education={edu} />
               ))}
             </div>
-          </div>
+          </section>
         )}
 
         <div className="pt-4 flex flex-wrap gap-4">
@@ -58,6 +57,6 @@ export default async function AboutPage() {
           </Button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

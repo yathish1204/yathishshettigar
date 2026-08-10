@@ -20,17 +20,17 @@ export function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 disabled:opacity-50 disabled:pointer-events-none cursor-pointer hover:scale-105 active:scale-95';
+    'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 disabled:opacity-50 disabled:pointer-events-none cursor-pointer hover:scale-105 active:scale-95';
 
   const variants = {
     primary:
-      'bg-emerald-500 text-zinc-950 hover:bg-emerald-400 font-semibold shadow-lg shadow-emerald-500/20',
+      'bg-[#B45309] text-white hover:bg-[#92400e] dark:bg-[#FBBF24] dark:text-zinc-950 dark:hover:bg-[#f59e0b] font-semibold border-2 border-[#B45309] dark:border-[#FBBF24] shadow-lg shadow-[#B45309]/20 dark:shadow-[#FBBF24]/20',
     secondary:
       'bg-zinc-800 text-zinc-100 hover:bg-zinc-700 border border-zinc-700/60',
     outline:
-      'border-2 border-emerald-500 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-zinc-950 dark:hover:text-zinc-950 font-bold bg-transparent shadow-sm',
+      'border-2 border-[#B45309] text-[#B45309] dark:border-[#FBBF24] dark:text-[#FBBF24] hover:bg-[#B45309] hover:text-white dark:hover:bg-[#FBBF24] dark:hover:text-zinc-950 font-bold bg-transparent shadow-sm',
     ghost:
-      'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60 bg-transparent',
+      'text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] hover:bg-zinc-800/60 bg-transparent',
   };
 
   const sizes = {

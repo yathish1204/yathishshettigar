@@ -17,13 +17,15 @@ import { ContactSection } from '@/sections/ContactSection';
 export const revalidate = 60; // Revalidate static data every 60 seconds
 
 export default async function HomePage() {
-  const profile = await getProfile();
-  const projects = await getPublishedProjects();
-  const experiences = await getExperiences();
-  const skills = await getSkills();
-  const certifications = await getCertifications();
-  const education = await getEducation();
-  const hobbies = await getHobbies();
+  const [profile, projects, experiences, skills, certifications, education, hobbies] = await Promise.all([
+    getProfile(),
+    getPublishedProjects(),
+    getExperiences(),
+    getSkills(),
+    getCertifications(),
+    getEducation(),
+    getHobbies(),
+  ]);
 
   return (
     <>

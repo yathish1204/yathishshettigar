@@ -19,6 +19,8 @@ export default function AdminProfilePage() {
     profileImage: '',
     heroVideoUrl: '',
     heroVideoPoster: '',
+    heroVideoUrlLight: '',
+    heroVideoPosterLight: '',
     resumeUrl: '',
     email: '',
     location: '',
@@ -127,15 +129,36 @@ export default function AdminProfilePage() {
           <textarea name="tagline" rows={2} required value={formData.tagline} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 leading-relaxed resize-y focus:outline-none focus:border-emerald-500" />
         </div>
 
-        {/* Hero Video & Poster Attribute URLs */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Hero Video URL (MP4/WebM)</label>
-            <textarea name="heroVideoUrl" rows={2} value={formData.heroVideoUrl || ''} onChange={handleChange} placeholder="https://..." className="w-full px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-emerald-500" />
+        {/* Hero Video & Poster Attribute URLs (Dark & Light Theme) */}
+        <div className="space-y-4 p-4 rounded-xl bg-slate-100/60 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800">
+          <div className="font-mono text-xs font-bold text-[#B45309] dark:text-[#FBBF24] uppercase tracking-wider">
+            Dark Theme Video Settings
           </div>
-          <div>
-            <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Hero Video Poster Image URL</label>
-            <textarea name="heroVideoPoster" rows={2} value={formData.heroVideoPoster || ''} onChange={handleChange} placeholder="https://..." className="w-full px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-emerald-500" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Dark Theme Video URL (MP4/WebM)</label>
+              <textarea name="heroVideoUrl" rows={2} value={formData.heroVideoUrl || ''} onChange={handleChange} placeholder="https://..." className="w-full px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
+            </div>
+            <div>
+              <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Dark Theme Poster Image URL</label>
+              <textarea name="heroVideoPoster" rows={2} value={formData.heroVideoPoster || ''} onChange={handleChange} placeholder="https://..." className="w-full px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4 p-4 rounded-xl bg-slate-100/60 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800">
+          <div className="font-mono text-xs font-bold text-[#B45309] dark:text-[#FBBF24] uppercase tracking-wider">
+            Light Theme Video Settings
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Light Theme Video URL (MP4/WebM)</label>
+              <textarea name="heroVideoUrlLight" rows={2} value={formData.heroVideoUrlLight || ''} onChange={handleChange} placeholder="https://... (fallback to Dark Theme Video)" className="w-full px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
+            </div>
+            <div>
+              <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Light Theme Poster Image URL</label>
+              <textarea name="heroVideoPosterLight" rows={2} value={formData.heroVideoPosterLight || ''} onChange={handleChange} placeholder="https://... (fallback to Dark Theme Poster)" className="w-full px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
+            </div>
           </div>
         </div>
 

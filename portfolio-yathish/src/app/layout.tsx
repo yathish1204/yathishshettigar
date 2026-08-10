@@ -58,8 +58,12 @@ export default async function RootLayout({
   const websiteJsonLd = getWebSiteJsonLd(profile, baseUrl);
 
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className="dark scroll-smooth overflow-x-hidden">
       <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
@@ -69,7 +73,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className="bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-emerald-500 selection:text-zinc-950 min-h-screen flex flex-col">
+      <body className="bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-[#B45309] selection:text-white dark:selection:bg-[#FBBF24] dark:selection:text-zinc-950 min-h-screen flex flex-col overflow-x-hidden">
         <SmoothScroll>
           <GSAPScroll>
             <ConditionalLayout profile={profile}>{children}</ConditionalLayout>

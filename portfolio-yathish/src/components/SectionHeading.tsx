@@ -29,7 +29,7 @@ export function SectionHeading({
       >
         <div className="max-w-2xl">
           {eyebrow && (
-            <span className="inline-block text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-2">
+            <span aria-hidden="true" className="inline-block text-xs font-bold uppercase tracking-widest text-gradient-accent mb-2">
               {eyebrow}
             </span>
           )}
@@ -53,7 +53,7 @@ export function SectionHeading({
       )}
     >
       {eyebrow && (
-        <span className="inline-block text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-2">
+        <span aria-hidden="true" className="inline-block text-xs font-bold uppercase tracking-widest text-gradient-accent mb-2">
           {eyebrow}
         </span>
       )}

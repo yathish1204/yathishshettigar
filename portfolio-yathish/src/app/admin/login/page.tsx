@@ -1,14 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const rawRedirect = searchParams.get('redirect');
+  const redirectTarget =
+    rawRedirect && rawRedirect.startsWith('/admin') && rawRedirect !== '/admin/login'
+      ? rawRedirect
+      : '/admin';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,8 +31,8 @@ export default function AdminLoginPage() {
       const json = await response.json();
 
       if (response.ok && json.success) {
-        router.push('/admin');
-        router.refresh();
+        // Redirect to intended destination after successful login
+        window.location.href = redirectTarget;
       } else {
         setError(json.error?.message || 'Invalid username or password');
       }
@@ -95,5 +101,19 @@ export default function AdminLoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center p-4 bg-zinc-950 text-zinc-400 text-xs font-mono">
+          Loading login portal...
+        </div>
+      }
+    >
+      <AdminLoginForm />
+    </Suspense>
   );
 }

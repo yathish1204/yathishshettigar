@@ -14,7 +14,7 @@ export function HobbiesSection({ hobbies }: { hobbies: Hobby[] }) {
         />
 
         {/* 4 Column Responsive Grid Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 p-1">
           {hobbies.map((hobby) => (
             <HobbyCard key={hobby._id || hobby.name} hobby={hobby} />
           ))}

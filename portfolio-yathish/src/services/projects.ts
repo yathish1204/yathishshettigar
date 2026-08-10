@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ProjectModel } from '@/models/Project';
 import { Project } from '@/types';
@@ -200,7 +201,7 @@ async function ensureSeedProjects() {
   }
 }
 
-export async function getPublishedProjects(): Promise<Project[]> {
+export const getPublishedProjects = cache(async function getPublishedProjects(): Promise<Project[]> {
   const now = Date.now();
   if (cachedProjects && now - lastFetchTime < CACHE_TTL) {
     return cachedProjects;
@@ -210,11 +211,18 @@ export async function getPublishedProjects(): Promise<Project[]> {
     const db = await connectToDatabase();
     if (!db) return cachedProjects || DEFAULT_PROJECTS;
 
-    await ensureSeedProjects();
-
     const docs = await ProjectModel.find({ status: 'published' })
       .sort({ order: 1, createdAt: -1 })
       .lean();
+
+    if (docs.length === 0) {
+      await ensureSeedProjects();
+      const reDocs = await ProjectModel.find({ status: 'published' }).sort({ order: 1, createdAt: -1 }).lean();
+      const result = reDocs.map(sanitizeProjectDoc);
+      cachedProjects = result;
+      lastFetchTime = now;
+      return result;
+    }
 
     const result = docs.map(sanitizeProjectDoc);
     cachedProjects = result;
@@ -224,7 +232,7 @@ export async function getPublishedProjects(): Promise<Project[]> {
     console.error('Error fetching published projects:', error);
     return cachedProjects || DEFAULT_PROJECTS;
   }
-}
+});
 
 export async function getFeaturedProjects(): Promise<Project[]> {
   const projects = await getPublishedProjects();

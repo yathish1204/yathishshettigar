@@ -12,7 +12,11 @@ export function ExperienceList({ experiences }: { experiences: Experience[] }) {
   };
 
   return (
-    <div className="max-w-4xl relative pl-6 md:pl-8 border-l border-zinc-300 dark:border-zinc-800 ml-2.5 sm:ml-4">
+    <div
+      role="list"
+      aria-label="Work experience history"
+      className="max-w-4xl relative pl-6 md:pl-8 border-l border-zinc-300 dark:border-zinc-800 ml-2.5 sm:ml-4"
+    >
       {experiences.map((exp, idx) => {
         const itemId = exp._id || exp.company || `exp-${idx}`;
         return (

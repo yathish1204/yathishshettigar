@@ -8,6 +8,33 @@ export function HeroSection({ profile }: { profile: Profile }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [greeting, setGreeting] = useState('');
+  const [isDark, setIsDark] = useState(true);
+
+  React.useEffect(() => {
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+    checkTheme();
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          checkTheme();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+    return () => observer.disconnect();
+  }, []);
+
+  const activeVideoUrl = isDark
+    ? profile.heroVideoUrl || profile.heroVideoUrlLight
+    : profile.heroVideoUrlLight || profile.heroVideoUrl;
+
+  const activeVideoPoster = isDark
+    ? profile.heroVideoPoster || profile.profileImage
+    : profile.heroVideoPosterLight || profile.heroVideoPoster || profile.profileImage;
 
   React.useEffect(() => {
     const hour = new Date().getHours();
@@ -27,7 +54,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
       videoRef.current.muted = isMuted;
       videoRef.current.volume = 1.0;
     }
-  }, [isMuted]);
+  }, [isMuted, activeVideoUrl]);
 
   const toggleMute = () => {
     const video = videoRef.current;
@@ -92,34 +119,40 @@ export function HeroSection({ profile }: { profile: Profile }) {
 
   return (
     <section id="hero" className="relative w-full min-h-[calc(100vh-72px)] sm:h-[calc(100vh-72px)] flex flex-col justify-center py-8 sm:py-8 bg-slate-50 dark:bg-zinc-950 transition-colors overflow-hidden">
-      {/* Background Video (Shifted towards the right side on md+ screens) or Image Poster Fallback */}
-      {profile.heroVideoUrl ? (
+      {/* Background Video (Light or Dark video loaded dynamically with full controls) */}
+      {activeVideoUrl ? (
         <video
+          key={activeVideoUrl}
           ref={videoRef}
           autoPlay
           muted={isMuted}
           playsInline
           preload="auto"
-          poster={profile.heroVideoPoster || profile.profileImage}
-          className="absolute inset-0 md:left-[30%] md:w-[78%] w-full h-full object-cover object-center md:object-right opacity-15 dark:opacity-25 pointer-events-none transition-all"
+          poster={activeVideoPoster}
+          className="absolute inset-0 sm:left-[30%] sm:w-[75%] w-full h-full object-cover object-center md:object-right opacity-80 dark:opacity-90 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
         >
-          <source src={profile.heroVideoUrl} type="video/mp4" />
+          <source src={activeVideoUrl} type="video/mp4" />
         </video>
-      ) : profile.heroVideoPoster ? (
+      ) : activeVideoPoster ? (
         <div
-          className="absolute inset-0 md:left-[25%] md:w-[75%] w-full h-full bg-cover bg-center md:bg-right opacity-10 dark:opacity-15 pointer-events-none transition-all"
-          style={{ backgroundImage: `url(${profile.heroVideoPoster})` }}
+          className="absolute inset-0 md:left-[20%] md:w-[80%] w-full h-full bg-cover bg-center md:bg-right opacity-70 dark:opacity-85 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
+          style={{ backgroundImage: `url(${activeVideoPoster})` }}
         />
       ) : (
-        /* Subtle Background Glow */
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+        /* Subtle Background Glow Fallback */
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 blur-[120px] rounded-full pointer-events-none" />
       )}
 
-      {/* Horizontal Linear Gradient Mask (Smooth fade from text side to video side on md+ screens) */}
-      <div className="hidden md:block absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent dark:from-zinc-950 dark:via-zinc-950/80 dark:to-transparent pointer-events-none z-10" />
+      {/* Subtle Background Glow Fallback */}
+      {!profile.heroVideoUrl && !profile.heroVideoUrlLight && !profile.heroVideoPoster && !profile.heroVideoPosterLight && (
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 blur-[120px] rounded-full pointer-events-none" />
+      )}
 
-      {/* Bottom Linear Gradient Mask for Smooth Fade */}
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-slate-50 via-slate-50/70 to-transparent dark:from-zinc-950 dark:via-zinc-950/70 dark:to-transparent pointer-events-none z-10" />
+      {/* Horizontal Linear Gradient Mask (Light fade from text side to video side on md+ screens) */}
+      <div className="hidden md:block absolute inset-y-0 left-0 w-2/5 bg-gradient-to-r from-slate-50 via-slate-50/60 to-transparent dark:from-zinc-950 dark:via-zinc-950/60 to-transparent pointer-events-none z-10" />
+
+      {/* Bottom Linear Gradient Mask for Smooth Section Transition */}
+      <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-slate-50 via-slate-50/40 to-transparent dark:from-zinc-950 dark:via-zinc-950/40 to-transparent pointer-events-none z-10" />
 
       {/* Main Hero Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
@@ -130,7 +163,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
               Hi{greeting ? ` ${greeting}` : ''}, I'm
             </span>
             <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans leading-tight sm:leading-none">
-              <span className="text-emerald-600 dark:text-emerald-400">{profile.name}</span>
+              <span className="text-gradient-accent">{profile.name}</span>
             </h1>
           </div>
 
@@ -174,7 +207,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={item.name}
-                    className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-500/40 transition-all hover:scale-110 shadow-sm dark:shadow-none backdrop-blur-sm flex items-center justify-center"
+                    className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/90 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] hover:border-[#B45309] dark:hover:border-[#FBBF24] transition-all hover:scale-110 shadow-sm backdrop-blur-sm flex items-center justify-center cursor-pointer"
                   >
                     {item.icon}
                   </a>
@@ -197,22 +230,23 @@ export function HeroSection({ profile }: { profile: Profile }) {
             <button
               type="button"
               onClick={toggleMute}
-              className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-500/40 transition-all shadow-sm backdrop-blur-md cursor-pointer hover:scale-110 flex items-center justify-center"
+              className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/90 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] hover:border-[#B45309] dark:hover:border-[#FBBF24] transition-all shadow-sm backdrop-blur-md cursor-pointer hover:scale-110 flex items-center justify-center"
               aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+              aria-pressed={!isMuted}
             >
               {isMuted ? (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
                 </svg>
               ) : (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                 </svg>
               )}
             </button>
             {/* Tooltip on Hover */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 text-[11px] font-mono font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
+            <div aria-hidden="true" className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 text-[11px] font-mono font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
               {isMuted ? 'Unmute' : 'Mute'}
             </div>
           </div>
@@ -222,15 +256,15 @@ export function HeroSection({ profile }: { profile: Profile }) {
             <button
               type="button"
               onClick={replayVideo}
-              className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-500/40 transition-all shadow-sm backdrop-blur-md cursor-pointer hover:scale-110 flex items-center justify-center"
+              className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/90 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] hover:border-[#B45309] dark:hover:border-[#FBBF24] transition-all shadow-sm backdrop-blur-md cursor-pointer hover:scale-110 flex items-center justify-center"
               aria-label="Replay video"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
             </button>
             {/* Tooltip on Hover */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 text-[11px] font-mono font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
+            <div aria-hidden="true" className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 text-[11px] font-mono font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
               Replay
             </div>
           </div>

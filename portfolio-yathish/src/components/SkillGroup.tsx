@@ -43,43 +43,55 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
         <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
           <span>{category}</span>
         </h3>
-        <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+        <span
+          aria-label={`${skills?.length || 0} skills`}
+          className="text-[11px] font-mono text-[#B45309] dark:text-[#FBBF24] font-semibold px-2 py-0.5 rounded bg-[#B45309]/10 dark:bg-[#FBBF24]/10 border border-[#B45309]/20 dark:border-[#FBBF24]/20"
+        >
           {skills?.length || 0}
         </span>
       </div>
 
-      {/* Gray Glassmorphism Skill Chips with Hover Popovers */}
+      {/* Gray Glassmorphism Skill Chips with Hover/Focus Popovers */}
       {skills && skills.length > 0 ? (
-        <div className="flex flex-wrap gap-2 pt-1">
+        <div className="flex flex-wrap gap-2 pt-1" role="list" aria-label={`${category} skills`}>
         {skills.map((skill) => {
           const svgIcon = TechIcon({ name: skill.name });
           const { activeStep, label } = getProficiencyDetails(skill.proficiency);
           const years = skill.yearsOfExperience || 3;
 
           return (
-            <div key={skill._id || skill.name} className="relative group/chip">
+            <div key={skill._id || skill.name} className="relative group/chip" role="listitem">
               {/* Skill Chip Trigger */}
-              <div className="bg-zinc-800/10 dark:bg-zinc-800/60 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-700/60 text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-emerald-500/50 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/80 transition-all hover:scale-105 cursor-pointer">
+              <div
+                tabIndex={0}
+                role="button"
+                aria-label={`${skill.name}: ${label} level, ${years} ${years === 1 ? 'year' : 'years'} experience`}
+                className="bg-zinc-800/10 dark:bg-zinc-800/60 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-700/60 text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-[#B45309]/50 dark:hover:border-[#FBBF24]/50 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] transition-all hover:scale-105 cursor-pointer"
+              >
                 {skill.icon ? (
                   <img
                     src={skill.icon}
-                    alt={skill.name}
+                    alt=""
+                    aria-hidden="true"
                     className="w-4 h-4 object-contain shrink-0 rounded-sm"
                   />
                 ) : svgIcon ? (
                   svgIcon
                 ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 group-hover/chip:scale-125 transition-transform" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#B45309] dark:bg-[#FBBF24] shrink-0 group-hover/chip:scale-125 transition-transform" aria-hidden="true" />
                 )}
                 <span>{skill.name}</span>
               </div>
 
-              {/* Hover Popover Box (Dark text in light theme, white text in dark theme) */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl opacity-0 group-hover/chip:opacity-100 group-hover/chip:pointer-events-auto pointer-events-none transition-all duration-200 z-50 transform group-hover/chip:translate-y-0 translate-y-1">
+              {/* Hover/Focus Popover Box */}
+              <div
+                aria-hidden="true"
+                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl opacity-0 group-hover/chip:opacity-100 group-focus-within/chip:opacity-100 group-hover/chip:pointer-events-auto group-focus-within/chip:pointer-events-auto pointer-events-none transition-all duration-200 z-50 transform group-hover/chip:translate-y-0 group-focus-within/chip:translate-y-0 translate-y-1"
+              >
                 {/* Popover Header: Skill Title & Experience Years */}
                 <div className="flex items-center justify-between gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 mb-2.5">
-                  <span className="font-bold text-xs text-white dark:text-white font-sans">{skill.name}</span>
-                  <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-gray-300/10 dark:bg-gray-500/30 text-[#555] dark:text-white  whitespace-nowrap">
+                  <span className="font-bold text-xs text-zinc-900 dark:text-white font-sans">{skill.name}</span>
+                  <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-gray-300/10 dark:bg-gray-500/30 text-[#555] dark:text-white whitespace-nowrap">
                     {years} {years === 1 ? 'Year' : 'Years'}
                   </span>
                 </div>
@@ -87,7 +99,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                 {/* 4-Step Horizontal Stepper */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 dark:text-zinc-400">
-                    <span className="text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">{label}</span>
+                    <span className="text-[#B45309] dark:text-[#FBBF24] font-bold uppercase tracking-wider">{label}</span>
                   </div>
 
                   <div className="grid grid-cols-4 gap-1.5 pt-0.5">
@@ -98,7 +110,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                           <div
                             className={`h-1.5 w-full rounded-full transition-colors ${
                               isActive
-                                ? 'bg-emerald-500 shadow-sm shadow-emerald-500/10'
+                                ? 'bg-[#B45309] dark:bg-[#FBBF24] shadow-sm shadow-[#B45309]/20'
                                 : 'bg-zinc-200 dark:bg-zinc-800'
                             }`}
                           />

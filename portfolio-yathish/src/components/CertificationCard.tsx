@@ -1,5 +1,6 @@
 import React from 'react';
 import { Certification } from '@/types';
+import { formatMonthYear } from '@/utils/format';
 
 export interface CertificationCardProps {
   certification: Certification;
@@ -7,7 +8,7 @@ export interface CertificationCardProps {
 
 export function CertificationCard({ certification }: CertificationCardProps) {
   const imgSrc = certification.thumbnail || certification.certificateImage;
-  const issueYear = certification.issueDate ? certification.issueDate.slice(0, 4) : '2024';
+  const displayDate = formatMonthYear(certification.issueDate);
   const targetUrl = certification.credentialUrl || '#';
 
   return (
@@ -15,7 +16,7 @@ export function CertificationCard({ certification }: CertificationCardProps) {
       href={targetUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 text-white border border-zinc-800/90 hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 cursor-pointer block"
+      className="group relative flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 text-white border border-zinc-200/90 dark:border-zinc-800/90 hover:border-[#B45309]/50 dark:hover:border-[#FBBF24]/50 hover:shadow-2xl hover:shadow-[#B45309]/10 dark:hover:shadow-[#FBBF24]/10 transition-all duration-300 cursor-pointer block"
     >
       {/* Top Thumbnail Section (Slightly Reduced Height Aspect Ratio) */}
       <div className="relative w-full aspect-[16/7.5] bg-white dark:bg-zinc-100 overflow-hidden flex items-center justify-center p-4">
@@ -23,9 +24,10 @@ export function CertificationCard({ certification }: CertificationCardProps) {
         {certification.featured && (
           <div
             title="Featured Certification"
+            aria-label="Featured certification"
             className="absolute top-3 right-3 w-8 h-8 rounded-full bg-zinc-950/50 text-amber-400 font-bold text-lg flex items-center justify-center shadow-lg backdrop-blur-md z-10"
           >
-            ★
+            <span aria-hidden="true">★</span>
           </div>
         )}
 
@@ -44,12 +46,13 @@ export function CertificationCard({ certification }: CertificationCardProps) {
           </div>
         )}
 
-        {/* Bottom-Right Year Badge */}
+        {/* Bottom-Right Year/Date Badge */}
         <div
-          title={`Issue Year: ${issueYear}`}
-          className="absolute bottom-0 right-0 px-3.5 py-1 bg-white dark:bg-zinc-900 text-white font-mono text-xs font-bold rounded-tl-xl shadow-lg z-10 border-t border-l border-zinc-800"
+          title={`Issue Date: ${displayDate}`}
+          aria-label={`Issue date: ${displayDate}`}
+          className="absolute bottom-0 right-0 px-3.5 py-1 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white font-mono text-xs font-bold rounded-tl-xl shadow-lg z-10 border-t border-l border-zinc-800"
         >
-          {issueYear}
+          {displayDate}
         </div>
       </div>
 
@@ -57,7 +60,7 @@ export function CertificationCard({ certification }: CertificationCardProps) {
       <div className="p-4 flex flex-col gap-1 bg-white dark:bg-zinc-900">
         <div className="flex items-center justify-between gap-2">
           <h3
-            className="text-base font-bold text-white leading-snug group-hover:text-emerald-400 transition-colors line-clamp-1 min-w-0 flex-1"
+            className="text-base font-bold text-zinc-900 dark:text-white leading-snug group-hover:text-[#B45309] dark:group-hover:text-[#FBBF24] transition-colors line-clamp-1 min-w-0 flex-1"
             title={certification.name}
           >
             {certification.name}
@@ -65,7 +68,7 @@ export function CertificationCard({ certification }: CertificationCardProps) {
 
           {/* Accent Vector Right Slant-Up Arrow on Hover */}
           <svg
-            className="w-4 h-4 text-emerald-500 dark:text-emerald-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0"
+            className="w-4 h-4 text-[#B45309] dark:text-[#FBBF24] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

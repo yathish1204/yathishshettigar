@@ -87,18 +87,18 @@ export function YathishAnimatedTitle() {
                 className="w-14 h-16 lg:w-16 lg:h-20 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-125 shrink-0"
               >
                 {yShapeIndex === 0 && (
-                  <span className="text-6xl lg:text-7xl font-black text-zinc-900 dark:text-zinc-100 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">
+                  <span className="text-6xl lg:text-7xl font-black text-zinc-900 dark:text-zinc-100 hover:text-[#B45309] dark:hover:text-[#FBBF24] transition-colors">
                     Y
                   </span>
                 )}
                 {yShapeIndex === 1 && (
-                  <div className="w-10 h-10 lg:w-12 lg:h-12 border-4 border-emerald-500 bg-emerald-500/20 rounded-none shadow-[0_0_15px_rgba(16,185,129,0.6)] animate-pulse" />
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 border-4 border-[#B45309] bg-[#B45309]/20 shadow-[0_0_15px_rgba(180,83,9,0.6)] dark:border-[#FBBF24] dark:bg-[#FBBF24]/20 dark:shadow-[0_0_15px_rgba(251,191,36,0.6)] rounded-none animate-pulse" />
                 )}
                 {yShapeIndex === 2 && (
-                  <div className="w-10 h-10 lg:w-12 lg:h-12 border-4 border-emerald-500 bg-emerald-500/20 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.6)] animate-pulse" />
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 border-4 border-[#B45309] bg-[#B45309]/20 shadow-[0_0_15px_rgba(180,83,9,0.6)] dark:border-[#FBBF24] dark:bg-[#FBBF24]/20 dark:shadow-[0_0_15px_rgba(251,191,36,0.6)] rounded-full animate-pulse" />
                 )}
                 {yShapeIndex === 3 && (
-                  <svg className="w-11 h-11 lg:w-14 lg:h-14 text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.6)] animate-pulse" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="w-11 h-11 lg:w-14 lg:h-14 text-[#B45309] dark:text-[#FBBF24] drop-shadow-[0_0_15px_rgba(180,83,9,0.6)] dark:drop-shadow-[0_0_15px_rgba(251,191,36,0.6)] animate-pulse" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 3L1 21h22L12 3z" />
                   </svg>
                 )}
@@ -112,7 +112,7 @@ export function YathishAnimatedTitle() {
               key={index}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className={`text-6xl lg:text-7xl font-black text-zinc-900 dark:text-zinc-100 hover:text-emerald-500 dark:hover:text-emerald-400 cursor-pointer transition-all duration-300 hover:scale-125 inline-block px-0.5 ${getLetterAnimationClass(
+              className={`text-6xl lg:text-7xl font-black text-zinc-900 dark:text-zinc-100 hover:text-[#B45309] dark:hover:text-[#FBBF24] cursor-pointer transition-all duration-300 hover:scale-125 inline-block px-0.5 ${getLetterAnimationClass(
                 index
               )}`}
             >
@@ -125,7 +125,7 @@ export function YathishAnimatedTitle() {
       {/* Reserved Empty Height Subtitle Display (Zero Layout Shift) */}
       <div className="h-4 min-h-[24px] mt-1 flex items-center justify-center transition-all duration-200">
         {hoveredIndex !== null && (
-          <span className="text-xs lg:text-sm font-mono font-bold text-[#555]dark:text-white tracking-widest uppercase rounded-full shadow-sm animate-fade-in">
+          <span className="text-xs lg:text-sm font-mono font-bold text-gradient-accent tracking-widest uppercase rounded-full shadow-sm animate-fade-in">
             {LETTERS[hoveredIndex].word}
           </span>
         )}

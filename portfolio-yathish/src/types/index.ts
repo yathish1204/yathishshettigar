@@ -32,6 +32,8 @@ export interface Profile {
   profileImage?: string;
   heroVideoUrl?: string;
   heroVideoPoster?: string;
+  heroVideoUrlLight?: string;
+  heroVideoPosterLight?: string;
   resumeUrl?: string;
   email: string;
   phone?: string;
@@ -50,7 +52,7 @@ export interface Project {
   role: string;
   client?: string;
   duration?: string;
-  year: number;
+  year: number | string;
   thumbnail: string;
   images?: string[];
   technologies: string[];

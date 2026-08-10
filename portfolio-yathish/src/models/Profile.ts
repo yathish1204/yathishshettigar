@@ -13,6 +13,8 @@ const ProfileSchema = new Schema<IProfileDocument>(
     profileImage: { type: String },
     heroVideoUrl: { type: String },
     heroVideoPoster: { type: String },
+    heroVideoUrlLight: { type: String },
+    heroVideoPosterLight: { type: String },
     resumeUrl: { type: String },
     email: { type: String, required: true },
     phone: { type: String },

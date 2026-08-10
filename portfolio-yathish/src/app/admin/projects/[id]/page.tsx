@@ -272,14 +272,14 @@ export default function EditProjectPage({ params }: EditProjectProps) {
             />
           </div>
           <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-300 mb-1">Year *</label>
+            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-300 mb-1">Project Date *</label>
             <input
-              type="number"
+              type="date"
               name="year"
               required
               value={formData.year}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-xs"
+              className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-xs focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
           </div>
         </div>

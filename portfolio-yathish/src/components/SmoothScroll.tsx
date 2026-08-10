@@ -1,35 +1,46 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
+    let lenis: any = null;
+    let tickerCallback: any = null;
+    let gsapObj: any = null;
+    let isMounted = true;
 
-    // Synchronize Lenis with GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
+    Promise.all([import('lenis'), import('gsap'), import('gsap/ScrollTrigger')]).then(
+      ([{ default: Lenis }, { default: gsap }, { ScrollTrigger }]) => {
+        if (!isMounted) return;
 
-    const updateLenis = (time: number) => {
-      lenis.raf(time * 1000);
-    };
+        gsap.registerPlugin(ScrollTrigger);
+        gsapObj = gsap;
 
-    gsap.ticker.add(updateLenis);
-    gsap.ticker.lagSmoothing(0);
+        lenis = new Lenis({
+          duration: 1.2,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+        });
+
+        lenis.on('scroll', ScrollTrigger.update);
+
+        tickerCallback = (time: number) => {
+          lenis?.raf(time * 1000);
+        };
+
+        gsap.ticker.add(tickerCallback);
+        gsap.ticker.lagSmoothing(0);
+      }
+    );
 
     return () => {
-      gsap.ticker.remove(updateLenis);
-      lenis.destroy();
+      isMounted = false;
+      if (gsapObj && tickerCallback) {
+        gsapObj.ticker.remove(tickerCallback);
+      }
+      if (lenis) {
+        lenis.destroy();
+      }
     };
   }, []);
 

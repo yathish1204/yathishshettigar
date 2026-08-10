@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { connectToDatabase } from '@/lib/mongodb';
 import { EducationModel } from '@/models/Education';
 import { Education } from '@/types';
@@ -25,7 +26,7 @@ function sanitizeEduDoc(doc: any): Education {
   };
 }
 
-export async function getEducation(): Promise<Education[]> {
+export const getEducation = cache(async function getEducation(): Promise<Education[]> {
   const now = Date.now();
   if (cachedEdu && now - lastEduFetch < CACHE_TTL) {
     return cachedEdu;
@@ -45,7 +46,7 @@ export async function getEducation(): Promise<Education[]> {
     console.error('Error fetching education:', error);
     return cachedEdu || DEFAULT_EDUCATION;
   }
-}
+});
 
 export async function getAllEducationForAdmin(): Promise<Education[]> {
   return getEducation();

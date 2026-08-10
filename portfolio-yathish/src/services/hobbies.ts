@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { connectToDatabase } from '@/lib/mongodb';
 import { HobbyModel } from '@/models/Hobby';
 import { Hobby } from '@/types';
@@ -34,7 +35,7 @@ async function ensureSeedHobbies() {
   }
 }
 
-export async function getHobbies(): Promise<Hobby[]> {
+export const getHobbies = cache(async function getHobbies(): Promise<Hobby[]> {
   const now = Date.now();
   if (cachedHobbies && now - lastHobbyFetch < CACHE_TTL) {
     return cachedHobbies;
@@ -44,9 +45,16 @@ export async function getHobbies(): Promise<Hobby[]> {
     const db = await connectToDatabase();
     if (!db) return cachedHobbies || DEFAULT_HOBBIES;
 
-    await ensureSeedHobbies();
-
     const docs = await HobbyModel.find({ status: 'published' }).sort({ order: 1, name: 1 }).lean();
+    if (docs.length === 0) {
+      await ensureSeedHobbies();
+      const reDocs = await HobbyModel.find({ status: 'published' }).sort({ order: 1, name: 1 }).lean();
+      const result = reDocs.map(sanitizeHobbyDoc);
+      cachedHobbies = result;
+      lastHobbyFetch = now;
+      return result;
+    }
+
     const result = docs.map(sanitizeHobbyDoc);
     cachedHobbies = result;
     lastHobbyFetch = now;
@@ -55,7 +63,7 @@ export async function getHobbies(): Promise<Hobby[]> {
     console.error('Error fetching hobbies:', error);
     return cachedHobbies || DEFAULT_HOBBIES;
   }
-}
+});
 
 export async function getAllHobbiesForAdmin(): Promise<Hobby[]> {
   const db = await connectToDatabase();

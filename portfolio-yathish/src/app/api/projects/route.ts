@@ -13,7 +13,10 @@ export async function GET(request: NextRequest) {
 
     const session = getAdminSession(request);
 
-    if (all && session) {
+    if (all) {
+      if (!session) {
+        return apiError('UNAUTHORIZED', 'Authentication required for administrative queries', 401);
+      }
       const projects = await getAllProjectsForAdmin(status);
       return apiSuccess(projects);
     }

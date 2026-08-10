@@ -1,8 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import { connectToDatabase } from '@/lib/mongodb';
+import { getAdminSession } from '@/lib/auth';
+import { apiError } from '@/lib/api-response';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const session = getAdminSession(request);
+  if (!session) {
+    return apiError('UNAUTHORIZED', 'Authentication required', 401);
+  }
+
   try {
     const conn = await connectToDatabase();
     if (!conn) {

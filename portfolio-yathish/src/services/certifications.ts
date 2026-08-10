@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { connectToDatabase } from '@/lib/mongodb';
 import { CertificationModel } from '@/models/Certification';
 import { Certification } from '@/types';
@@ -62,7 +63,7 @@ async function ensureSeedCertifications() {
   }
 }
 
-export async function getCertifications(): Promise<Certification[]> {
+export const getCertifications = cache(async function getCertifications(): Promise<Certification[]> {
   const now = Date.now();
   if (cachedCerts && now - lastCertFetch < CACHE_TTL) {
     return cachedCerts;
@@ -72,9 +73,16 @@ export async function getCertifications(): Promise<Certification[]> {
     const db = await connectToDatabase();
     if (!db) return cachedCerts || DEFAULT_CERTIFICATIONS;
 
-    await ensureSeedCertifications();
-
     const docs = await CertificationModel.find({ status: 'published' }).sort({ order: 1, issueDate: -1 }).lean();
+    if (docs.length === 0) {
+      await ensureSeedCertifications();
+      const reDocs = await CertificationModel.find({ status: 'published' }).sort({ order: 1, issueDate: -1 }).lean();
+      const result = reDocs.map(sanitizeCertDoc);
+      cachedCerts = result;
+      lastCertFetch = now;
+      return result;
+    }
+
     const result = docs.map(sanitizeCertDoc);
     cachedCerts = result;
     lastCertFetch = now;
@@ -83,7 +91,7 @@ export async function getCertifications(): Promise<Certification[]> {
     console.error('Error fetching certifications:', error);
     return cachedCerts || DEFAULT_CERTIFICATIONS;
   }
-}
+});
 
 export async function getAllCertificationsForAdmin(): Promise<Certification[]> {
   const db = await connectToDatabase();

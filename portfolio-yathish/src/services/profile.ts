@@ -1,22 +1,25 @@
+import { cache } from 'react';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ProfileModel } from '@/models/Profile';
 import { Profile } from '@/types';
 
 export const DEFAULT_PROFILE: Profile = {
   name: 'Yathish Shettigar',
-  title: 'Senior UX Engineer & Frontend Architect',
+  title: 'UX Engineer & Frontend Architect',
   tagline: 'Bridging intuitive human-centered design with high-performance React & Next.js engineering.',
   shortBio:
     'UX Engineer combining product design, frontend architecture, React, Next.js, and interaction design to build enterprise-grade web applications.',
   longBio:
     'I design and build production web applications that blend human-centered UX design with clean, scalable frontend engineering. With expertise across design systems, web performance, web accessibility, and full-stack Next.js architecture, I partner with engineering and product leaders to deliver exceptional user experiences.',
-  profileImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600',
+  profileImage: 'https://res.cloudinary.com/ddzrfwfsl/image/upload/q_auto,f_auto/v1786337057/yathish-hero-poster-img_1_qfd3fd.png',
   heroVideoUrl: '',
-  heroVideoPoster: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1000',
+  heroVideoPoster: 'https://res.cloudinary.com/ddzrfwfsl/image/upload/q_auto,f_auto/v1786337057/yathish-hero-poster-img_1_qfd3fd.png',
+  heroVideoUrlLight: '',
+  heroVideoPosterLight: '',
   resumeUrl: '#resume',
-  email: 'yathish.shettigar@example.com',
+  email: 'yathish120420@gmail.com',
   location: 'Bengaluru, India',
-  availability: 'Available for Senior UX Engineer & Frontend Architect roles',
+  availability: 'Available for UX Enginner | Product Designer & Front-end Developer role',
   socialLinks: {
     github: 'https://github.com',
     linkedin: 'https://linkedin.com',
@@ -29,7 +32,7 @@ let cachedProfile: Profile | null = null;
 let lastProfileFetch = 0;
 const CACHE_TTL = 30000; // 30 seconds
 
-export async function getProfile(): Promise<Profile> {
+export const getProfile = cache(async function getProfile(): Promise<Profile> {
   const now = Date.now();
   if (cachedProfile && now - lastProfileFetch < CACHE_TTL) {
     return cachedProfile;
@@ -56,6 +59,8 @@ export async function getProfile(): Promise<Profile> {
       profileImage: profileDoc.profileImage || DEFAULT_PROFILE.profileImage,
       heroVideoUrl: profileDoc.heroVideoUrl || DEFAULT_PROFILE.heroVideoUrl,
       heroVideoPoster: profileDoc.heroVideoPoster || DEFAULT_PROFILE.heroVideoPoster,
+      heroVideoUrlLight: profileDoc.heroVideoUrlLight || DEFAULT_PROFILE.heroVideoUrlLight,
+      heroVideoPosterLight: profileDoc.heroVideoPosterLight || DEFAULT_PROFILE.heroVideoPosterLight,
       resumeUrl: profileDoc.resumeUrl || DEFAULT_PROFILE.resumeUrl,
       email: profileDoc.email,
       phone: profileDoc.phone,
@@ -72,7 +77,7 @@ export async function getProfile(): Promise<Profile> {
     console.error('Error fetching profile:', error);
     return cachedProfile || DEFAULT_PROFILE;
   }
-}
+});
 
 export async function updateProfile(data: Partial<Profile>): Promise<{ success: boolean; profile?: Profile; error?: string }> {
   try {
@@ -104,6 +109,8 @@ export async function updateProfile(data: Partial<Profile>): Promise<{ success: 
         profileImage: updated.profileImage,
         heroVideoUrl: updated.heroVideoUrl,
         heroVideoPoster: updated.heroVideoPoster,
+        heroVideoUrlLight: updated.heroVideoUrlLight,
+        heroVideoPosterLight: updated.heroVideoPosterLight,
         resumeUrl: updated.resumeUrl,
         email: updated.email,
         phone: updated.phone,

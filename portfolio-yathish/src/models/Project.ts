@@ -12,7 +12,7 @@ const ProjectSchema = new Schema<IProjectDocument>(
     role: { type: String, required: true },
     client: { type: String },
     duration: { type: String },
-    year: { type: Number, required: true },
+    year: { type: Schema.Types.Mixed, required: true },
     thumbnail: { type: String, required: true },
     images: [{ type: String }],
     technologies: [{ type: String, required: true }],

@@ -100,15 +100,17 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 dark:bg-zinc-950/80 border-b border-zinc-200/80 dark:border-zinc-800/80 transition-all">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full backdrop-blur-md bg-white/80 dark:bg-zinc-950/80 border-b border-zinc-200/80 dark:border-zinc-800/80 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between">
         {/* Brand Logo */}
         <Link
           href="/#hero"
           onClick={(e) => handleNavClick(e, '/#hero', 'hero')}
-          className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-md"
+          aria-label="Yathish Shettigar — Home"
+          className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 hover:text-[#B45309] dark:hover:text-[#FBBF24] transition-colors flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] rounded-md"
         >
-          <span className="w-8 h-8 rounded-lg bg-emerald-500 text-zinc-950 font-mono font-extrabold flex items-center justify-center text-sm shadow-md shadow-emerald-500/20">
+          {/* YS monogram is decorative — the link's aria-label provides the accessible name */}
+          <span className="w-8 h-8 rounded-lg bg-[#B45309] dark:bg-[#FBBF24] text-white dark:text-zinc-950 font-mono font-extrabold flex items-center justify-center text-sm shadow-md shadow-[#B45309]/20 dark:shadow-[#FBBF24]/20" aria-hidden="true">
             YS
           </span>
           <span className="hidden sm:inline font-sans">Yathish Shettigar</span>
@@ -117,7 +119,7 @@ export function Navbar() {
         {/* Right Section: Navigation Links & Theme Toggle */}
         <div className="flex items-center gap-4 lg:gap-6">
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-1.5" aria-label="Main Navigation">
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-1.5" aria-label="Main navigation">
             {navLinks.map((link) => {
               const active = isLinkActive(link.sectionId, link.href);
               return (
@@ -125,9 +127,10 @@ export function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href, link.sectionId)}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 border ${
+                  aria-current={active ? 'page' : undefined}
+                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] border ${
                     active
-                      ? 'text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
+                      ? 'text-[#B45309] dark:text-[#FBBF24] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 border-[#B45309]/30 dark:border-[#FBBF24]/30'
                       : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
                   }`}
                 >
@@ -144,9 +147,10 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 cursor-pointer"
+            className="md:hidden p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] cursor-pointer"
             aria-expanded={mobileMenuOpen}
-            aria-label="Toggle navigation menu"
+            aria-controls="mobile-nav"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           >
             <svg
               className="w-6 h-6"
@@ -167,7 +171,11 @@ export function Navbar() {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 px-4 pt-2 pb-6 space-y-1.5 shadow-xl">
+        <nav
+          id="mobile-nav"
+          aria-label="Mobile navigation"
+          className="md:hidden bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 px-4 pt-2 pb-6 space-y-1.5 shadow-xl"
+        >
           {navLinks.map((link) => {
             const active = isLinkActive(link.sectionId, link.href);
             return (
@@ -175,9 +183,10 @@ export function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href, link.sectionId)}
+                aria-current={active ? 'page' : undefined}
                 className={`block px-4 py-2.5 rounded-lg text-base font-semibold transition-colors cursor-pointer border ${
                   active
-                    ? 'text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
+                    ? 'text-[#B45309] dark:text-[#FBBF24] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 border-[#B45309]/30 dark:border-[#FBBF24]/30'
                     : 'text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
                 }`}
               >
@@ -185,7 +194,7 @@ export function Navbar() {
               </a>
             );
           })}
-        </div>
+        </nav>
       )}
     </header>
   );

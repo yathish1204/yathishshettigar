@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Project } from '@/types';
+import { formatMonthYear } from '@/utils/format';
 
 export interface ProjectCardProps {
   project: Project;
@@ -9,16 +10,20 @@ export interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, priority = false }: ProjectCardProps) {
+  const displayYear = formatMonthYear(project.year);
   const techList =
     project.technologies && project.technologies.length > 0
       ? project.technologies.slice(0, 3).join(' • ')
       : project.role || 'UX & Frontend';
 
-  return (
-    <Link
-      href={`/projects/${project.slug}`}
-      className="group relative flex flex-col rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800/80 overflow-hidden hover:border-emerald-500/50 transition-all duration-300 shadow-md dark:shadow-xl h-full cursor-pointer"
-    >
+  const hasLiveUrl = Boolean(project.liveUrl && project.liveUrl.trim());
+  const internalHref = `/projects/${project.slug || project._id}`;
+
+  const cardClasses =
+    'group relative flex flex-col rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800/80 overflow-hidden hover:border-[#B45309]/60 dark:hover:border-[#FBBF24]/60 transition-all duration-300 shadow-md dark:shadow-xl h-full cursor-pointer';
+
+  const cardInnerContent = (
+    <>
       {/* 16:8 Aspect Ratio Thumbnail Container */}
       <div className="relative aspect-[16/8] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-950">
         <Image
@@ -35,18 +40,20 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
         {project.featured && (
           <div
             title="Featured Case Study"
+            aria-label="Featured case study"
             className="absolute top-3 right-3 w-8 h-8 rounded-full bg-zinc-950/50 text-amber-400 font-bold text-lg flex items-center justify-center shadow-lg backdrop-blur-md z-10"
           >
-            ★
+            <span aria-hidden="true">★</span>
           </div>
         )}
 
         {/* Year Badge Flushed to Bottom Right with Top-Left Border Radius */}
         <div
-          title={`Production Year: ${project.year}`}
+          title={`Production Date: ${displayYear}`}
+          aria-label={`Production date: ${displayYear}`}
           className="absolute bottom-0 right-0 text-xs font-mono font-bold text-zinc-200 dark:bg-zinc-900 px-3 py-1 rounded-tl-xl border-t border-l border-zinc-800/80 backdrop-blur-md shadow-md z-10"
         >
-          {project.year}
+          {displayYear}
         </div>
       </div>
 
@@ -54,12 +61,12 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
       <div className="flex flex-col flex-1 p-5 gap-1.5 justify-start">
         {/* Title with Accent Color Hover Right Slant Arrow */}
         <div className="flex items-center justify-between gap-2">
-          <h3 className="text-base md:text-lg font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors line-clamp-1 truncate min-w-0">
+          <h3 className="text-base md:text-lg font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-[#B45309] dark:group-hover:text-[#FBBF24] transition-colors line-clamp-1 truncate min-w-0">
             {project.title}
           </h3>
           {/* Accent Vector Right Slant-Up Arrow on Hover */}
           <svg
-            className="w-4 h-4 text-emerald-500 dark:text-emerald-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0"
+            className="w-4 h-4 text-[#B45309] dark:text-[#FBBF24] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -86,6 +93,32 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
           {project.shortDescription}
         </p>
       </div>
+    </>
+  );
+
+  if (hasLiveUrl) {
+    return (
+      <a
+        href={project.liveUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={`Visit live site for ${project.title}`}
+        aria-label={`Open live site for ${project.title} in new tab`}
+        className={cardClasses}
+      >
+        {cardInnerContent}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      href={internalHref}
+      title={`View case study for ${project.title}`}
+      aria-label={`View case study for ${project.title}`}
+      className={cardClasses}
+    >
+      {cardInnerContent}
     </Link>
   );
 }

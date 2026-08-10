@@ -37,8 +37,8 @@ export function ContactForm() {
   const onSubmit = async (data: ContactInput) => {
     setStatus({ submitting: true });
 
-    // Construct Gmail Compose direct URL as instant fallback
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=yathish120420@gmail.com&su=${encodeURIComponent(
+    // Construct mailto: direct scheme to open Gmail app on mobile devices
+    const mailtoScheme = `mailto:yathish120420@gmail.com?subject=${encodeURIComponent(
       `[Portfolio Inquiry] ${data.subject}`
     )}&body=${encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`)}`;
 
@@ -56,26 +56,26 @@ export function ContactForm() {
           submitting: false,
           success: true,
           message: `Message sent to yathish120420@gmail.com!`,
-          mailtoUrl: gmailUrl,
+          mailtoUrl: mailtoScheme,
         });
         reset();
       } else {
         setStatus({
           submitting: false,
           success: false,
-          message: result.error?.message || result.message || 'Form error. Opening Gmail...',
-          mailtoUrl: gmailUrl,
+          message: result.error?.message || result.message || 'Form error. Opening Mail app...',
+          mailtoUrl: mailtoScheme,
         });
       }
     } catch (err) {
       console.error('Contact form submission error:', err);
-      // Automatically open Gmail compose on network error
-      window.open(gmailUrl, '_blank');
+      // Automatically open Mail/Gmail app on network error
+      window.location.href = mailtoScheme;
       setStatus({
         submitting: false,
         success: true,
-        message: 'Opening Gmail compose window for direct email to yathish120420@gmail.com...',
-        mailtoUrl: gmailUrl,
+        message: 'Opening Mail app for direct email to yathish120420@gmail.com...',
+        mailtoUrl: mailtoScheme,
       });
     }
   };
@@ -85,16 +85,17 @@ export function ContactForm() {
       {/* Name Input */}
       <div>
         <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-mono">
-          Your Name <span className="text-emerald-600 dark:text-emerald-400">*</span>
+          Your Name <span className="text-[#B45309] dark:text-[#FBBF24]" aria-hidden="true">*</span>
         </label>
         <input
           id="name"
           type="text"
           {...register('name')}
+          aria-required="true"
           aria-invalid={!!errors.name}
           aria-describedby={errors.name ? 'name-error' : undefined}
           placeholder="e.g. Alex Morgan"
-          className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-xs sm:text-sm transition-colors"
+          className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24] focus:border-transparent text-xs sm:text-sm transition-colors"
         />
         {errors.name && (
           <p id="name-error" className="mt-1 text-xs text-red-600 dark:text-red-400">
@@ -106,16 +107,17 @@ export function ContactForm() {
       {/* Email Input */}
       <div>
         <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-mono">
-          Your Email <span className="text-emerald-600 dark:text-emerald-400">*</span>
+          Your Email <span className="text-[#B45309] dark:text-[#FBBF24]" aria-hidden="true">*</span>
         </label>
         <input
           id="email"
           type="email"
           {...register('email')}
+          aria-required="true"
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? 'email-error' : undefined}
           placeholder="e.g. alex@company.com"
-          className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-xs sm:text-sm transition-colors"
+          className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24] focus:border-transparent text-xs sm:text-sm transition-colors"
         />
         {errors.email && (
           <p id="email-error" className="mt-1 text-xs text-red-600 dark:text-red-400">
@@ -127,16 +129,17 @@ export function ContactForm() {
       {/* Subject Input */}
       <div>
         <label htmlFor="subject" className="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-mono">
-          Subject <span className="text-emerald-600 dark:text-emerald-400">*</span>
+          Subject <span className="text-[#B45309] dark:text-[#FBBF24]" aria-hidden="true">*</span>
         </label>
         <input
           id="subject"
           type="text"
           {...register('subject')}
+          aria-required="true"
           aria-invalid={!!errors.subject}
           aria-describedby={errors.subject ? 'subject-error' : undefined}
           placeholder="e.g. Senior UX Engineer Role / Project Inquiry"
-          className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-xs sm:text-sm transition-colors"
+          className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24] focus:border-transparent text-xs sm:text-sm transition-colors"
         />
         {errors.subject && (
           <p id="subject-error" className="mt-1 text-xs text-red-600 dark:text-red-400">
@@ -148,16 +151,17 @@ export function ContactForm() {
       {/* Message Input */}
       <div>
         <label htmlFor="message" className="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-mono">
-          Message <span className="text-emerald-600 dark:text-emerald-400">*</span>
+          Message <span className="text-[#B45309] dark:text-[#FBBF24]" aria-hidden="true">*</span>
         </label>
         <textarea
           id="message"
           rows={2}
           {...register('message')}
+          aria-required="true"
           aria-invalid={!!errors.message}
           aria-describedby={errors.message ? 'message-error' : undefined}
           placeholder="Write your message here..."
-          className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-xs sm:text-sm transition-colors resize-y min-h-[80px] max-h-[350px]"
+          className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24] focus:border-transparent text-xs sm:text-sm transition-colors resize-y min-h-[80px] max-h-[350px]"
         />
         {errors.message && (
           <p id="message-error" className="mt-1 text-xs text-red-600 dark:text-red-400">
@@ -170,6 +174,8 @@ export function ContactForm() {
       {status.message && (
         <div
           role="alert"
+          aria-live="polite"
+          aria-atomic="true"
           className={`p-3.5 rounded-xl text-xs sm:text-sm font-medium border leading-relaxed flex items-center justify-between gap-3 transition-all duration-300 ${
             status.success
               ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300'

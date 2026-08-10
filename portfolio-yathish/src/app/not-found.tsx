@@ -4,7 +4,7 @@ import { Button } from '@/components/Button';
 export default function NotFound() {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 py-20">
-      <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest mb-2">
+      <span className="text-xs font-mono font-bold text-gradient-accent uppercase tracking-widest mb-2">
         Error 404
       </span>
       <h1 className="text-4xl sm:text-5xl font-extrabold text-zinc-100 mb-4 tracking-tight">

@@ -70,20 +70,22 @@ export function ExperienceItem({
       .filter(Boolean);
   }, [experience.summary]);
 
+  const bodyId = `exp-body-${experience._id || experience.company.toLowerCase().replace(/\s+/g, '-')}`;
+
   return (
     <article ref={itemRef} className="relative group transition-colors">
       {/* Stepper Node with Horizontally-Centered Alignment & Pulsing Ring for Latest Employer */}
-      <div className="absolute -left-6 md:-left-8 top-3.5 -translate-x-1/2 flex items-center justify-center z-20">
+      <div className="absolute -left-6 md:-left-8 top-3.5 -translate-x-1/2 flex items-center justify-center z-20" aria-hidden="true">
         {shouldPulse && (
-          <span className="absolute inline-flex h-6 w-6 rounded-full bg-emerald-400/60 dark:bg-emerald-500/50 animate-ping opacity-75" />
+          <span className="absolute inline-flex h-6 w-6 rounded-full bg-[#9D5AF9]/60 dark:bg-[#BF6BFA]/50 animate-ping opacity-75" />
         )}
         <div
-          className={`relative w-4 h-4 rounded-full transition-all duration-300 ${
+          className={`relative w-4 h-4 rounded-full transition-all duration-300 bg-gradient-to-r from-[#9D5AF9] to-[#123FD9] dark:from-[#BF6BFA] dark:to-[#53B9F6] shadow-md shadow-[#9D5AF9]/30 dark:shadow-[#BF6BFA]/30 ${
             active
-              ? 'bg-emerald-500 border-2 border-emerald-400 shadow-md shadow-emerald-500/30 scale-125'
+              ? 'scale-125 ring-2 ring-[#B45309] dark:ring-[#FBBF24]'
               : shouldPulse
-              ? 'bg-emerald-500 border-2 border-emerald-400 scale-110'
-              : 'bg-slate-50 dark:bg-zinc-950 border-2 border-emerald-600 dark:border-emerald-500 group-hover:scale-110'
+              ? 'scale-110'
+              : 'opacity-80 group-hover:scale-125'
           }`}
         />
       </div>
@@ -92,7 +94,7 @@ export function ExperienceItem({
       <div
         className={`pb-6 md:pb-8 mb-6 md:mb-8 transition-all duration-200 border-b ${
           active
-            ? 'border-emerald-500 dark:border-emerald-500/90'
+            ? 'border-[#B45309] dark:border-[#FBBF24]'
             : 'border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700'
         }`}
       >
@@ -102,10 +104,11 @@ export function ExperienceItem({
           onClick={toggle}
           className="w-full text-left flex flex-col gap-2 focus:outline-none group/btn cursor-pointer"
           aria-expanded={active}
+          aria-controls={bodyId}
         >
           {/* Line 1: Company name, location ---- Start & End date + Chevron icon */}
           <div className="flex items-center justify-between gap-4 w-full">
-            <div className="text-base sm:text-lg md:text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 flex-wrap">
+            <div className="text-base sm:text-lg md:text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 flex-wrap group-hover/btn:text-[#B45309] dark:group-hover/btn:text-[#FBBF24] transition-colors">
               <span>{experience.company}</span>
               {experience.location && (
                 <span className="text-xs sm:text-sm font-normal text-zinc-500 dark:text-zinc-400">
@@ -118,7 +121,7 @@ export function ExperienceItem({
               <span
                 className={`text-xs font-mono px-3 py-1 rounded-md border font-medium transition-colors ${
                   active
-                    ? 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 border-emerald-500/30'
+                    ? 'text-[#B45309] dark:text-[#FBBF24] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 border-[#B45309]/30 dark:border-[#FBBF24]/30'
                     : 'text-zinc-600 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'
                 }`}
               >
@@ -128,11 +131,11 @@ export function ExperienceItem({
               <div
                 className={`p-1 rounded-md transition-all duration-200 ${
                   active
-                    ? 'text-emerald-600 dark:text-emerald-400 rotate-180'
-                    : 'text-zinc-400 dark:text-zinc-500 group-hover/btn:text-emerald-600 dark:group-hover/btn:text-emerald-400'
+                    ? 'text-[#B45309] dark:text-[#FBBF24] rotate-180'
+                    : 'text-zinc-400 dark:text-zinc-500 group-hover/btn:text-[#B45309] dark:group-hover/btn:text-[#FBBF24]'
                 }`}
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -143,8 +146,8 @@ export function ExperienceItem({
           <div
             className={`text-sm sm:text-base font-semibold transition-colors ${
               active
-                ? 'text-emerald-600 dark:text-emerald-400'
-                : 'text-zinc-700 dark:text-zinc-300 group-hover/btn:text-emerald-600 dark:group-hover/btn:text-emerald-400'
+                ? 'text-[#B45309] dark:text-[#FBBF24]'
+                : 'text-zinc-700 dark:text-zinc-300 group-hover/btn:text-[#B45309] dark:group-hover/btn:text-[#FBBF24]'
             }`}
           >
             {experience.role}
@@ -153,16 +156,16 @@ export function ExperienceItem({
 
         {/* Accordion Body (Expanded Content) */}
         {active && (
-          <div className="pt-5 space-y-5 animate-fadeIn">
+          <div id={bodyId} role="region" aria-label={`${experience.company} role details`} className="pt-5 space-y-5 animate-fadeIn">
             {/* Summary rendered as Bulleted Points */}
             {summaryPoints.length > 0 && (
               <div className="space-y-2">
                 <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Summary
                 </h4>
-                <ul className="list-disc list-outside ml-4 space-y-2 text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
+                <ul className="list-disc list-outside ml-4 space-y-2 text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans break-words whitespace-normal max-w-full">
                   {summaryPoints.map((point, idx) => (
-                    <li key={idx}>{point}</li>
+                    <li key={idx} className="break-words max-w-full leading-relaxed">{point}</li>
                   ))}
                 </ul>
               </div>

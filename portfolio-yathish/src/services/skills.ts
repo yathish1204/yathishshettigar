@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { connectToDatabase } from '@/lib/mongodb';
 import { SkillModel } from '@/models/Skill';
 import { Skill } from '@/types';
@@ -57,7 +58,7 @@ async function ensureSeedSkills() {
   }
 }
 
-export async function getSkills(): Promise<Skill[]> {
+export const getSkills = cache(async function getSkills(): Promise<Skill[]> {
   const now = Date.now();
   if (cachedSkills && now - lastSkillFetch < CACHE_TTL) {
     return cachedSkills;
@@ -67,9 +68,16 @@ export async function getSkills(): Promise<Skill[]> {
     const db = await connectToDatabase();
     if (!db) return cachedSkills || DEFAULT_SKILLS;
 
-    await ensureSeedSkills();
-
     const docs = await SkillModel.find({ status: 'published' }).sort({ order: 1, name: 1 }).lean();
+    if (docs.length === 0) {
+      await ensureSeedSkills();
+      const reDocs = await SkillModel.find({ status: 'published' }).sort({ order: 1, name: 1 }).lean();
+      const result = reDocs.map(sanitizeSkillDoc);
+      cachedSkills = result;
+      lastSkillFetch = now;
+      return result;
+    }
+
     const result = docs.map(sanitizeSkillDoc);
     cachedSkills = result;
     lastSkillFetch = now;
@@ -78,7 +86,7 @@ export async function getSkills(): Promise<Skill[]> {
     console.error('Error fetching skills:', error);
     return cachedSkills || DEFAULT_SKILLS;
   }
-}
+});
 
 export async function getAllSkillsForAdmin(): Promise<Skill[]> {
   const db = await connectToDatabase();

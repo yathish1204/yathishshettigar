@@ -17,13 +17,13 @@ export function ConditionalLayout({
   const isAdmin = pathname.startsWith('/admin');
 
   if (isAdmin) {
-    return <main className="flex-1 w-full">{children}</main>;
+    return <main className="flex-1 w-full" aria-label="Admin content">{children}</main>;
   }
 
   return (
     <>
       <Navbar />
-      <main className="flex-1 w-full">{children}</main>
+      <main className="flex-1 w-full pt-[72px]" aria-label="Main content">{children}</main>
       <Footer profile={profile} />
     </>
   );

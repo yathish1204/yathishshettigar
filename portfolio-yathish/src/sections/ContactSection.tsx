@@ -4,7 +4,7 @@ import { SectionHeading } from '@/components/SectionHeading';
 import { ContactForm } from '@/components/ContactForm';
 
 export function ContactSection({ profile }: { profile: Profile }) {
-  const phoneDisplay = profile.phone || '+91 99000 00000';
+  const phoneDisplay = profile.phone || '+91 8296302220';
   const phoneTel = profile.phone ? profile.phone.replace(/\s+/g, '') : '+919900000000';
 
   return (
@@ -22,21 +22,20 @@ export function ContactSection({ profile }: { profile: Profile }) {
             <div className="space-y-4 pt-2 text-xs sm:text-sm">
               {/* 1. Direct Email */}
               <a
-                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${profile.email}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Compose Email in Gmail"
+                href={`mailto:${profile.email}`}
+                title={`Send email to ${profile.email}`}
+                aria-label={`Email: ${profile.email}`}
                 className="flex items-center justify-between py-2 group cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <div className="w-8 h-8 rounded-lg bg-[#B45309]/10 text-[#B45309] dark:bg-[#FBBF24]/10 dark:text-[#FBBF24] flex items-center justify-center shrink-0">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <span className="text-zinc-500 dark:text-zinc-400 font-mono">Email</span>
                 </div>
-                <span className="font-semibold text-zinc-900 dark:text-white truncate group-hover:text-emerald-500 dark:group-hover:text-emerald-400 group-hover:underline group-hover:decoration-dashed group-hover:decoration-emerald-500 group-hover:underline-offset-[3px] transition-all ml-2">
+                <span className="font-semibold text-zinc-900 dark:text-white truncate group-hover:text-[#B45309] dark:group-hover:text-[#FBBF24] group-hover:underline group-hover:decoration-dashed group-hover:decoration-[#B45309] dark:group-hover:decoration-[#FBBF24] group-hover:underline-offset-[3px] transition-all ml-2">
                   {profile.email}
                 </span>
               </a>
@@ -45,17 +44,18 @@ export function ContactSection({ profile }: { profile: Profile }) {
               <a
                 href={`tel:${phoneTel}`}
                 title="Click to dial phone number"
+                aria-label={`Phone: ${phoneDisplay}`}
                 className="flex items-center justify-between py-2 group cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <div className="w-8 h-8 rounded-lg bg-[#B45309]/10 text-[#B45309] dark:bg-[#FBBF24]/10 dark:text-[#FBBF24] flex items-center justify-center shrink-0">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                   </div>
                   <span className="text-zinc-500 dark:text-zinc-400 font-mono">Phone</span>
                 </div>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-emerald-500 dark:group-hover:text-emerald-400 group-hover:underline group-hover:decoration-dashed group-hover:decoration-emerald-500 group-hover:underline-offset-[3px] transition-all ml-2">
+                <span className="font-semibold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-[#B45309] dark:group-hover:text-[#FBBF24] group-hover:underline group-hover:decoration-dashed group-hover:decoration-[#B45309] dark:group-hover:decoration-[#FBBF24] group-hover:underline-offset-[3px] transition-all ml-2">
                   {phoneDisplay}
                 </span>
               </a>
@@ -66,30 +66,31 @@ export function ContactSection({ profile }: { profile: Profile }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="View location on Google Maps"
+                aria-label={`Location: ${profile.location}`}
                 className="flex items-center justify-between py-2 group cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <div className="w-8 h-8 rounded-lg bg-[#B45309]/10 text-[#B45309] dark:bg-[#FBBF24]/10 dark:text-[#FBBF24] flex items-center justify-center shrink-0">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
                   <span className="text-zinc-500 dark:text-zinc-400 font-mono">Location</span>
                 </div>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-emerald-500 dark:group-hover:text-emerald-400 group-hover:underline group-hover:decoration-dashed group-hover:decoration-emerald-500 group-hover:underline-offset-[3px] transition-all ml-2">
+                <span className="font-semibold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-[#B45309] dark:group-hover:text-[#FBBF24] group-hover:underline group-hover:decoration-dashed group-hover:decoration-[#B45309] dark:group-hover:decoration-[#FBBF24] group-hover:underline-offset-[3px] transition-all ml-2">
                   {profile.location}
                 </span>
               </a>
 
               {/* 4. Status */}
               <div className="flex items-start gap-3 py-2 text-xs sm:text-sm group cursor-default">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 mt-0.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <div className="w-8 h-8 rounded-lg bg-[#B45309]/10 text-[#B45309] dark:bg-[#FBBF24]/10 dark:text-[#FBBF24] flex items-center justify-center shrink-0">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#B45309]/10 dark:bg-[#FBBF24] animate-pulse" aria-hidden="true" />
                 </div>
                 <div className="flex flex-col min-w-0 flex-1">
                   <span className="text-zinc-500 dark:text-zinc-400 font-mono text-xs">Status</span>
-                  <span className="font-semibold text-zinc-900 dark:text-white text-xs leading-relaxed mt-0.5 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 group-hover:underline group-hover:decoration-dashed group-hover:decoration-emerald-500 group-hover:underline-offset-[3px] transition-all">
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">
                     {profile.availability}
                   </span>
                 </div>

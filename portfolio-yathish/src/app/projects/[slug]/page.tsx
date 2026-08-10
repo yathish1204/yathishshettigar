@@ -179,7 +179,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailProps) 
           {/* Challenge */}
           {project.challenge && (
             <section className="space-y-4 p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800">
-              <h2 className="text-2xl font-bold text-emerald-400">The Challenge</h2>
+              <h2 className="text-2xl font-bold text-gradient-accent">The Challenge</h2>
               <p>{project.challenge}</p>
             </section>
           )}
@@ -204,7 +204,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailProps) 
           {/* Measurable Outcome */}
           {project.outcome && (
             <section className="space-y-4 p-8 rounded-2xl bg-emerald-950/20 border border-emerald-800/60">
-              <h2 className="text-2xl font-bold text-emerald-400">Measurable Impact & Outcome</h2>
+              <h2 className="text-2xl font-bold text-gradient-accent">Measurable Impact & Outcome</h2>
               <p className="text-emerald-200">{project.outcome}</p>
             </section>
           )}

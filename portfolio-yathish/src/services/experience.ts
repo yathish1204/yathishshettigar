@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ExperienceModel } from '@/models/Experience';
 import { Experience } from '@/types';
@@ -61,7 +62,7 @@ async function ensureSeedExperiences() {
   }
 }
 
-export async function getExperiences(): Promise<Experience[]> {
+export const getExperiences = cache(async function getExperiences(): Promise<Experience[]> {
   const now = Date.now();
   if (cachedExp && now - lastExpFetch < CACHE_TTL) {
     return cachedExp;
@@ -71,11 +72,18 @@ export async function getExperiences(): Promise<Experience[]> {
     const db = await connectToDatabase();
     if (!db) return cachedExp || DEFAULT_EXPERIENCES;
 
-    await ensureSeedExperiences();
-
     const docs = await ExperienceModel.find({ status: 'published' })
       .sort({ order: 1, startDate: -1 })
       .lean();
+
+    if (docs.length === 0) {
+      await ensureSeedExperiences();
+      const reDocs = await ExperienceModel.find({ status: 'published' }).sort({ order: 1, startDate: -1 }).lean();
+      const result = reDocs.map(sanitizeExpDoc);
+      cachedExp = result;
+      lastExpFetch = now;
+      return result;
+    }
 
     const result = docs.map(sanitizeExpDoc);
     cachedExp = result;
@@ -85,7 +93,7 @@ export async function getExperiences(): Promise<Experience[]> {
     console.error('Error fetching experiences:', error);
     return cachedExp || DEFAULT_EXPERIENCES;
   }
-}
+});
 
 export async function getAllExperiencesForAdmin(): Promise<Experience[]> {
   const db = await connectToDatabase();

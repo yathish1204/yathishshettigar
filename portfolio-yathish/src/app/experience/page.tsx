@@ -15,7 +15,7 @@ export default async function ExperiencePage() {
   const experiences = await getExperiences();
 
   return (
-    <div className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <article className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <SectionHeading
         eyebrow="Career Path"
         title="Professional Experience"
@@ -23,6 +23,6 @@ export default async function ExperiencePage() {
       />
 
       <ExperienceList experiences={experiences} />
-    </div>
+    </article>
   );
 }

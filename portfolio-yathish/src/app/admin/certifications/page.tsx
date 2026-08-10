@@ -190,8 +190,8 @@ export default function AdminCertificationsPage() {
                   <input type="text" name="issuer" required value={form.issuer} onChange={handleChange} placeholder="freecodecamp" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
                 </div>
                 <div>
-                  <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Issue Date / Year *</label>
-                  <input type="text" name="issueDate" required value={form.issueDate} onChange={handleChange} placeholder="2024" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
+                  <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Issue Date *</label>
+                  <input type="date" name="issueDate" required value={form.issueDate} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
                 </div>
               </div>
 

@@ -96,12 +96,18 @@ export function SelectedWorkSection({ projects }: { projects: Project[] }) {
         <div
           ref={scrollRef}
           onScroll={handleScrollEvent}
+          role="region"
+          aria-label="Featured projects carousel"
+          aria-roledescription="carousel"
           className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-6 pb-2 pt-1 scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {displayProjects.map((project) => (
+          {displayProjects.map((project, idx) => (
             <div
               key={project._id || project.slug}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`Project ${idx + 1} of ${displayProjects.length}: ${project.title}`}
               className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start"
             >
               <ProjectCard project={project} />
@@ -111,15 +117,16 @@ export function SelectedWorkSection({ projects }: { projects: Project[] }) {
 
         {/* Dynamic Responsive Bottom Carousel Dot Indicators */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 pt-6">
+          <div className="flex items-center justify-center gap-2 pt-6" role="tablist" aria-label="Project carousel slides">
             {Array.from({ length: totalPages }).map((_, i) => (
               <button
                 key={i}
                 onClick={() => scrollToPage(i)}
                 aria-label={`Go to project slide set ${i + 1}`}
+                aria-current={activeIndex === i ? 'true' : undefined}
                 className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                   activeIndex === i
-                    ? 'w-8 bg-emerald-500 shadow-sm shadow-emerald-500/40'
+                    ? 'w-8 bg-[#B45309] dark:bg-[#FBBF24] shadow-sm shadow-[#B45309]/40 dark:shadow-[#FBBF24]/40'
                     : 'w-2.5 bg-zinc-300 dark:bg-zinc-800 hover:bg-zinc-400 dark:hover:bg-zinc-700'
                 }`}
               />

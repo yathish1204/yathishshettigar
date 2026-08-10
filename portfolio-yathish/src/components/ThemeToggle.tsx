@@ -33,7 +33,7 @@ export function ThemeToggle() {
   };
 
   if (!mounted) {
-    return <div className="w-14 h-8 rounded-full bg-zinc-900 border border-zinc-800" />;
+    return <div className="w-14 h-8 rounded-full bg-zinc-900 border border-zinc-800" aria-hidden="true" />;
   }
 
   const isDark = theme === 'dark';
@@ -42,31 +42,43 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className={`relative inline-flex h-8 w-14 shrink-0 items-center rounded-full p-1 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 cursor-pointer border ${
+      className={`relative inline-flex h-8 w-14 shrink-0 items-center rounded-full p-1 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] cursor-pointer border ${
         isDark
-          ? 'bg-zinc-900 border-zinc-800 text-zinc-400'
-          : 'bg-zinc-200 border-zinc-300 text-zinc-600'
+          ? 'bg-zinc-900 border-zinc-800 text-[#FBBF24]'
+          : 'bg-zinc-200 border-zinc-300 text-[#B45309]'
       }`}
-      aria-label="Toggle theme"
+      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      aria-pressed={isDark}
       title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
-      {/* Sun Icon (Light Mode) */}
-      <span className={`absolute left-1.5 flex items-center justify-center transition-opacity duration-300 ${isDark ? 'opacity-40' : 'opacity-100 text-amber-500'}`}>
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      {/* Sun Icon (Light Mode) — decorative, z-10 to sit above knob when selected */}
+      <span
+        aria-hidden="true"
+        className={`absolute left-1.5 z-10 flex items-center justify-center transition-colors duration-300 ${
+          isDark ? 'text-zinc-500 opacity-50' : 'text-white font-bold opacity-100'
+        }`}
+      >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       </span>
 
-      {/* Moon Icon (Dark Mode) */}
-      <span className={`absolute right-1.5 flex items-center justify-center transition-opacity duration-300 ${isDark ? 'opacity-100 text-emerald-400' : 'opacity-40'}`}>
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      {/* Moon Icon (Dark Mode) — decorative, z-10 to sit above knob when selected */}
+      <span
+        aria-hidden="true"
+        className={`absolute right-1.5 z-10 flex items-center justify-center transition-colors duration-300 ${
+          isDark ? 'text-zinc-950 font-bold opacity-100' : 'text-zinc-400 opacity-50'
+        }`}
+      >
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
         </svg>
       </span>
 
-      {/* Sliding Knob */}
+      {/* Sliding Knob — decorative */}
       <span
-        className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-emerald-500 shadow-md transition duration-300 ease-in-out ${
+        aria-hidden="true"
+        className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-[#B45309] dark:bg-[#FBBF24] shadow-md transition duration-300 ease-in-out ${
           isDark ? 'translate-x-6' : 'translate-x-0'
         }`}
       />
