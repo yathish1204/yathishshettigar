@@ -54,6 +54,15 @@ export const getProfile = cache(async function getProfile(): Promise<Profile> {
       return DEFAULT_PROFILE;
     }
 
+    const YATHISH_PHOTO = 'https://res.cloudinary.com/ddzrfwfsl/image/upload/v1786337057/yathish-hero-poster-img_1_qfd3fd.png';
+    const activeProfileImage = (profileDoc.profileImage && !profileDoc.profileImage.includes('unsplash.com'))
+      ? profileDoc.profileImage
+      : YATHISH_PHOTO;
+
+    if (profileDoc.profileImage !== activeProfileImage) {
+      await ProfileModel.updateOne({ _id: profileDoc._id }, { $set: { profileImage: activeProfileImage } }).catch(() => {});
+    }
+
     const formatted: Profile = {
       _id: profileDoc._id.toString(),
       name: profileDoc.name,
@@ -61,9 +70,7 @@ export const getProfile = cache(async function getProfile(): Promise<Profile> {
       tagline: profileDoc.tagline,
       shortBio: profileDoc.shortBio,
       longBio: profileDoc.longBio,
-      profileImage: (profileDoc.profileImage && !profileDoc.profileImage.includes('unsplash.com'))
-        ? profileDoc.profileImage
-        : 'https://res.cloudinary.com/ddzrfwfsl/image/upload/v1786337057/yathish-hero-poster-img_1_qfd3fd.png',
+      profileImage: activeProfileImage,
       heroVideoUrl: profileDoc.heroVideoUrl || DEFAULT_PROFILE.heroVideoUrl,
       heroVideoPoster: profileDoc.heroVideoPoster || DEFAULT_PROFILE.heroVideoPoster,
       heroVideoUrlLight: profileDoc.heroVideoUrlLight || DEFAULT_PROFILE.heroVideoUrlLight,
