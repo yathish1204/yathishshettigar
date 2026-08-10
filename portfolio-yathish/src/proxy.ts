@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getAdminSession } from '@/lib/auth';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const session = getAdminSession(request);
 
@@ -65,6 +65,8 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+export const middleware = proxy;
 
 export const config = {
   matcher: ['/admin/:path*', '/api/admin/:path*'],

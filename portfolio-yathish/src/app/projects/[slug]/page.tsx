@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: ProjectDetailProps): Promise<
       type: 'article',
       images: [
         {
-          url: project.ogImage || project.thumbnail,
+          url: project.ogImage || project.thumbnail || '/og-image.jpg',
           width: 1200,
           height: 630,
           alt: project.title,
@@ -129,7 +129,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailProps) 
           {/* 75% Hero Image (9 Cols on md+) */}
           <div className="md:col-span-9 relative w-full h-[300px] sm:h-[400px] md:h-auto min-h-[300px] md:min-h-[420px] rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xl">
             <Image
-              src={project.thumbnail}
+              src={project.thumbnail || '/og-image.jpg'}
               alt={`Hero image for ${project.title}`}
               fill
               sizes="(max-width: 768px) 100vw, 75vw"

@@ -66,7 +66,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                 tabIndex={0}
                 role="button"
                 aria-label={`${skill.name}: ${label} level, ${years} ${years === 1 ? 'year' : 'years'} experience`}
-                className="bg-zinc-800/10 dark:bg-zinc-800/60 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-700/60 text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-[#B45309]/50 dark:hover:border-[#FBBF24]/50 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] transition-all hover:scale-105 cursor-pointer"
+                className="bg-zinc-100 dark:bg-zinc-900/90 border border-zinc-200/90 dark:border-zinc-800/90 text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-[#B45309]/50 dark:hover:border-[#FBBF24]/50 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] transition-all hover:scale-105 cursor-pointer"
               >
                 {skill.icon ? (
                   <img
@@ -83,10 +83,10 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                 <span>{skill.name}</span>
               </div>
 
-              {/* Hover/Focus Popover Box */}
+              {/* Desktop Hover Popover Box (Hidden on touch devices to prevent mobile overlay boxes) */}
               <div
                 aria-hidden="true"
-                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl opacity-0 group-hover/chip:opacity-100 group-focus-within/chip:opacity-100 group-hover/chip:pointer-events-auto group-focus-within/chip:pointer-events-auto pointer-events-none transition-all duration-200 z-50 transform group-hover/chip:translate-y-0 group-focus-within/chip:translate-y-0 translate-y-1"
+                className="hidden md:block absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl opacity-0 group-hover/chip:opacity-100 pointer-events-none group-hover/chip:pointer-events-auto transition-all duration-200 z-50 transform group-hover/chip:translate-y-0 translate-y-1"
               >
                 {/* Popover Header: Skill Title & Experience Years */}
                 <div className="flex items-center justify-between gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 mb-2.5">

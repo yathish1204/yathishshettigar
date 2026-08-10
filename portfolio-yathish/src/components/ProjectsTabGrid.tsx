@@ -42,11 +42,11 @@ export function ProjectsTabGrid({ projects }: ProjectsTabGridProps) {
   const displayedProjects = activeTab === 'personal' ? personalProjects : corporateProjects;
 
   const tabSwitcherAction = (
-    <div className="inline-flex p-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+    <div className="flex w-full md:w-auto p-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
       <button
         type="button"
         onClick={() => handleTabChange('personal')}
-        className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs font-mono font-bold transition-all duration-200 cursor-pointer ${
+        className={`flex-1 md:flex-initial px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-xs font-mono font-bold transition-all duration-200 cursor-pointer text-center whitespace-nowrap ${
           activeTab === 'personal'
             ? 'bg-white dark:bg-zinc-800 text-[#B45309] dark:text-[#FBBF24] shadow-sm'
             : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -57,7 +57,7 @@ export function ProjectsTabGrid({ projects }: ProjectsTabGridProps) {
       <button
         type="button"
         onClick={() => handleTabChange('corporate')}
-        className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs font-mono font-bold transition-all duration-200 cursor-pointer ${
+        className={`flex-1 md:flex-initial px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-xs font-mono font-bold transition-all duration-200 cursor-pointer text-center whitespace-nowrap ${
           activeTab === 'corporate'
             ? 'bg-white dark:bg-zinc-800 text-[#B45309] dark:text-[#FBBF24] shadow-sm'
             : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'

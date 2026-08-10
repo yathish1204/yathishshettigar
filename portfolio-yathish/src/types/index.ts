@@ -53,7 +53,7 @@ export interface Project {
   client?: string;
   duration?: string;
   year: number | string;
-  thumbnail: string;
+  thumbnail?: string;
   images?: string[];
   technologies: string[];
   responsibilities?: string[];

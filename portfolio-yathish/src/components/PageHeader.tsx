@@ -21,11 +21,12 @@ export function PageHeader({
   onBack,
 }: PageHeaderProps) {
   return (
-    <div className="mb-6 sm:mb-8 md:mb-10 space-y-3">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+    <div className="mb-6 sm:mb-8 md:mb-10 space-y-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        {/* Top/Left Section: Back Button + Title Block */}
+        <div className="flex items-start gap-3 sm:gap-4 min-w-0 flex-1">
           {/* Back Button with Dynamic Tooltip and Handler/Href */}
-          <div className="relative group shrink-0">
+          <div className="relative group shrink-0 pt-0.5">
             {onBack ? (
               <button
                 type="button"
@@ -56,19 +57,20 @@ export function PageHeader({
           </div>
 
           {/* Eyebrow & Title in the same header row */}
-          <div className="min-w-0 py-0.5">
+          <div className="min-w-0 flex-1 py-0.5">
             {eyebrow && (
               <span className="inline-block text-[11px] sm:text-xs font-mono font-bold uppercase tracking-widest text-gradient-accent mb-0.5 pb-0.5">
                 {eyebrow}
               </span>
             )}
-            <h1 className="text-xl md:text-2xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans leading-tight break-words">
               {title}
             </h1>
           </div>
         </div>
 
-        {action && <div className="shrink-0">{action}</div>}
+        {/* Action (Tab Switcher) */}
+        {action && <div className="w-full md:w-auto shrink-0 pt-1 md:pt-0">{action}</div>}
       </div>
     </div>
   );

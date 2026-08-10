@@ -58,7 +58,7 @@ export default async function AdminProjectPreviewPage({ params }: PreviewProps) 
 
         <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800">
           <Image
-            src={project.thumbnail}
+            src={project.thumbnail || '/og-image.jpg'}
             alt={project.title}
             fill
             className="object-cover object-top"

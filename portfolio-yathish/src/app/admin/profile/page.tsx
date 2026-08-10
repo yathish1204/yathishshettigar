@@ -129,6 +129,30 @@ export default function AdminProfilePage() {
           <textarea name="tagline" rows={2} required value={formData.tagline} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 leading-relaxed resize-y focus:outline-none focus:border-emerald-500" />
         </div>
 
+        {/* Profile Avatar / Headshot Image URL */}
+        <div className="space-y-3 p-4 rounded-xl bg-slate-100/60 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800">
+          <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">
+            Profile Avatar / Headshot Image URL
+          </label>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            {formData.profileImage && (
+              <img
+                src={formData.profileImage}
+                alt="Profile Avatar Preview"
+                className="w-14 h-14 rounded-full object-cover border-2 border-[#B45309] dark:border-[#FBBF24] shadow-md shrink-0"
+              />
+            )}
+            <textarea
+              name="profileImage"
+              rows={2}
+              value={formData.profileImage || ''}
+              onChange={handleChange}
+              placeholder="https://res.cloudinary.com/... or image URL"
+              className="w-full px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]"
+            />
+          </div>
+        </div>
+
         {/* Hero Video & Poster Attribute URLs (Dark & Light Theme) */}
         <div className="space-y-4 p-4 rounded-xl bg-slate-100/60 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800">
           <div className="font-mono text-xs font-bold text-[#B45309] dark:text-[#FBBF24] uppercase tracking-wider">

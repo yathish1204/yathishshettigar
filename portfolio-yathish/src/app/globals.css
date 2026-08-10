@@ -27,9 +27,11 @@ body {
   0% {
     left: -100%;
   }
+
   20% {
     left: 200%;
   }
+
   100% {
     left: 200%;
   }
@@ -61,12 +63,14 @@ body {
 
 /* Theme-Aware Light Gray Text Selection Styling */
 ::selection {
-  background-color: #e4e4e7; /* Light zinc-200 gray */
+  background-color: #e4e4e7;
+  /* Light zinc-200 gray */
   color: #18181b;
 }
 
 :where(.dark, .dark *) ::selection {
-  background-color: #3f3f46; /* Lighter zinc-700 gray in dark mode */
+  background-color: #3f3f46;
+  /* Lighter zinc-700 gray in dark mode */
   color: #f4f4f5;
 }
 
@@ -78,7 +82,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #e4e4e7; /* Light mode tracker */
+  background-color: #e4e4e7;
   border-radius: 9999px;
 }
 
@@ -92,33 +96,40 @@ body {
   background-color: #92400E;
 }
 
-/* Dark Mode: Dark Tracker (#555) | Thumb: CTA Golden Amber (#FBBF24) */
-:where(.dark, .dark *) ::-webkit-scrollbar-track {
-  background-color: #555; /* Dark mode tracker */
+/* Dark Mode: Dark Tracker (#222222) | Thumb: CTA Golden Amber (#FBBF24) */
+html.dark ::-webkit-scrollbar-track,
+.dark ::-webkit-scrollbar-track,
+.dark::-webkit-scrollbar-track {
+  background-color: #222222 !important;
 }
 
-:where(.dark, .dark *) ::-webkit-scrollbar-thumb {
-  background-color: #FBBF24;
-  border: 2px solid #555;
+html.dark ::-webkit-scrollbar-thumb,
+.dark ::-webkit-scrollbar-thumb,
+.dark::-webkit-scrollbar-thumb {
+  background-color: #FBBF24 !important;
+  border: 2px solid #222222 !important;
 }
 
-:where(.dark, .dark *) ::-webkit-scrollbar-thumb:hover {
-  background-color: #F59E0B;
+html.dark ::-webkit-scrollbar-thumb:hover,
+.dark ::-webkit-scrollbar-thumb:hover,
+.dark::-webkit-scrollbar-thumb:hover {
+  background-color: #F59E0B !important;
 }
 
 /* Firefox Scrollbar Color Rules */
-* {
+html, body, * {
   scrollbar-color: #B45309 #e4e4e7;
 }
 
-:where(.dark, .dark *) * {
-  scrollbar-color: #FBBF24 #555;
+html.dark, html.dark body, html.dark * {
+  scrollbar-color: #FBBF24 #222222;
 }
 
 /* Hide scrollbar utility class for explicitly hidden containers */
 .no-scrollbar::-webkit-scrollbar {
   display: none !important;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;

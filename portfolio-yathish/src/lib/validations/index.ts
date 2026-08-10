@@ -20,7 +20,7 @@ export const projectSchema = z.object({
   client: z.string().optional(),
   duration: z.string().optional(),
   year: z.union([z.string().min(1, 'Year or date is required'), z.number()]),
-  thumbnail: z.string().url('Thumbnail must be a valid URL'),
+  thumbnail: z.string().url('Thumbnail must be a valid URL').or(z.literal('')).optional(),
   images: z.array(z.string().url()).optional(),
   technologies: z.array(z.string()).min(1, 'At least one technology must be specified'),
   responsibilities: z.array(z.string()).optional(),

@@ -74,16 +74,16 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
               </p>
             )}
 
-            {/* 1-Line Truncated Summary with inline Read More on the same line */}
-            <div className="flex items-center gap-1.5 min-w-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300">
-              <span className="truncate min-w-0 font-normal">
+            {/* Summary Text with inline Read More button */}
+            <div className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed font-normal min-w-0 break-words [overflow-wrap:anywhere]">
+              <span className="line-clamp-1 inline">
                 {summaryText}
               </span>
               {hasLongSummary && (
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(true)}
-                  className="inline-flex items-center text-xs font-mono font-bold text-[#B45309] dark:text-[#FBBF24] hover:underline cursor-pointer shrink-0 transition-colors"
+                  className="inline-flex items-center text-xs font-mono font-bold text-[#B45309] dark:text-[#FBBF24] hover:underline cursor-pointer ml-1.5 shrink-0 transition-colors align-baseline whitespace-nowrap"
                 >
                   Read More →
                 </button>
@@ -101,7 +101,7 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
                 {project.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="px-2.5 py-1 text-[11px] font-mono font-medium rounded-md bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700/60"
+                    className="px-2.5 py-1 text-[11px] font-mono font-medium rounded-md bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700/60 break-words"
                   >
                     {tech}
                   </span>
@@ -127,7 +127,7 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
               data-lenis-prevent="true"
               data-lenis-prevent-wheel="true"
               data-lenis-prevent-touch="true"
-              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 sm:p-8 shadow-2xl space-y-6 my-auto"
+              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto overflow-x-hidden rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 sm:p-8 shadow-2xl space-y-6 my-auto"
               onClick={(e) => e.stopPropagation()}
               onWheel={(e) => {
                 e.stopPropagation();
@@ -136,20 +136,20 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
               }}
             >
               {/* Modal Header: Title & Close Button */}
-              <div className="flex items-start justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
-                <div>
+              <div className="flex items-start justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4 min-w-0">
+                <div className="min-w-0 flex-1">
                   <h2
                     id={`modal-title-${project.slug || project._id}`}
-                    className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 font-sans flex items-center gap-2"
+                    className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 font-sans flex items-center gap-2 break-words"
                   >
                     {project.featured && (
                       <span className="text-amber-400 font-bold shrink-0" aria-label="Featured Project" title="Featured Project">
                         ★
                       </span>
                     )}
-                    <span>{project.title}</span>
+                    <span className="break-words [overflow-wrap:anywhere]">{project.title}</span>
                   </h2>
-                  <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mt-1">
+                  <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mt-1 break-words">
                     {project.role} {project.client ? `• ${project.client}` : ''} ({displayYear})
                   </p>
                 </div>
@@ -169,7 +169,7 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
                 <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-gradient-accent">
                   Project Overview & Summary
                 </h3>
-                <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal whitespace-pre-line">
+                <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal whitespace-pre-line break-words [overflow-wrap:anywhere]">
                   {project.description || project.shortDescription}
                 </p>
               </div>
@@ -319,7 +319,7 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
       {/* 16:8 Aspect Ratio Thumbnail Container */}
       <div className="relative aspect-[16/8] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-950">
         <Image
-          src={project.thumbnail}
+          src={project.thumbnail || '/og-image.jpg'}
           alt={`Thumbnail for ${project.title}`}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

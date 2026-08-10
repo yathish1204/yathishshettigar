@@ -61,7 +61,7 @@ export const getProfile = cache(async function getProfile(): Promise<Profile> {
       tagline: profileDoc.tagline,
       shortBio: profileDoc.shortBio,
       longBio: profileDoc.longBio,
-      profileImage: profileDoc.profileImage || DEFAULT_PROFILE.profileImage,
+      profileImage: profileDoc.profileImage || `https://res.cloudinary.com/ddzrfwfsl/image/upload/q_auto,f_auto/v1786337057/yathish-hero-poster-img_1_qfd3fd.png`,
       heroVideoUrl: profileDoc.heroVideoUrl || DEFAULT_PROFILE.heroVideoUrl,
       heroVideoPoster: profileDoc.heroVideoPoster || DEFAULT_PROFILE.heroVideoPoster,
       heroVideoUrlLight: profileDoc.heroVideoUrlLight || DEFAULT_PROFILE.heroVideoUrlLight,

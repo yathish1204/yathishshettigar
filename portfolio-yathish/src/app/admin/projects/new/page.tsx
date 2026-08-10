@@ -213,13 +213,14 @@ export default function CreateProjectPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-300 mb-1">Project Date *</label>
+            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-300 mb-1">Project Date / Year *</label>
             <input
-              type="date"
+              type="text"
               name="year"
               required
               value={formData.year}
               onChange={handleChange}
+              placeholder="e.g. 2024 or May 2024 or 2024-05-15"
               className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-xs focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
           </div>
@@ -228,13 +229,16 @@ export default function CreateProjectPage() {
         {/* Thumbnail & Images */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-300 mb-1">Thumbnail URL *</label>
+            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-300 mb-1">
+              {formData.isCorporateProject ? 'Thumbnail URL (Optional for Corporate)' : 'Thumbnail URL *'}
+            </label>
             <input
               type="text"
               name="thumbnail"
-              required
+              required={!formData.isCorporateProject}
               value={formData.thumbnail}
               onChange={handleChange}
+              placeholder="https://..."
               className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-xs font-mono"
             />
           </div>
