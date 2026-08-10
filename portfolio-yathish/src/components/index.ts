@@ -15,5 +15,7 @@ export * from './LoadingState';
 export * from './ErrorState';
 export * from './MethodologyGrid';
 export * from './ExperienceList';
+export * from './PageHeader';
+export * from './ProjectsTabGrid';
 
 

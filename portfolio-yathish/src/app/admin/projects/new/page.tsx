@@ -30,6 +30,7 @@ export default function CreateProjectPage() {
     liveUrl: '',
     githubUrl: '',
     featured: false,
+    isCorporateProject: false,
     order: 0,
     status: 'draft',
     seoTitle: '',
@@ -350,19 +351,35 @@ export default function CreateProjectPage() {
           </div>
         </div>
 
-        {/* Featured Checkbox */}
-        <div className="flex items-center gap-2 pt-2">
-          <input
-            type="checkbox"
-            id="featured"
-            name="featured"
-            checked={formData.featured}
-            onChange={handleChange}
-            className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-emerald-500 focus:ring-emerald-500"
-          />
-          <label htmlFor="featured" className="text-xs font-mono text-zinc-300">
-            Mark as Featured Case Study on Homepage
-          </label>
+        {/* Featured & Corporate Checkboxes */}
+        <div className="flex flex-wrap items-center gap-6 pt-2">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="featured"
+              name="featured"
+              checked={formData.featured}
+              onChange={handleChange}
+              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-emerald-500 focus:ring-emerald-500"
+            />
+            <label htmlFor="featured" className="text-xs font-mono text-zinc-300">
+              Mark as Featured Case Study on Homepage
+            </label>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isCorporateProject"
+              name="isCorporateProject"
+              checked={formData.isCorporateProject}
+              onChange={handleChange}
+              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-[#B45309] dark:text-[#FBBF24] focus:ring-[#B45309]"
+            />
+            <label htmlFor="isCorporateProject" className="text-xs font-mono text-zinc-300">
+              Corporate Project (Check if Corporate / Uncheck for Personal)
+            </label>
+          </div>
         </div>
 
         {/* Form Action Buttons */}

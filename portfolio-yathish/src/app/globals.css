@@ -45,6 +45,8 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+  display: inline-block;
+  padding-bottom: 0.08em;
 }
 
 :where(.dark, .dark *) .text-gradient-accent {
@@ -53,4 +55,71 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+  display: inline-block;
+  padding-bottom: 0.08em;
+}
+
+/* Theme-Aware Light Gray Text Selection Styling */
+::selection {
+  background-color: #e4e4e7; /* Light zinc-200 gray */
+  color: #18181b;
+}
+
+:where(.dark, .dark *) ::selection {
+  background-color: #3f3f46; /* Lighter zinc-700 gray in dark mode */
+  color: #f4f4f5;
+}
+
+/* Theme-Aware Global Custom Scrollbar Styling */
+/* Light Mode: Light Tracker (#E4E4E7) | Thumb: CTA Amber (#B45309) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #e4e4e7; /* Light mode tracker */
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #B45309;
+  border-radius: 9999px;
+  border: 2px solid #e4e4e7;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #92400E;
+}
+
+/* Dark Mode: Dark Tracker (#555) | Thumb: CTA Golden Amber (#FBBF24) */
+:where(.dark, .dark *) ::-webkit-scrollbar-track {
+  background-color: #555; /* Dark mode tracker */
+}
+
+:where(.dark, .dark *) ::-webkit-scrollbar-thumb {
+  background-color: #FBBF24;
+  border: 2px solid #555;
+}
+
+:where(.dark, .dark *) ::-webkit-scrollbar-thumb:hover {
+  background-color: #F59E0B;
+}
+
+/* Firefox Scrollbar Color Rules */
+* {
+  scrollbar-color: #B45309 #e4e4e7;
+}
+
+:where(.dark, .dark *) * {
+  scrollbar-color: #FBBF24 #555;
+}
+
+/* Hide scrollbar utility class for explicitly hidden containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }

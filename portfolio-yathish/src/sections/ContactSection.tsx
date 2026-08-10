@@ -1,23 +1,32 @@
 import React from 'react';
 import { Profile } from '@/types';
 import { SectionHeading } from '@/components/SectionHeading';
+import { PageHeader } from '@/components/PageHeader';
 import { ContactForm } from '@/components/ContactForm';
 
-export function ContactSection({ profile }: { profile: Profile }) {
+export function ContactSection({ profile, isPage = false }: { profile: Profile; isPage?: boolean }) {
   const phoneDisplay = profile.phone || '+91 8296302220';
   const phoneTel = profile.phone ? profile.phone.replace(/\s+/g, '') : '+919900000000';
 
   return (
-    <section id="contact" className="py-12 md:py-18 border-b border-zinc-200 dark:border-zinc-900 bg-slate-100/50 dark:bg-zinc-950/40 transition-colors">
+    <section id="contact" className={`${isPage ? 'py-6 md:py-10' : 'py-10 md:py-14'} border-b border-zinc-200 dark:border-zinc-900 bg-slate-100/50 dark:bg-zinc-950/40 transition-colors`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* LHS Info Side (Clean borderless list with icons) */}
           <div className="lg:col-span-5 space-y-6">
-            <SectionHeading
-              eyebrow="Get in Touch"
-              title="Let's build something extraordinary."
-              description="Whether you have an inquiry regarding a Senior UX Engineer role, design system architecture, or full-stack Next.js project, feel free to reach out."
-            />
+            {isPage ? (
+              <PageHeader
+                eyebrow="Get in Touch"
+                title="Let's build something extraordinary."
+                description="Whether you have an inquiry regarding a Senior UX Engineer role, design system architecture, or full-stack Next.js project, feel free to reach out."
+              />
+            ) : (
+              <SectionHeading
+                eyebrow="Get in Touch"
+                title="Let's build something extraordinary."
+                description="Whether you have an inquiry regarding a Senior UX Engineer role, design system architecture, or full-stack Next.js project, feel free to reach out."
+              />
+            )}
 
             <div className="space-y-4 pt-2 text-xs sm:text-sm">
               {/* 1. Direct Email */}

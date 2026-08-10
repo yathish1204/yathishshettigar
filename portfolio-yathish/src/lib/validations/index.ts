@@ -32,6 +32,7 @@ export const projectSchema = z.object({
   liveUrl: z.string().url().or(z.literal('')).optional(),
   githubUrl: z.string().url().or(z.literal('')).optional(),
   featured: z.boolean().default(false),
+  isCorporateProject: z.boolean().default(false),
   status: z.enum(['draft', 'published', 'archived']).default('draft'),
   order: z.number().int().default(0),
   seoTitle: z.string().optional(),

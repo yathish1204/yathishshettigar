@@ -29,11 +29,11 @@ export function SectionHeading({
       >
         <div className="max-w-2xl">
           {eyebrow && (
-            <span aria-hidden="true" className="inline-block text-xs font-bold uppercase tracking-widest text-gradient-accent mb-2">
+            <span aria-hidden="true" className="inline-block text-xs font-bold uppercase tracking-widest text-gradient-accent mb-2 pb-0.5">
               {eyebrow}
             </span>
           )}
-          <h2 className="text-xl md:text-2xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans">
+          <h2 className="text-xl md:text-2xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans leading-[1.25] pb-1 pt-0.5">
             {title}
           </h2>
         </div>
@@ -53,11 +53,11 @@ export function SectionHeading({
       )}
     >
       {eyebrow && (
-        <span aria-hidden="true" className="inline-block text-xs font-bold uppercase tracking-widest text-gradient-accent mb-2">
+        <span aria-hidden="true" className="inline-block text-xs font-bold uppercase tracking-widest text-gradient-accent mb-2 pb-0.5">
           {eyebrow}
         </span>
       )}
-      <h2 className="text-xl md:text-2xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans">
+      <h2 className="text-xl md:text-2xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans leading-[1.25] pb-1 pt-0.5">
         {title}
       </h2>
     </div>

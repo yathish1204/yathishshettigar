@@ -49,6 +49,25 @@ export default function AdminProjectsListPage() {
     }
   };
 
+  const handleToggleCorporate = async (project: Project) => {
+    const newIsCorporate = !project.isCorporateProject;
+    try {
+      const res = await fetch(`/api/projects/${project._id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isCorporateProject: newIsCorporate }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        fetchProjects();
+      } else {
+        alert(`Failed: ${json.error?.message}`);
+      }
+    } catch (e) {
+      alert('Error updating category');
+    }
+  };
+
   const handleDelete = async (id: string, title: string) => {
     if (!confirm(`Are you sure you want to delete "${title}"?`)) return;
 
@@ -94,6 +113,7 @@ export default function AdminProjectsListPage() {
             <thead className="bg-zinc-900 border-b border-zinc-800 uppercase font-mono text-[10px] text-zinc-400">
               <tr>
                 <th className="p-3">Title & Slug</th>
+                <th className="p-3">Category</th>
                 <th className="p-3">Role</th>
                 <th className="p-3">Year</th>
                 <th className="p-3">Status</th>
@@ -107,6 +127,19 @@ export default function AdminProjectsListPage() {
                   <td className="p-3">
                     <div className="font-bold text-zinc-100">{project.title}</div>
                     <div className="font-mono text-[10px] text-zinc-400">/projects/{project.slug}</div>
+                  </td>
+                  <td className="p-3 font-mono">
+                    <button
+                      onClick={() => handleToggleCorporate(project)}
+                      title="Click to toggle between Personal and Corporate Project"
+                      className={`inline-flex px-2 py-1 rounded text-[10px] font-bold cursor-pointer transition-all hover:scale-105 ${
+                        project.isCorporateProject
+                          ? 'bg-amber-950 text-[#FBBF24] border border-amber-700/80 shadow-sm'
+                          : 'bg-blue-950 text-blue-300 border border-blue-800'
+                      }`}
+                    >
+                      {project.isCorporateProject ? '🏢 Corporate' : '👤 Personal'}
+                    </button>
                   </td>
                   <td className="p-3 font-mono text-zinc-400">{project.role}</td>
                   <td className="p-3 font-mono text-zinc-400">{project.year}</td>

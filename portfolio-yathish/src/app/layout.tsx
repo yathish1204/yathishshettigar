@@ -10,7 +10,7 @@ import { Analytics } from "@vercel/analytics/next";
 
 export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yathish.dev';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yathishshettigar.site';
 
   return {
     title: {
@@ -44,6 +44,11 @@ export async function generateMetadata(): Promise<Metadata> {
       index: true,
       follow: true,
     },
+    icons: {
+      icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+      shortcut: '/icon.svg',
+      apple: '/icon.svg',
+    },
   };
 }
 
@@ -73,7 +78,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className="bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-[#B45309] selection:text-white dark:selection:bg-[#FBBF24] dark:selection:text-zinc-950 min-h-screen flex flex-col overflow-x-hidden">
+      <body className="bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-zinc-200 selection:text-zinc-900 dark:selection:bg-zinc-700 dark:selection:text-zinc-100 min-h-screen flex flex-col overflow-x-hidden">
         <SmoothScroll>
           <GSAPScroll>
             <ConditionalLayout profile={profile}>{children}</ConditionalLayout>

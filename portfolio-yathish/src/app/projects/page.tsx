@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { getPublishedProjects } from '@/services/projects';
-import { SectionHeading } from '@/components/SectionHeading';
-import { ProjectGrid } from '@/components/ProjectGrid';
+import { PageHeader } from '@/components/PageHeader';
+import { ProjectsTabGrid } from '@/components/ProjectsTabGrid';
 
 export const metadata: Metadata = {
   title: 'Projects & Case Studies | Yathish Shettigar',
@@ -15,14 +15,8 @@ export default async function ProjectsPage() {
   const projects = await getPublishedProjects();
 
   return (
-    <div className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <SectionHeading
-        eyebrow="Case Study Portfolio"
-        title="Featured Projects & Work"
-        description="Comprehensive breakdown of software architecture, UX research, component engineering, and measurable project outcomes."
-      />
-
-      <ProjectGrid projects={projects} />
+    <div className="py-8 md:py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <ProjectsTabGrid projects={projects} />
     </div>
   );
 }

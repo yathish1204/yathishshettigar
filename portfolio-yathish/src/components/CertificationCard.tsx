@@ -19,7 +19,7 @@ export function CertificationCard({ certification }: CertificationCardProps) {
       className="group relative flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 text-white border border-zinc-200/90 dark:border-zinc-800/90 hover:border-[#B45309]/50 dark:hover:border-[#FBBF24]/50 hover:shadow-2xl hover:shadow-[#B45309]/10 dark:hover:shadow-[#FBBF24]/10 transition-all duration-300 cursor-pointer block"
     >
       {/* Top Thumbnail Section (Slightly Reduced Height Aspect Ratio) */}
-      <div className="relative w-full aspect-[16/7.5] bg-white dark:bg-zinc-100 overflow-hidden flex items-center justify-center p-4">
+      <div className="relative w-full aspect-[16/7.5] bg-white dark:bg-zinc-100 overflow-hidden flex items-center justify-center">
         {/* Featured Glassmorphism Golden Star Badge at Top Right */}
         {certification.featured && (
           <div
@@ -39,7 +39,7 @@ export function CertificationCard({ certification }: CertificationCardProps) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="text-center group-hover:scale-105 transition-transform duration-300">
+          <div className="text-center p-4 group-hover:scale-105 transition-transform duration-300">
             <span className="text-xl sm:text-2xl font-extrabold text-zinc-900 font-sans tracking-tight block">
               Course Certificate
             </span>

@@ -11,8 +11,9 @@ export function SelectedWorkSection({ projects }: { projects: Project[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [cardsPerPage, setCardsPerPage] = useState(3);
 
-  // Maximum 9 featured project items displayed in carousel on main page
-  const displayProjects = projects ? projects.slice(0, 9) : [];
+  // Filter for Personal Projects only on home page
+  const personalProjects = (projects || []).filter((p) => !p.isCorporateProject);
+  const displayProjects = personalProjects.slice(0, 9);
 
   // Update cardsPerPage based on current viewport width
   useEffect(() => {

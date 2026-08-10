@@ -107,13 +107,22 @@ export function Navbar() {
           href="/#hero"
           onClick={(e) => handleNavClick(e, '/#hero', 'hero')}
           aria-label="Yathish Shettigar — Home"
-          className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 hover:text-[#B45309] dark:hover:text-[#FBBF24] transition-colors flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] rounded-md"
+          className="group flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] rounded-md"
         >
-          {/* YS monogram is decorative — the link's aria-label provides the accessible name */}
-          <span className="w-8 h-8 rounded-lg bg-[#B45309] dark:bg-[#FBBF24] text-white dark:text-zinc-950 font-mono font-extrabold flex items-center justify-center text-sm shadow-md shadow-[#B45309]/20 dark:shadow-[#FBBF24]/20" aria-hidden="true">
-            YS
+          {/* YS Accent Div Logo with black text on bottom right edge */}
+          <div
+            className="relative w-10 h-10 sm:w-9 sm:h-9 rounded-sm bg-[#B45309] dark:bg-[#FBBF24] transition-colors duration-300 overflow-hidden shadow-sm shrink-0"
+            aria-hidden="true"
+          >
+            <span className="absolute bottom-[-1px] right-[2px] font-bold text-white dark:text-black font-sans text-lg sm:text-xl leading-none tracking-tighter select-none">
+              YS
+            </span>
+          </div>
+
+          {/* Text mark: Yathish Shettigar (Visible only on sm and above) */}
+          <span className="hidden sm:inline-block font-sans font-semibold sm:text-lg text-zinc-900 dark:text-zinc-100 group-hover:text-[#B45309] dark:group-hover:text-[#FBBF24] transition-colors">
+            Yathish Shettigar
           </span>
-          <span className="hidden sm:inline font-sans">Yathish Shettigar</span>
         </Link>
 
         {/* Right Section: Navigation Links & Theme Toggle */}

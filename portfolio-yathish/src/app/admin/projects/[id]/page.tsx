@@ -37,6 +37,7 @@ export default function EditProjectPage({ params }: EditProjectProps) {
     liveUrl: '',
     githubUrl: '',
     featured: false,
+    isCorporateProject: false,
     order: 0,
     status: 'draft',
     seoTitle: '',
@@ -71,6 +72,7 @@ export default function EditProjectPage({ params }: EditProjectProps) {
             liveUrl: p.liveUrl || '',
             githubUrl: p.githubUrl || '',
             featured: p.featured || false,
+            isCorporateProject: p.isCorporateProject || false,
             order: p.order || 0,
             status: p.status || 'draft',
             seoTitle: p.seoTitle || '',
@@ -123,8 +125,35 @@ export default function EditProjectPage({ params }: EditProjectProps) {
 
       const json = await res.json();
       if (res.ok && json.success) {
-        setFormData((prev) => ({ ...prev, status: json.data.status }));
-        setSuccessMsg(`Project updated successfully! Status: ${json.data.status}`);
+        const p = json.data;
+        setFormData({
+          title: p.title || '',
+          slug: p.slug || '',
+          shortDescription: p.shortDescription || '',
+          description: p.description || '',
+          role: p.role || '',
+          client: p.client || '',
+          duration: p.duration || '',
+          year: p.year || 2025,
+          thumbnail: p.thumbnail || '',
+          images: (p.images || []).join(', '),
+          technologies: (p.technologies || []).join(', '),
+          responsibilities: (p.responsibilities || []).join(', '),
+          challenge: p.challenge || '',
+          research: p.research || '',
+          designProcess: p.designProcess || '',
+          solution: p.solution || '',
+          outcome: p.outcome || '',
+          liveUrl: p.liveUrl || '',
+          githubUrl: p.githubUrl || '',
+          featured: p.featured || false,
+          isCorporateProject: p.isCorporateProject || false,
+          order: p.order || 0,
+          status: p.status || 'draft',
+          seoTitle: p.seoTitle || '',
+          seoDescription: p.seoDescription || '',
+        });
+        setSuccessMsg(`Project updated successfully! Status: ${p.status} | Category: ${p.isCorporateProject ? 'Corporate' : 'Personal'}`);
       } else {
         setError(json.error?.message || 'Failed to update project.');
       }
@@ -313,19 +342,35 @@ export default function EditProjectPage({ params }: EditProjectProps) {
           </div>
         </div>
 
-        {/* Featured Checkbox */}
-        <div className="flex items-center gap-2 pt-2">
-          <input
-            type="checkbox"
-            id="featured"
-            name="featured"
-            checked={formData.featured}
-            onChange={handleChange}
-            className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-emerald-500"
-          />
-          <label htmlFor="featured" className="text-xs font-mono text-zinc-300">
-            Featured Case Study on Homepage
-          </label>
+        {/* Featured & Corporate Checkboxes */}
+        <div className="flex flex-wrap items-center gap-6 pt-2">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="featured"
+              name="featured"
+              checked={formData.featured}
+              onChange={handleChange}
+              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-emerald-500"
+            />
+            <label htmlFor="featured" className="text-xs font-mono text-zinc-300">
+              Featured Case Study on Homepage
+            </label>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isCorporateProject"
+              name="isCorporateProject"
+              checked={formData.isCorporateProject}
+              onChange={handleChange}
+              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-[#B45309] dark:text-[#FBBF24]"
+            />
+            <label htmlFor="isCorporateProject" className="text-xs font-mono text-zinc-300">
+              Corporate Project (Check for Corporate / Uncheck for Personal)
+            </label>
+          </div>
         </div>
 
         {/* Action Controls */}

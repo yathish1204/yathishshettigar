@@ -125,7 +125,7 @@ export function YathishAnimatedTitle() {
       {/* Reserved Empty Height Subtitle Display (Zero Layout Shift) */}
       <div className="h-4 min-h-[24px] mt-1 flex items-center justify-center transition-all duration-200">
         {hoveredIndex !== null && (
-          <span className="text-xs lg:text-sm font-mono font-bold text-gradient-accent tracking-widest uppercase rounded-full shadow-sm animate-fade-in">
+          <span className="text-xs lg:text-sm font-mono font-bold text-gradient-accent tracking-widest uppercase animate-fade-in pb-0.5">
             {LETTERS[hoveredIndex].word}
           </span>
         )}

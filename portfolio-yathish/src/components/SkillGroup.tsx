@@ -39,7 +39,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
   return (
     <div className="flex flex-col gap-4 py-4 md:py-2 md:px-6">
       {/* Category Heading */}
-      <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800/80 pb-2.5">
+      <div className="flex items-center justify-between md:border-b md:border-zinc-200 md:dark:border-zinc-800/80 md:pb-2.5">
         <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
           <span>{category}</span>
         </h3>

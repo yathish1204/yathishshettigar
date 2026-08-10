@@ -129,13 +129,13 @@ export function HeroSection({ profile }: { profile: Profile }) {
           playsInline
           preload="auto"
           poster={activeVideoPoster}
-          className="absolute inset-0 sm:left-[30%] sm:w-[75%] w-full h-full object-cover object-center md:object-right opacity-80 dark:opacity-90 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
+          className="absolute inset-0 sm:left-[30%] sm:w-[75%] w-full h-full object-cover object-center md:object-right opacity-90 dark:opacity-90 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
         >
           <source src={activeVideoUrl} type="video/mp4" />
         </video>
       ) : activeVideoPoster ? (
         <div
-          className="absolute inset-0 md:left-[20%] md:w-[80%] w-full h-full bg-cover bg-center md:bg-right opacity-70 dark:opacity-85 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
+          className="absolute inset-0 md:left-[20%] md:w-[80%] w-full h-full bg-cover bg-center md:bg-right opacity-90 dark:opacity-85 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
           style={{ backgroundImage: `url(${activeVideoPoster})` }}
         />
       ) : (
@@ -162,7 +162,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
             <span className="text-lg sm:text-xl md:text-2xl font-semibold text-zinc-600 dark:text-zinc-400 font-mono tracking-wide block">
               Hi{greeting ? ` ${greeting}` : ''}, I'm
             </span>
-            <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans leading-tight sm:leading-none">
+            <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans leading-tight sm:leading-[1.15] pb-1">
               <span className="text-gradient-accent">{profile.name}</span>
             </h1>
           </div>

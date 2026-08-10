@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { getExperiences } from '@/services/experience';
-import { SectionHeading } from '@/components/SectionHeading';
+import { PageHeader } from '@/components/PageHeader';
 import { ExperienceList } from '@/components/ExperienceList';
 
 export const metadata: Metadata = {
@@ -15,8 +15,8 @@ export default async function ExperiencePage() {
   const experiences = await getExperiences();
 
   return (
-    <article className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <SectionHeading
+    <article className="py-8 md:py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <PageHeader
         eyebrow="Career Path"
         title="Professional Experience"
         description="Comprehensive timeline highlighting enterprise leadership, accomplishments, and engineering contributions."

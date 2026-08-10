@@ -20,8 +20,7 @@ export function AboutSection({ profile, education }: { profile: Profile; educati
           </div>
 
           <div className="lg:col-span-7 space-y-4">
-            <p className="text-base sm:text-lg md:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans font-normal">
-              Senior UX Engineer & Frontend Architect specializing in building performant, accessible web applications. By combining human-centered usability research with modern React, Next.js, and automated design token pipelines, I bridge the gap between design vision and production code — crafting web experiences that look exceptional and perform flawlessly.
+            <p className="text-base sm:text-lg md:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans font-normal">I’m a UX Engineer with 2 years of experience working at the intersection of design and frontend development. I turn user needs and design concepts into accessible, responsive, and high-performing web experiences using React, Next.js, and modern frontend technologies. For me, good engineering isn’t just about making things work — it’s about making them feel right, too.
             </p>
             <div className="pt-2 flex flex-wrap gap-4">
               <Button href="/about" variant="outline" size="md">

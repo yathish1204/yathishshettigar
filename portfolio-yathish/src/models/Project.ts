@@ -25,6 +25,7 @@ const ProjectSchema = new Schema<IProjectDocument>(
     liveUrl: { type: String },
     githubUrl: { type: String },
     featured: { type: Boolean, default: false, index: true },
+    isCorporateProject: { type: Boolean, default: false, index: true },
     status: {
       type: String,
       enum: ['draft', 'published', 'archived'],
@@ -38,6 +39,12 @@ const ProjectSchema = new Schema<IProjectDocument>(
   },
   { timestamps: true }
 );
+
+if (mongoose.models && mongoose.models.Project) {
+  if (!mongoose.models.Project.schema.path('isCorporateProject')) {
+    delete (mongoose.models as any).Project;
+  }
+}
 
 export const ProjectModel: Model<IProjectDocument> =
   (mongoose.models && mongoose.models.Project) ||

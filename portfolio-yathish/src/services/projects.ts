@@ -183,7 +183,8 @@ function sanitizeProjectDoc(doc: any): Project {
     outcome: doc.outcome,
     liveUrl: doc.liveUrl,
     githubUrl: doc.githubUrl,
-    featured: doc.featured,
+    featured: doc.featured || false,
+    isCorporateProject: doc.isCorporateProject || false,
     status: doc.status,
     order: doc.order,
     seoTitle: doc.seoTitle,
@@ -268,7 +269,10 @@ export async function getAllProjectsForAdmin(status?: string): Promise<Project[]
 
 export async function getProjectById(id: string): Promise<Project | null> {
   const db = await connectToDatabase();
-  if (!db) return null;
+  if (!db) {
+    const found = DEFAULT_PROJECTS.find((p) => p._id === id || p.slug === id);
+    return found || null;
+  }
 
   await ensureSeedProjects();
 
@@ -280,7 +284,13 @@ export async function getProjectById(id: string): Promise<Project | null> {
 
 export async function createProject(data: Omit<Project, '_id'>): Promise<{ success: boolean; project?: Project; error?: string }> {
   const db = await connectToDatabase();
-  if (!db) return { success: false, error: 'Database connection unavailable' };
+  if (!db) {
+    const newProject: Project = { ...data, _id: `proj_${Date.now()}` };
+    DEFAULT_PROJECTS.unshift(newProject);
+    cachedProjects = null;
+    lastFetchTime = 0;
+    return { success: true, project: newProject };
+  }
 
   await ensureSeedProjects();
 
@@ -298,7 +308,16 @@ export async function createProject(data: Omit<Project, '_id'>): Promise<{ succe
 
 export async function updateProject(id: string, data: Partial<Project>): Promise<{ success: boolean; project?: Project; error?: string }> {
   const db = await connectToDatabase();
-  if (!db) return { success: false, error: 'Database connection unavailable' };
+  if (!db) {
+    const idx = DEFAULT_PROJECTS.findIndex((p) => p._id === id || p.slug === id);
+    if (idx !== -1) {
+      DEFAULT_PROJECTS[idx] = { ...DEFAULT_PROJECTS[idx], ...data };
+      cachedProjects = null;
+      lastFetchTime = 0;
+      return { success: true, project: DEFAULT_PROJECTS[idx] };
+    }
+    return { success: false, error: 'Project not found in memory' };
+  }
 
   await ensureSeedProjects();
 

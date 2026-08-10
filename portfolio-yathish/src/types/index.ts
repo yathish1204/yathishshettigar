@@ -65,6 +65,7 @@ export interface Project {
   liveUrl?: string;
   githubUrl?: string;
   featured: boolean;
+  isCorporateProject?: boolean;
   status: ProjectStatus;
   order: number;
   seoTitle?: string;
