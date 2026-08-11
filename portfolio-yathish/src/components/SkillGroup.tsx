@@ -86,7 +86,16 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
   ];
 
   return (
-    <div className="flex flex-col gap-4 py-4 md:py-2 md:px-6">
+    <div className="flex flex-col gap-4 py-4 md:py-2 md:px-6 relative">
+      {/* Mobile Transparent Backdrop to ensure 100% reliable 1-tap dismiss outside active chip */}
+      {activeSkill && (
+        <div
+          onClick={() => setActiveSkill(null)}
+          className="fixed inset-0 z-40 md:hidden bg-transparent"
+          aria-hidden="true"
+        />
+      )}
+
       {/* Category Heading */}
       <div className="flex items-center justify-between md:border-b md:border-zinc-200 md:dark:border-zinc-800/80 md:pb-2.5">
         <h3 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
@@ -130,7 +139,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                   }}
                   className={`bg-zinc-100 dark:bg-zinc-900/90 border text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] transition-all md:hover:scale-105 active:scale-95 cursor-pointer ${
                     isClicked
-                      ? 'border-[#B45309] dark:border-[#FBBF24] bg-zinc-200/85 dark:bg-zinc-800'
+                      ? 'border-[#B45309] dark:border-[#FBBF24] bg-zinc-200/85 dark:bg-zinc-800 z-50 relative'
                       : 'border-zinc-200/90 dark:border-zinc-800/90 hover:border-[#B45309]/50 dark:hover:border-[#FBBF24]/50'
                   }`}
                 >
@@ -150,15 +159,15 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                   <span>{skill.name}</span>
                 </div>
 
-                {/* Hover/Click Popover Box */}
+                {/* Popover Box: Positions below chip (top-full) on mobile to prevent covering category titles, and above (bottom-full) on desktop */}
                 <div
                   aria-hidden={!isClicked}
-                  className={`absolute bottom-full mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl transition-all duration-200 z-50 transform ${
+                  className={`absolute top-full mt-2.5 md:top-auto md:bottom-full md:mt-0 md:mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl transition-all duration-200 z-50 transform ${
                     tooltipAlignment[skillKey] === 'start'
-                      ? 'left-0 translate-x-0 origin-bottom-left md:left-1/2 md:-translate-x-1/2 md:right-auto'
+                      ? 'left-0 translate-x-0 origin-top-left md:origin-bottom-left md:left-1/2 md:-translate-x-1/2 md:right-auto'
                       : tooltipAlignment[skillKey] === 'end'
-                      ? 'right-0 left-auto translate-x-0 origin-bottom-right md:left-1/2 md:-translate-x-1/2 md:right-auto'
-                      : 'left-1/2 -translate-x-1/2 origin-bottom'
+                      ? 'right-0 left-auto translate-x-0 origin-top-right md:origin-bottom-right md:left-1/2 md:-translate-x-1/2 md:right-auto'
+                      : 'left-1/2 -translate-x-1/2 origin-top md:origin-bottom'
                   } ${
                     isClicked
                       ? 'opacity-100 translate-y-0 pointer-events-auto'
@@ -197,12 +206,12 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                     </div>
                   </div>
 
-                  {/* Arrow Pointer */}
-                  <div className={`absolute top-full -mt-[1px] border-4 border-transparent border-t-white dark:border-t-zinc-900/95 ${
+                  {/* Arrow Pointer: points UP towards chip on mobile, points DOWN on desktop */}
+                  <div className={`absolute bottom-full -mb-[1px] md:bottom-auto md:top-full md:-mt-[1px] border-4 border-transparent border-b-white dark:border-b-zinc-900/95 md:border-b-transparent md:border-t-white md:dark:border-t-zinc-900/95 ${
                     tooltipAlignment[skillKey] === 'start'
                       ? 'left-6 translate-x-0 md:left-1/2 md:-translate-x-1/2'
                       : tooltipAlignment[skillKey] === 'end'
-                      ? 'right-6 left-auto translate-x-0 md:left-1/2 md:-translate-x-1/2 md:right-auto'
+                      ? 'right-6 left-auto translate-x-0 md:left-1/2 md:-translate-x-1/2'
                       : 'left-1/2 -translate-x-1/2'
                   }`} />
                 </div>
