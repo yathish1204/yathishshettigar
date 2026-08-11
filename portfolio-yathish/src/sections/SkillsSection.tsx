@@ -31,7 +31,7 @@ export function SkillsSection({ skills }: { skills: Skill[] }) {
   });
 
   return (
-    <section id="skills" className="py-12 md:py-16 border-b border-zinc-200 dark:border-zinc-900 bg-slate-50 dark:bg-zinc-950 transition-colors overflow-hidden">
+    <section id="skills" className="py-12 md:py-16 border-b border-zinc-200 dark:border-zinc-900 bg-slate-50 dark:bg-zinc-950 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Capabilities"
