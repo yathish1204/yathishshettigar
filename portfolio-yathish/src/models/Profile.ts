@@ -26,6 +26,12 @@ const ProfileSchema = new Schema<IProfileDocument>(
       website: { type: String },
     },
     availability: { type: String },
+    languages: [
+      {
+        name: { type: String, required: true },
+        level: { type: String, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -54,6 +54,25 @@ export default async function AboutPage() {
           </section>
         )}
 
+        {profile.languages && profile.languages.length > 0 && (
+          <section aria-labelledby="languages-heading" className="pt-8 border-t border-zinc-200 dark:border-zinc-800">
+            <h2 id="languages-heading" className="text-xl sm:text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 font-sans">
+              Languages
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+              {profile.languages.map((lang) => (
+                <div
+                  key={lang.name}
+                  className="p-4 rounded-xl bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 flex flex-col gap-1 shadow-sm dark:shadow-none hover:border-zinc-400 dark:hover:border-[#ffffff]/40 transition-colors"
+                >
+                  <div className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{lang.name}</div>
+                  <div className="text-xs font-mono text-gradient-accent dark:text-gradient-accent font-semibold">{lang.level}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         <div className="pt-2 flex flex-wrap gap-4">
           <Button href="/contact" variant="primary" size="lg">
             Let's Collaborate

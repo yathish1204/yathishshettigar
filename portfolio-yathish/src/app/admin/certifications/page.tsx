@@ -21,7 +21,7 @@ export default function AdminCertificationsPage() {
     featured: false,
     order: 0,
     status: 'published' as 'published' | 'draft',
-    categories: ['Others'] as ('AI' | 'UI' | 'Development' | 'Others')[],
+    categories: ['General'] as string[],
   };
 
   const [form, setForm] = useState(initialForm);
@@ -133,48 +133,62 @@ export default function AdminCertificationsPage() {
 
         <button
           onClick={handleOpenCreate}
-          className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs transition-colors cursor-pointer shadow-lg shadow-emerald-500/20 self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-xl bg-[#B45309] hover:bg-[#92400E] text-white dark:bg-[#FBBF24] dark:hover:bg-[#F59E0B] dark:text-zinc-950 font-bold text-xs transition-colors cursor-pointer shadow-lg shadow-[#B45309]/20 dark:shadow-[#FBBF24]/20 self-start sm:self-auto"
         >
           + Add New Certification
         </button>
       </div>
 
       {loading ? (
-        <div className="py-8 text-center text-xs font-mono text-zinc-400">Loading certifications...</div>
+        <div className="py-8 text-center text-xs font-mono text-zinc-500 dark:text-zinc-400">Loading certifications...</div>
       ) : certs.length === 0 ? (
-        <div className="p-8 text-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs">
+        <div className="p-8 text-center rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs">
           No certifications found. Click "+ Add New Certification" to create one.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {certs.map((c) => (
-            <div key={c._id || c.name} className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 flex items-start justify-between">
+            <div key={c._id || c.name} className="group p-4 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-none flex items-start justify-between transition-colors">
               <div className="space-y-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-mono text-emerald-400 font-semibold">{c.issuer}</span>
-                  <span className="text-xs font-mono text-zinc-500">• {c.issueDate}</span>
-                  {c.featured && <span className="text-xs text-amber-400 font-bold">★ Featured</span>}
+                  <span className="text-xs font-mono text-[#B45309] dark:text-[#FBBF24] font-semibold">{c.issuer}</span>
+                  <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">• {c.issueDate}</span>
+                  {c.featured && <span className="text-xs text-[#B45309] dark:text-[#FBBF24] font-bold">★ Featured</span>}
                 </div>
-                <div className="font-bold text-sm text-zinc-100">{c.name}</div>
+                <div className="font-bold text-sm text-zinc-900 dark:text-zinc-100">{c.name}</div>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {(c.categories && c.categories.length > 0
                     ? c.categories
                     : c.category ? [c.category] : ['Others']
                   ).map((cat) => (
-                    <span key={cat} className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 text-[9px] uppercase font-semibold font-mono border border-zinc-700">
+                    <span key={cat} className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-[9px] uppercase font-semibold font-mono border border-zinc-200 dark:border-zinc-700">
                       {cat}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <button onClick={() => handleOpenEdit(c)} className="px-2 py-0.5 rounded bg-zinc-800 text-emerald-400 text-[10px] font-mono">
-                  Edit
+              <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <button
+                  onClick={() => handleOpenEdit(c)}
+                  title="Edit Certification"
+                  aria-label="Edit Certification"
+                  className="w-[38px] h-[38px] rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-[#B45309]/10 dark:hover:bg-[#FBBF24]/10 text-zinc-600 dark:text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] border border-zinc-200 dark:border-zinc-700 hover:border-[#B45309]/40 dark:hover:border-[#FBBF24]/40 flex items-center justify-center transition-all cursor-pointer"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
                 </button>
                 {c._id && (
-                  <button onClick={() => handleDelete(c._id!, c.name)} className="px-2 py-0.5 rounded bg-red-950/60 text-red-300 text-[10px] font-mono">
-                    Delete
+                  <button
+                    onClick={() => handleDelete(c._id!, c.name)}
+                    title="Delete Certification"
+                    aria-label="Delete Certification"
+                    className="w-[38px] h-[38px] rounded-lg bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/60 flex items-center justify-center transition-all cursor-pointer"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
                   </button>
                 )}
               </div>
@@ -185,64 +199,62 @@ export default function AdminCertificationsPage() {
 
       {/* Creation/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-              <h2 className="text-lg font-bold text-zinc-100">{editingId ? 'Edit Certification' : '+ Add New Certification'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-zinc-400 hover:text-zinc-100 font-mono text-xs">✕ Close</button>
+        <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">
+              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{editingId ? 'Edit Certification' : '+ Add New Certification'}</h2>
+              <button onClick={() => setShowModal(false)} className="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 font-mono text-xs cursor-pointer">✕ Close</button>
             </div>
 
-            {error && <div className="p-3 rounded-lg bg-red-950/60 border border-red-800 text-red-300 text-xs">{error}</div>}
+            {error && <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 text-xs">{error}</div>}
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Certification Name *</label>
-                <input type="text" name="name" required value={form.name} onChange={handleChange} placeholder="e.g. Responsive Web Development" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Certification Name *</label>
+                <input type="text" name="name" required value={form.name} onChange={handleChange} placeholder="e.g. Responsive Web Development" className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Issuer *</label>
-                  <input type="text" name="issuer" required value={form.issuer} onChange={handleChange} placeholder="freecodecamp" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
+                  <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Issuer *</label>
+                  <input type="text" name="issuer" required value={form.issuer} onChange={handleChange} placeholder="freecodecamp" className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
                 </div>
                 <div>
-                  <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Issue Date *</label>
-                  <input type="date" name="issueDate" required value={form.issueDate} onChange={handleChange} className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
+                  <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Issue Date *</label>
+                  <input type="text" name="issueDate" required value={form.issueDate} onChange={handleChange} placeholder="2023" className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
                 </div>
               </div>
 
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Thumbnail / Certificate Image URL</label>
-                <input type="text" name="thumbnail" value={form.thumbnail} onChange={handleChange} placeholder="https://... or /images/cert.jpg" className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500 font-mono text-xs" />
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Badge Image / Thumbnail URL</label>
+                <input type="text" name="thumbnail" value={form.thumbnail} onChange={handleChange} placeholder="https://... or /images/cert.jpg" className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24] font-mono text-xs" />
               </div>
 
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Credential URL</label>
-                <input type="text" name="credentialUrl" value={form.credentialUrl} onChange={handleChange} placeholder="https://freecodecamp.org/verify/..." className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Credential Verification URL</label>
+                <input type="text" name="credentialUrl" value={form.credentialUrl} onChange={handleChange} placeholder="https://freecodecamp.org/verify/..." className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
               </div>
 
               <div>
-                <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Categories *</label>
-                <div className="flex flex-wrap gap-3 mt-1 bg-zinc-950 p-3 rounded-lg border border-zinc-800">
-                  {['AI', 'UI', 'Development', 'Others'].map((cat) => {
-                    const checked = form.categories.includes(cat as any);
+                <label className="block font-mono uppercase text-zinc-700 dark:text-zinc-300 mb-1 font-bold">Filter Categories</label>
+                <div className="grid grid-cols-2 gap-2 bg-slate-50 dark:bg-zinc-950 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 max-h-32 overflow-y-auto">
+                  {['UX/UI Design', 'Frontend Development', 'Design Systems', 'General'].map((cat) => {
+                    const isChecked = form.categories.includes(cat);
                     return (
-                      <label key={cat} className="flex items-center gap-2 text-zinc-350 cursor-pointer select-none">
+                      <label key={cat} className="flex items-center gap-2 cursor-pointer text-zinc-700 dark:text-zinc-300 select-none">
                         <input
                           type="checkbox"
-                          checked={checked}
+                          checked={isChecked}
                           onChange={(e) => {
-                            let newCats = [...form.categories];
                             if (e.target.checked) {
-                              newCats.push(cat as any);
+                              setForm((prev) => ({ ...prev, categories: [...prev.categories, cat] }));
                             } else {
-                              newCats = newCats.filter((c) => c !== cat);
+                              setForm((prev) => ({ ...prev, categories: prev.categories.filter((c) => c !== cat) }));
                             }
-                            setForm((prev) => ({ ...prev, categories: newCats }));
                           }}
-                          className="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
+                          className="w-4 h-4 accent-[#B45309] dark:accent-[#FBBF24] rounded cursor-pointer"
                         />
-                        <span className="text-[10px] font-mono uppercase">{cat}</span>
+                        <span className="text-[11px] font-mono">{cat}</span>
                       </label>
                     );
                   })}
@@ -256,16 +268,16 @@ export default function AdminCertificationsPage() {
                   name="featured"
                   checked={form.featured}
                   onChange={handleChange}
-                  className="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
+                  className="w-4 h-4 accent-[#B45309] dark:accent-[#FBBF24] rounded cursor-pointer"
                 />
-                <label htmlFor="featured" className="text-zinc-300 font-medium cursor-pointer">
-                  Mark as Featured Certification (displays golden star icon)
+                <label htmlFor="featured" className="text-xs font-mono text-zinc-700 dark:text-zinc-300 font-medium cursor-pointer">
+                  Featured Certification (Display on home page highlight grid)
                 </label>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
-                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 font-mono">Cancel</button>
-                <button type="submit" disabled={submitting} className="px-5 py-2 rounded-lg bg-emerald-500 text-zinc-950 font-bold">{submitting ? 'Saving...' : 'Save Certification'}</button>
+              <div className="flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono">Cancel</button>
+                <button type="submit" disabled={submitting} className="px-5 py-2 rounded-lg bg-[#B45309] text-white dark:bg-[#FBBF24] dark:text-zinc-950 font-bold">{submitting ? 'Saving...' : 'Save Certification'}</button>
               </div>
             </form>
           </div>

@@ -97,7 +97,7 @@ export default function CreateProjectPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
         <div>
-          <Link href="/admin/projects" className="text-xs text-zinc-400 hover:text-emerald-400 font-mono">
+          <Link href="/admin/projects" className="text-xs text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] font-mono">
             ← Back to Projects Directory
           </Link>
           <h1 className="text-2xl font-bold text-zinc-100 mt-1">Create New Project</h1>
@@ -125,7 +125,7 @@ export default function CreateProjectPage() {
               onChange={handleChange}
               onBlur={handleAutoSlug}
               placeholder="e.g. US-FEX Design System"
-              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
           </div>
 
@@ -140,7 +140,7 @@ export default function CreateProjectPage() {
               value={formData.slug}
               onChange={handleChange}
               placeholder="e.g. us-fex"
-              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-emerald-500 font-mono text-xs"
+              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24] font-mono text-xs"
             />
           </div>
         </div>
@@ -158,7 +158,7 @@ export default function CreateProjectPage() {
               value={formData.shortDescription}
               onChange={handleChange}
               placeholder="Concise 1-2 sentence overview of the project..."
-              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
           </div>
 
@@ -173,7 +173,7 @@ export default function CreateProjectPage() {
               value={formData.description}
               onChange={handleChange}
               placeholder="Detailed case study background and problem statement..."
-              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
           </div>
         </div>
@@ -364,7 +364,7 @@ export default function CreateProjectPage() {
               name="featured"
               checked={formData.featured}
               onChange={handleChange}
-              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-emerald-500 focus:ring-emerald-500"
+              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-[#B45309] dark:text-[#FBBF24] focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
             <label htmlFor="featured" className="text-xs font-mono text-zinc-300">
               Mark as Featured Case Study on Homepage
@@ -378,7 +378,7 @@ export default function CreateProjectPage() {
               name="isCorporateProject"
               checked={formData.isCorporateProject}
               onChange={handleChange}
-              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-[#B45309] dark:text-[#FBBF24] focus:ring-[#B45309]"
+              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-[#B45309] dark:text-[#FBBF24] focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
             <label htmlFor="isCorporateProject" className="text-xs font-mono text-zinc-300">
               Corporate Project (Check if Corporate / Uncheck for Personal)
@@ -400,7 +400,7 @@ export default function CreateProjectPage() {
             type="button"
             disabled={submitting}
             onClick={(e) => handleSubmit(e, 'published')}
-            className="px-5 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold transition-colors"
+            className="px-5 py-2.5 rounded-lg bg-[#B45309] hover:bg-[#92400e] text-white dark:bg-[#FBBF24] dark:hover:bg-[#f59e0b] dark:text-zinc-950 text-xs font-bold transition-colors"
           >
             Publish Immediately
           </button>

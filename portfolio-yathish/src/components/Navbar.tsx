@@ -61,6 +61,18 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   // Smooth scroll handler with proper header offset
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, sectionId: string) => {
     setMobileMenuOpen(false);
@@ -111,7 +123,7 @@ export function Navbar() {
         >
           {/* YS Accent Div Logo with black text on bottom right edge */}
           <div
-            className="relative w-10 h-10 sm:w-9 sm:h-9 rounded-sm bg-[#B45309] dark:bg-[#FBBF24] transition-colors duration-300 overflow-hidden shadow-sm shrink-0"
+            className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-sm bg-[#B45309] dark:bg-[#FBBF24] transition-colors duration-300 overflow-hidden shadow-sm shrink-0"
             aria-hidden="true"
           >
             <span className="absolute bottom-[-1px] right-[2px] font-semibold text-white dark:text-black font-sans text-lg sm:text-xl leading-none tracking-tighter select-none">
@@ -178,32 +190,42 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Drawer Navigation & Backdrop Overlay */}
       {mobileMenuOpen && (
-        <nav
-          id="mobile-nav"
-          aria-label="Mobile navigation"
-          className="md:hidden bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 px-4 pt-2 pb-6 space-y-1.5 shadow-xl"
-        >
-          {navLinks.map((link) => {
-            const active = isLinkActive(link.sectionId, link.href);
-            return (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href, link.sectionId)}
-                aria-current={active ? 'page' : undefined}
-                className={`block px-4 py-2.5 rounded-lg text-base font-semibold transition-colors cursor-pointer border ${
-                  active
-                    ? 'text-[#B45309] dark:text-[#FBBF24] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 border-[#B45309]/30 dark:border-[#FBBF24]/30'
-                    : 'text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
-                }`}
-              >
-                {link.name}
-              </a>
-            );
-          })}
-        </nav>
+        <>
+          {/* Backdrop Overlay (Fills entire screen below navbar header, click outside collapses menu) */}
+          <div
+            onClick={() => setMobileMenuOpen(false)}
+            className="fixed inset-0 top-[72px] z-40 bg-black/60 backdrop-blur-sm md:hidden cursor-pointer transition-opacity"
+            aria-hidden="true"
+          />
+
+          {/* Mobile Drawer Navigation Menu */}
+          <nav
+            id="mobile-nav"
+            aria-label="Mobile navigation"
+            className="relative z-50 md:hidden bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 px-4 pt-2 pb-6 space-y-1.5 shadow-2xl transition-all"
+          >
+            {navLinks.map((link) => {
+              const active = isLinkActive(link.sectionId, link.href);
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href, link.sectionId)}
+                  aria-current={active ? 'page' : undefined}
+                  className={`block px-4 py-2.5 rounded-lg text-base font-semibold transition-colors cursor-pointer border ${
+                    active
+                      ? 'text-[#B45309] dark:text-[#FBBF24] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 border-[#B45309]/30 dark:border-[#FBBF24]/30'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
+                  }`}
+                >
+                  {link.name}
+                </a>
+              );
+            })}
+          </nav>
+        </>
       )}
     </header>
   );

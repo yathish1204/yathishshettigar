@@ -36,6 +36,7 @@ export function CertificationCard({ certification }: CertificationCardProps) {
           <img
             src={imgSrc}
             alt={certification.name}
+            loading="lazy"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (

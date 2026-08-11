@@ -22,6 +22,11 @@ export interface SocialLinks {
   whatsapp?: string;
 }
 
+export interface Language {
+  name: string;
+  level: string;
+}
+
 export interface Profile {
   _id?: string;
   name: string;
@@ -40,6 +45,7 @@ export interface Profile {
   location: string;
   socialLinks?: SocialLinks;
   availability?: string;
+  languages?: Language[];
   updatedAt?: string | Date;
 }
 

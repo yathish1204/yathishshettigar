@@ -48,7 +48,7 @@ export default async function AdminProjectPreviewPage({ params }: PreviewProps) 
       <article className="py-8 max-w-5xl mx-auto space-y-12">
         <header className="space-y-4">
           <div className="flex items-center gap-3">
-            <Badge variant="emerald">{project.role}</Badge>
+            <Badge variant="amber">{project.role}</Badge>
             <span className="text-xs font-mono text-zinc-400">Year: {project.year}</span>
           </div>
 

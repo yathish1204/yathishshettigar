@@ -47,8 +47,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <header className="w-full bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <Link href="/admin" className="font-bold text-lg text-emerald-600 dark:text-emerald-400 tracking-tight flex items-center gap-2">
-                <span className="w-6 h-6 rounded bg-emerald-500 text-zinc-950 font-mono text-xs flex items-center justify-center font-extrabold">
+              <Link href="/admin" className="font-bold text-lg text-[#B45309] dark:text-[#FBBF24] tracking-tight flex items-center gap-2">
+                <span className="w-6 h-6 rounded bg-[#B45309] text-white dark:bg-[#FBBF24] dark:text-zinc-950 font-mono text-xs flex items-center justify-center font-extrabold">
                   YS
                 </span>
                 <span>Yathish Admin</span>
@@ -61,7 +61,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     href={link.href}
                     className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                       isActive(link.href)
-                        ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/80'
+                        ? 'bg-[#B45309]/10 dark:bg-[#FBBF24]/10 text-[#B45309] dark:text-[#FBBF24] border border-[#B45309]/20 dark:border-[#FBBF24]/20'
                         : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800'
                     }`}
                   >
@@ -95,7 +95,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 href={link.href}
                 className={`px-2.5 py-1 rounded whitespace-nowrap ${
                   isActive(link.href)
-                    ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
+                    ? 'bg-[#B45309]/10 dark:bg-[#FBBF24]/10 text-[#B45309] dark:text-[#FBBF24] border border-[#B45309]/20 dark:border-[#FBBF24]/20'
                     : 'text-zinc-600 dark:text-zinc-400'
                 }`}
               >

@@ -20,6 +20,22 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${profile.name}`,
     },
     description: profile.shortBio,
+    keywords: [
+      'Yathish Shettigar',
+      'UX Engineer',
+      'Frontend Architect',
+      'Design Systems',
+      'React Developer',
+      'Next.js Developer',
+      'Human-Centered Design',
+      'Web Performance Optimization',
+      'UI/UX Engineering Portfolio'
+    ],
+    authors: [{ name: 'Yathish Shettigar', url: baseUrl }],
+    creator: 'Yathish Shettigar',
+    alternates: {
+      canonical: baseUrl,
+    },
     metadataBase: new URL(baseUrl),
     openGraph: {
       title: `${profile.name} — ${profile.title}`,
@@ -64,6 +80,7 @@ export default async function RootLayout({
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yathish.dev';
   const personJsonLd = getPersonJsonLd(profile, baseUrl);
   const websiteJsonLd = getWebSiteJsonLd(profile, baseUrl);
+  const darkPoster = profile.heroVideoPoster || profile.profileImage;
 
   return (
     <html lang="en" className="dark scroll-smooth overflow-x-hidden">
@@ -72,6 +89,9 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        {darkPoster && (
+          <link rel="preload" href={darkPoster} as="image" fetchPriority="high" />
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

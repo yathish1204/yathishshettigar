@@ -26,6 +26,7 @@ export default function AdminProfilePage() {
     location: '',
     availability: '',
     socialLinks: { github: '', linkedin: '', twitter: '', website: '' },
+    languages: [],
   });
 
   useEffect(() => {
@@ -60,6 +61,28 @@ export default function AdminProfilePage() {
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
+  };
+
+  const handleLanguageChange = (index: number, field: 'name' | 'level', value: string) => {
+    setFormData((prev) => {
+      const updated = [...(prev.languages || [])];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prev, languages: updated };
+    });
+  };
+
+  const handleAddLanguage = () => {
+    setFormData((prev) => ({
+      ...prev,
+      languages: [...(prev.languages || []), { name: '', level: 'Native' }],
+    }));
+  };
+
+  const handleRemoveLanguage = (index: number) => {
+    setFormData((prev) => {
+      const updated = (prev.languages || []).filter((_, i) => i !== index);
+      return { ...prev, languages: updated };
+    });
   };
 
   const handleCancel = () => {
@@ -109,7 +132,7 @@ export default function AdminProfilePage() {
         <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Profile Information</h1>
       </div>
 
-      {message && <div role="alert" className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-mono">{message}</div>}
+      {message && <div role="alert" className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/60 border border-[#B45309]/30 dark:border-[#FBBF24]/30 text-[#B45309] dark:text-[#FBBF24] text-xs font-mono">{message}</div>}
       {error && <div role="alert" className="p-3 rounded-lg bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 text-xs">{error}</div>}
 
       <form onSubmit={handleSubmit} className="w-full space-y-6 bg-white dark:bg-zinc-900/60 p-6 md:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-none text-xs transition-colors">
@@ -120,13 +143,13 @@ export default function AdminProfilePage() {
           </div>
           <div>
             <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Professional Role/Title *</label>
-            <input type="text" name="title" required value={formData.title} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
+            <input type="text" name="title" required value={formData.title} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
           </div>
         </div>
 
         <div>
           <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Tagline (Hero Positioning Intro) *</label>
-          <textarea name="tagline" rows={2} required value={formData.tagline} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 leading-relaxed resize-y focus:outline-none focus:border-emerald-500" />
+          <textarea name="tagline" rows={2} required value={formData.tagline} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 leading-relaxed resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
         </div>
 
         {/* Profile Avatar / Headshot Image URL */}
@@ -197,7 +220,7 @@ export default function AdminProfilePage() {
                 value={formData.resumeUrl && !formData.resumeUrl.startsWith('data:') ? formData.resumeUrl : ''}
                 onChange={handleChange}
                 placeholder="https://example.com/resume.pdf or /resume.pdf"
-                className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] focus:outline-none focus:border-emerald-500"
+                className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]"
               />
             </div>
             
@@ -246,7 +269,7 @@ export default function AdminProfilePage() {
               </div>
               
               {formData.resumeUrl && formData.resumeUrl.startsWith('data:application/pdf;base64,') && (
-                <div className="mt-2 text-[10px] font-mono text-emerald-500 font-semibold flex items-center gap-1.5">
+                <div className="mt-2 text-[10px] font-mono text-[#B45309] dark:text-[#FBBF24] font-semibold flex items-center gap-1.5">
                   <span>✓ PDF Attached successfully ({Math.round(formData.resumeUrl.length / 1024)} KB)</span>
                 </div>
               )}
@@ -256,39 +279,102 @@ export default function AdminProfilePage() {
 
         <div>
           <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Short Bio *</label>
-          <textarea name="shortBio" rows={3} required value={formData.shortBio} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 leading-relaxed resize-y focus:outline-none focus:border-emerald-500" />
+          <textarea name="shortBio" rows={3} required value={formData.shortBio} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 leading-relaxed resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
         </div>
 
         <div>
           <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Long Bio *</label>
-          <textarea name="longBio" rows={5} required value={formData.longBio} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 leading-relaxed resize-y focus:outline-none focus:border-emerald-500" />
+          <textarea name="longBio" rows={5} required value={formData.longBio} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 leading-relaxed resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Email *</label>
-            <input type="email" name="email" required value={formData.email} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
+            <input type="email" name="email" required value={formData.email} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
           </div>
           <div>
             <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Location *</label>
-            <input type="text" name="location" required value={formData.location} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
+            <input type="text" name="location" required value={formData.location} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
           </div>
         </div>
 
         <div>
           <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Availability Status</label>
-          <input type="text" name="availability" value={formData.availability || ''} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500" />
+          <input type="text" name="availability" value={formData.availability || ''} onChange={handleChange} className="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
           <div>
             <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">GitHub URL</label>
-            <textarea name="social_github" rows={2} value={formData.socialLinks?.github || ''} onChange={handleChange} className="w-full px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-emerald-500" />
+            <textarea name="social_github" rows={2} value={formData.socialLinks?.github || ''} onChange={handleChange} className="w-full px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
           </div>
           <div>
             <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">LinkedIn URL</label>
-            <textarea name="social_linkedin" rows={2} value={formData.socialLinks?.linkedin || ''} onChange={handleChange} className="w-full px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-emerald-500" />
+            <textarea name="social_linkedin" rows={2} value={formData.socialLinks?.linkedin || ''} onChange={handleChange} className="w-full px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]" />
           </div>
+        </div>
+
+        {/* Languages Section */}
+        <div className="space-y-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+          <div className="flex items-center justify-between">
+            <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-bold">
+              Languages & Proficiency
+            </label>
+            <button
+              type="button"
+              onClick={handleAddLanguage}
+              className="px-3 py-1.5 rounded-lg bg-[#B45309]/10 text-[#B45309] dark:bg-[#FBBF24]/10 dark:text-[#FBBF24] hover:bg-[#B45309]/20 dark:hover:bg-[#FBBF24]/20 font-mono text-[10px] font-bold uppercase transition-colors cursor-pointer"
+            >
+              + Add Language
+            </button>
+          </div>
+
+          {(formData.languages || []).length === 0 ? (
+            <p className="text-zinc-500 dark:text-zinc-400 font-mono text-[11px] py-2">
+              No languages added. Click "+ Add Language" to configure.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {(formData.languages || []).map((lang, index) => (
+                <div key={index} className="flex items-center gap-3 bg-slate-50 dark:bg-zinc-950/40 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                  <div className="flex-1">
+                    <label className="block font-mono text-[9px] uppercase text-zinc-400 mb-0.5">Language Name</label>
+                    <input
+                      type="text"
+                      value={lang.name}
+                      required
+                      placeholder="e.g. English"
+                      onChange={(e) => handleLanguageChange(index, 'name', e.target.value)}
+                      className="w-full px-3 py-1.5 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 text-xs focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block font-mono text-[9px] uppercase text-zinc-400 mb-0.5">Proficiency Level</label>
+                    <select
+                      value={lang.level}
+                      onChange={(e) => handleLanguageChange(index, 'level', e.target.value)}
+                      className="w-full px-3 py-1.5 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 text-xs focus:outline-none focus:border-[#B45309] dark:focus:border-[#FBBF24]"
+                    >
+                      <option value="Native">Native</option>
+                      <option value="Proficient">Proficient</option>
+                      <option value="Fluent">Fluent</option>
+                      <option value="Bilingual">Bilingual</option>
+                      <option value="Conversational">Conversational</option>
+                      <option value="Intermediate">Intermediate</option>
+                      <option value="Beginner">Beginner</option>
+                    </select>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveLanguage(index)}
+                    className="mt-3.5 px-2.5 py-1.5 rounded bg-red-950/60 text-red-300 hover:bg-red-900/40 text-[10px] font-mono cursor-pointer border border-red-800/40"
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
@@ -305,7 +391,7 @@ export default function AdminProfilePage() {
           <button
             type="submit"
             disabled={!isDirty || submitting}
-            className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:bg-zinc-200 dark:disabled:bg-zinc-800 disabled:text-zinc-400 dark:disabled:text-zinc-500 disabled:cursor-not-allowed disabled:shadow-none text-zinc-950 font-bold text-xs transition-all cursor-pointer shadow-lg shadow-emerald-500/20"
+            className="px-6 py-2.5 rounded-xl bg-[#B45309] hover:bg-[#92400e] text-white dark:bg-[#FBBF24] dark:hover:bg-[#f59e0b] dark:text-zinc-950 disabled:bg-zinc-200 dark:disabled:bg-zinc-800 disabled:text-zinc-400 dark:disabled:text-zinc-500 disabled:cursor-not-allowed disabled:shadow-none font-bold text-xs transition-all cursor-pointer shadow-lg shadow-[#B45309]/10 dark:shadow-[#FBBF24]/10"
           >
             {submitting ? 'Saving...' : 'Save Profile Changes'}
           </button>

@@ -35,6 +35,13 @@ export const DEFAULT_PROFILE: Profile = {
     instagram: 'https://www.instagram.com/y_shettigar_',
     facebook: 'https://www.facebook.com/yathish.shettigar.165',
   },
+  languages: [
+    { name: 'Kannada', level: 'Native' },
+    { name: 'English', level: 'Proficient' },
+    { name: 'Hindi', level: 'Fluent' },
+    { name: 'Tulu', level: 'Fluent' },
+    { name: 'French', level: 'Beginner' },
+  ],
 };
 
 let cachedProfile: Profile | null = null;
@@ -85,6 +92,7 @@ export const getProfile = cache(async function getProfile(): Promise<Profile> {
       location: profileDoc.location,
       socialLinks: profileDoc.socialLinks || DEFAULT_PROFILE.socialLinks,
       availability: profileDoc.availability || DEFAULT_PROFILE.availability,
+      languages: profileDoc.languages || DEFAULT_PROFILE.languages,
       updatedAt: profileDoc.updatedAt ? new Date(profileDoc.updatedAt).toISOString() : undefined,
     };
 
@@ -135,6 +143,7 @@ export async function updateProfile(data: Partial<Profile>): Promise<{ success: 
         location: updated.location,
         socialLinks: updated.socialLinks,
         availability: updated.availability,
+        languages: updated.languages,
       },
     };
   } catch (error) {

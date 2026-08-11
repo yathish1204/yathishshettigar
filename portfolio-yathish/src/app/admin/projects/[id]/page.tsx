@@ -172,14 +172,14 @@ export default function EditProjectPage({ params }: EditProjectProps) {
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
         <div>
-          <Link href="/admin/projects" className="text-xs text-zinc-400 hover:text-emerald-400 font-mono">
+          <Link href="/admin/projects" className="text-xs text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] font-mono">
             ← Back to Projects Directory
           </Link>
           <h1 className="text-2xl font-bold text-zinc-100 mt-1">Edit Project — {formData.title}</h1>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono uppercase px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-emerald-400">
+          <span className="text-xs font-mono uppercase px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-[#B45309] dark:text-[#FBBF24]">
             Status: {formData.status}
           </span>
           <Link
@@ -199,8 +199,8 @@ export default function EditProjectPage({ params }: EditProjectProps) {
       )}
 
       {successMsg && (
-        <div role="alert" className="p-4 rounded-xl bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-xs font-mono">
-          {successMsg}
+        <div role="alert" className="p-4 rounded-xl bg-amber-500/10 border border-[#B45309]/30 dark:border-[#FBBF24]/30 text-[#B45309] dark:text-[#FBBF24] text-xs font-mono">
+          Project updated successfully!
         </div>
       )}
 
@@ -217,7 +217,7 @@ export default function EditProjectPage({ params }: EditProjectProps) {
               required
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
           </div>
 
@@ -231,7 +231,7 @@ export default function EditProjectPage({ params }: EditProjectProps) {
               required
               value={formData.slug}
               onChange={handleChange}
-              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-emerald-500 font-mono text-xs"
+              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24] font-mono text-xs"
             />
           </div>
         </div>
@@ -248,7 +248,7 @@ export default function EditProjectPage({ params }: EditProjectProps) {
               required
               value={formData.shortDescription}
               onChange={handleChange}
-              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
           </div>
 
@@ -262,7 +262,7 @@ export default function EditProjectPage({ params }: EditProjectProps) {
               required
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-sm focus:ring-2 focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
           </div>
         </div>
@@ -420,7 +420,7 @@ export default function EditProjectPage({ params }: EditProjectProps) {
               name="featured"
               checked={formData.featured}
               onChange={handleChange}
-              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-emerald-500"
+              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-[#B45309] dark:text-[#FBBF24] focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
             <label htmlFor="featured" className="text-xs font-mono text-zinc-300">
               Featured Case Study on Homepage
@@ -434,7 +434,7 @@ export default function EditProjectPage({ params }: EditProjectProps) {
               name="isCorporateProject"
               checked={formData.isCorporateProject}
               onChange={handleChange}
-              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-[#B45309] dark:text-[#FBBF24]"
+              className="w-4 h-4 rounded bg-zinc-950 border-zinc-800 text-[#B45309] dark:text-[#FBBF24] focus:ring-[#B45309] dark:focus:ring-[#FBBF24]"
             />
             <label htmlFor="isCorporateProject" className="text-xs font-mono text-zinc-300">
               Corporate Project (Check for Corporate / Uncheck for Personal)
@@ -468,7 +468,7 @@ export default function EditProjectPage({ params }: EditProjectProps) {
               type="button"
               disabled={submitting}
               onClick={(e) => handleUpdate(e, 'published')}
-              className="px-5 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold"
+              className="px-5 py-2.5 rounded-lg bg-[#B45309] hover:bg-[#92400e] text-white dark:bg-[#FBBF24] dark:hover:bg-[#f59e0b] dark:text-zinc-950 text-xs font-bold"
             >
               Publish Updates
             </button>

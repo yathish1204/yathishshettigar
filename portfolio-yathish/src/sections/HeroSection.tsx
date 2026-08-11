@@ -157,67 +157,113 @@ export function HeroSection({ profile }: { profile: Profile }) {
   };
 
   return (
-    <section id="hero" className="relative w-full min-h-[calc(100vh-72px)] sm:h-[calc(100vh-72px)] flex flex-col justify-center py-8 sm:py-8 bg-slate-50 dark:bg-zinc-950 transition-colors overflow-hidden">
-      {/* Background Video (Light or Dark video loaded dynamically with full controls) */}
-      {activeVideoUrl ? (
-        <video
-          key={activeVideoUrl}
-          ref={videoRef}
-          autoPlay
-          muted={isMuted}
-          playsInline
-          preload="auto"
-          poster={activeVideoPoster}
-          className="absolute inset-0 sm:left-[30%] sm:w-[75%] w-full h-full object-cover object-center md:object-right opacity-90 dark:opacity-90 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
-        >
-          <source src={activeVideoUrl} type="video/mp4" />
-        </video>
-      ) : activeVideoPoster ? (
-        <div
-          className="absolute inset-0 md:left-[20%] md:w-[80%] w-full h-full bg-cover bg-center md:bg-right opacity-90 dark:opacity-85 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
-          style={{ backgroundImage: `url(${activeVideoPoster})` }}
-        />
-      ) : (
-        /* Subtle Background Glow Fallback */
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 blur-[120px] rounded-full pointer-events-none" />
-      )}
+    <section id="hero" className="relative w-full min-h-[calc(100vh-72px)] sm:h-[calc(100vh-72px)] flex flex-col justify-start sm:justify-center py-0 sm:py-8 bg-slate-50 dark:bg-zinc-950 transition-colors overflow-hidden">
+      {/* Top 45vh Video/Poster Container for Mobile, Absolute for Desktop */}
+      <div className="relative w-full h-[45vh] sm:h-full sm:absolute sm:inset-0 sm:left-[30%] sm:w-[75%] shrink-0 overflow-hidden">
+        {activeVideoUrl ? (
+          <video
+            key={activeVideoUrl}
+            ref={videoRef}
+            autoPlay
+            muted={isMuted}
+            playsInline
+            preload="auto"
+            poster={activeVideoPoster}
+            className="w-full h-full object-cover object-center md:object-right opacity-90 dark:opacity-90 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] sm:[mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] sm:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
+          >
+            <source src={activeVideoUrl} type="video/mp4" />
+          </video>
+        ) : activeVideoPoster ? (
+          <div
+            className="w-full h-full bg-cover bg-center md:bg-right opacity-90 dark:opacity-85 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] sm:[mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] sm:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
+            style={{ backgroundImage: `url(${activeVideoPoster})` }}
+          />
+        ) : (
+          /* Subtle Background Glow Fallback */
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 blur-[120px] rounded-full pointer-events-none" />
+        )}
 
-      {/* Subtle Background Glow Fallback */}
-      {!profile.heroVideoUrl && !profile.heroVideoUrlLight && !profile.heroVideoPoster && !profile.heroVideoPosterLight && (
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[#B45309]/10 dark:bg-[#FBBF24]/10 blur-[120px] rounded-full pointer-events-none" />
-      )}
+        {/* Video Controls (Mute/Unmute & Replay - Positioned inside bottom right of video frame on mobile, bottom right of screen on desktop) */}
+        {profile.heroVideoUrl && (
+          <div className="absolute bottom-8 sm:bottom-6 right-4 sm:right-8 lg:right-12 z-30 flex items-center gap-2.5">
+            {/* Mute/Unmute Button */}
+            <div className="relative group">
+              <button
+                type="button"
+                onClick={toggleMute}
+                className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/90 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] hover:border-[#B45309] dark:hover:border-[#FBBF24] transition-all shadow-sm backdrop-blur-md cursor-pointer hover:scale-110 flex items-center justify-center"
+                aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+                aria-pressed={!isMuted}
+              >
+                {isMuted ? (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  </svg>
+                )}
+              </button>
+              {/* Tooltip on Hover */}
+              <div aria-hidden="true" className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 text-[11px] font-mono font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
+                {isMuted ? 'Unmute' : 'Mute'}
+              </div>
+            </div>
+
+            {/* Replay Button */}
+            <div className="relative group">
+              <button
+                type="button"
+                onClick={replayVideo}
+                className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/90 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] hover:border-[#B45309] dark:hover:border-[#FBBF24] transition-all shadow-sm backdrop-blur-md cursor-pointer hover:scale-110 flex items-center justify-center"
+                aria-label="Replay video"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </button>
+              {/* Tooltip on Hover */}
+              <div aria-hidden="true" className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 text-[11px] font-mono font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
+                Replay
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Horizontal Linear Gradient Mask (Light fade from text side to video side on md+ screens) */}
       <div className="hidden md:block absolute inset-y-0 left-0 w-2/5 bg-gradient-to-r from-slate-50 via-slate-50/60 to-transparent dark:from-zinc-950 dark:via-zinc-950/60 to-transparent pointer-events-none z-10" />
 
       {/* Bottom Linear Gradient Mask for Smooth Section Transition */}
-      <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-slate-50 via-slate-50/40 to-transparent dark:from-zinc-950 dark:via-zinc-950/40 to-transparent pointer-events-none z-10" />
+      <div className="hidden sm:block absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-slate-50 via-slate-50/40 to-transparent dark:from-zinc-950 dark:via-zinc-950/40 to-transparent pointer-events-none z-10" />
 
-      {/* Main Hero Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
-        <div className="max-w-3xl space-y-5 sm:space-y-6">
+      {/* Main Hero Content (Overlay Card on Mobile with rounded-t-3xl) */}
+      <div className="relative z-20 max-w-7xl mx-auto px-5 py-6 sm:px-6 lg:px-8 w-full -mt-6 sm:mt-0 bg-slate-50 dark:bg-zinc-950 sm:bg-transparent sm:dark:bg-transparent rounded-t-3xl sm:rounded-none transition-colors">
+        <div className="max-w-3xl space-y-4 sm:space-y-6">
           {/* Greeting & Name */}
-          <div className="space-y-2">
-            <span className="text-lg sm:text-xl md:text-2xl font-semibold text-zinc-600 dark:text-zinc-400 font-mono tracking-wide block">
+          <div className="space-y-1 sm:space-y-2">
+            <span className="text-sm sm:text-xl md:text-2xl font-semibold text-zinc-600 dark:text-zinc-400 font-mono tracking-wide block">
               Hi{greeting ? ` ${greeting}` : ''}, I'm
             </span>
-            <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans leading-tight sm:leading-[1.15] pb-1">
+            <h1 className="text-3xl sm:text-5xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-sans leading-tight sm:leading-[1.15] pb-0.5 sm:pb-1">
               <span className="text-gradient-accent">{profile.name}</span>
             </h1>
           </div>
 
           {/* Role */}
-          <p className="text-lg sm:text-xl md:text-2xl font-medium text-zinc-800 dark:text-zinc-200 tracking-tight pt-1">
+          <p className="text-base sm:text-xl md:text-2xl font-medium text-zinc-800 dark:text-zinc-200 tracking-tight pt-0.5 sm:pt-1">
             {profile.title}
           </p>
 
           {/* Small Intro */}
-          <p className="text-base sm:text-lg md:text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-2xl">
+          <p className="text-xs sm:text-lg md:text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-2xl">
             {profile.tagline}
           </p>
 
           {/* 1 CTA for View Resume & Social Links directly underneath */}
-          <div className="pt-2 space-y-6">
+          <div className="pt-1 sm:pt-2 space-y-4 sm:space-y-6">
             <div>
               <Button
                 variant="outline"
@@ -236,8 +282,8 @@ export function HeroSection({ profile }: { profile: Profile }) {
               </Button>
             </div>
 
-            {/* Social Share Icons Row with Hover Tooltips (Positioned directly below View Resume CTA) */}
-            <div className="flex items-center gap-3 pt-1">
+            {/* Social Share Icons Row with Hover Tooltips */}
+            <div className="flex  items-center gap-3 pt-2">
               {socialItems.map((item) => (
                 <div key={item.name} className="relative group">
                   <a
@@ -259,55 +305,6 @@ export function HeroSection({ profile }: { profile: Profile }) {
           </div>
         </div>
       </div>
-
-      {/* Right-Bottom Video Controls (Mute/Unmute & Replay - Icon Only with Hover Tooltips) */}
-      {profile.heroVideoUrl && (
-        <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-8 lg:right-12 z-30 flex items-center gap-2.5">
-          {/* Mute/Unmute Button */}
-          <div className="relative group">
-            <button
-              type="button"
-              onClick={toggleMute}
-              className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/90 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] hover:border-[#B45309] dark:hover:border-[#FBBF24] transition-all shadow-sm backdrop-blur-md cursor-pointer hover:scale-110 flex items-center justify-center"
-              aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-              aria-pressed={!isMuted}
-            >
-              {isMuted ? (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                </svg>
-              ) : (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                </svg>
-              )}
-            </button>
-            {/* Tooltip on Hover */}
-            <div aria-hidden="true" className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 text-[11px] font-mono font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
-              {isMuted ? 'Unmute' : 'Mute'}
-            </div>
-          </div>
-
-          {/* Replay Button */}
-          <div className="relative group">
-            <button
-              type="button"
-              onClick={replayVideo}
-              className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/90 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-[#B45309] dark:hover:text-[#FBBF24] hover:border-[#B45309] dark:hover:border-[#FBBF24] transition-all shadow-sm backdrop-blur-md cursor-pointer hover:scale-110 flex items-center justify-center"
-              aria-label="Replay video"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </button>
-            {/* Tooltip on Hover */}
-            <div aria-hidden="true" className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 text-[11px] font-mono font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
-              Replay
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

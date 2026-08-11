@@ -128,6 +128,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                     src={skill.icon}
                     alt=""
                     aria-hidden="true"
+                    loading="lazy"
                     className="w-4 h-4 object-contain shrink-0 rounded-sm"
                   />
                 ) : svgIcon ? (
