@@ -159,7 +159,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
   return (
     <section id="hero" className="relative w-full min-h-[calc(100vh-72px)] sm:h-[calc(100vh-72px)] flex flex-col justify-start sm:justify-center py-0 sm:py-8 bg-slate-50 dark:bg-zinc-950 transition-colors overflow-hidden">
       {/* Top 45vh Video/Poster Container for Mobile, Absolute for Desktop */}
-      <div className="relative w-full h-[45vh] sm:h-full sm:absolute sm:inset-0 sm:left-[30%] sm:w-[75%] shrink-0 overflow-hidden aspect-[16/9] sm:aspect-auto">
+      <div className="relative w-full h-[45vh] sm:h-full sm:absolute sm:inset-y-0 sm:right-0 sm:left-auto sm:w-[70%] shrink-0 overflow-hidden aspect-[16/9] sm:aspect-auto">
         {activeVideoUrl ? (
           <video
             key={activeVideoUrl}
@@ -185,7 +185,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
 
         {/* Video Controls (Mute/Unmute & Replay - Positioned inside bottom right of video frame on mobile, bottom right of screen on desktop) */}
         {profile.heroVideoUrl && (
-          <div className="absolute bottom-8 sm:bottom-6 right-4 sm:right-8 lg:right-12 z-30 flex items-center gap-2.5">
+          <div className="absolute bottom-6 right-4 sm:right-6 lg:right-8 z-30 flex items-center gap-2.5">
             {/* Mute/Unmute Button */}
             <div className="relative group">
               <button

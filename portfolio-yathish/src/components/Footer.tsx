@@ -7,13 +7,6 @@ export function Footer({ profile }: { profile: Profile }) {
   const phoneTel = profile.phone ? profile.phone.replace(/\D/g, '') : '8296302220';
   const whatsappUrl = profile.socialLinks?.whatsapp || `https://wa.me/${phoneTel}`;
 
-  // github: 'https://github.com/yathish1204',
-  //   linkedin: 'https://www.linkedin.com/in/yathishshettigar',
-  //   twitter: 'https://x.com/YathishShe57208',
-  //   website: 'https://yathishshettigar.site',
-  //   behance: 'https://www.behance.net/yathishshettigar',
-  //   instagram: 'https://www.instagram.com/y_shettigar_',
-  //   facebook: 'https://www.facebook.com/yathish.shettigar.165',
 
   const socialItems = [
     {
@@ -165,7 +158,7 @@ export function Footer({ profile }: { profile: Profile }) {
         {/* Animated YATHISH Title (Visible only on medium screens and above) */}
         <YathishAnimatedTitle />
 
-        <div className="pt-8 border-t border-zinc-200 dark:border-zinc-900 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-4">
+        <div className="pt-8 border-t border-zinc-200 dark:border-zinc-900 flex flex-col sm:flex-row items-center justify-center text-xs text-zinc-500 gap-4">
           <div className="flex items-center gap-2 flex-wrap">
             <p>© {new Date().getFullYear()} {profile.name}. All rights reserved.</p>
             <span className="text-zinc-300 dark:text-zinc-800" aria-hidden="true">•</span>
@@ -177,7 +170,6 @@ export function Footer({ profile }: { profile: Profile }) {
               Admin
             </Link>
           </div>
-          <p className="font-mono">Built with Next.js App Router, React 19, TypeScript & Tailwind CSS.</p>
         </div>
       </div>
     </footer>
