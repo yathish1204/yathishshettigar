@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export interface PageHeaderProps {
   eyebrow?: string;
@@ -20,6 +23,30 @@ export function PageHeader({
   backTooltip = 'Back Home',
   onBack,
 }: PageHeaderProps) {
+  const router = useRouter();
+
+  const handleBack = (e: React.MouseEvent) => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('navigating_back', 'true');
+    }
+
+    if (onBack) {
+      e.preventDefault();
+      onBack();
+      return;
+    }
+
+    // If we have an internal referrer, go back in history to natively restore scroll position
+    if (
+      typeof window !== 'undefined' &&
+      document.referrer &&
+      document.referrer.includes(window.location.host)
+    ) {
+      e.preventDefault();
+      router.back();
+    }
+  };
+
   return (
     <div className="mb-6 sm:mb-8 md:mb-10 space-y-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -30,7 +57,7 @@ export function PageHeader({
             {onBack ? (
               <button
                 type="button"
-                onClick={onBack}
+                onClick={handleBack}
                 aria-label={backTooltip}
                 className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-[#B45309] dark:hover:border-[#FBBF24] hover:text-[#B45309] dark:hover:text-[#FBBF24] flex items-center justify-center transition-all shadow-sm cursor-pointer"
               >
@@ -41,6 +68,7 @@ export function PageHeader({
             ) : (
               <Link
                 href={backHref}
+                onClick={handleBack}
                 aria-label={backTooltip}
                 className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-[#B45309] dark:hover:border-[#FBBF24] hover:text-[#B45309] dark:hover:text-[#FBBF24] flex items-center justify-center transition-all shadow-sm cursor-pointer"
               >

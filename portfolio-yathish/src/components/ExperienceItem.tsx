@@ -107,7 +107,7 @@ export function ExperienceItem({
           aria-controls={bodyId}
         >
           {/* Line 1: Company name, location ---- Start & End date + Chevron icon */}
-          <div className="flex items-center justify-between gap-4 w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 w-full">
             <div className="text-base sm:text-lg md:text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 flex-wrap group-hover/btn:text-[#B45309] dark:group-hover/btn:text-[#FBBF24] transition-colors">
               <span>{experience.company}</span>
               {experience.location && (
@@ -117,7 +117,7 @@ export function ExperienceItem({
               )}
             </div>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-3 justify-between sm:justify-start w-full sm:w-auto shrink-0">
               <span
                 className={`text-xs font-mono px-3 py-1 rounded-md border font-medium transition-colors ${
                   active

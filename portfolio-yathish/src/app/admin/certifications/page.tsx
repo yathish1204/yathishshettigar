@@ -21,6 +21,7 @@ export default function AdminCertificationsPage() {
     featured: false,
     order: 0,
     status: 'published' as 'published' | 'draft',
+    categories: ['Others'] as ('AI' | 'UI' | 'Development' | 'Others')[],
   };
 
   const [form, setForm] = useState(initialForm);
@@ -61,14 +62,19 @@ export default function AdminCertificationsPage() {
       featured: Boolean(cert.featured),
       order: cert.order || 0,
       status: (cert.status as 'published' | 'draft') || 'published',
+      categories: cert.categories && cert.categories.length > 0
+        ? cert.categories
+        : cert.category ? [cert.category] : ['Others'],
     });
     setError('');
     setShowModal(true);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    const type = 'type' in e.target ? (e.target as HTMLInputElement).type : undefined;
     if (type === 'checkbox') {
+      const checked = (e.target as HTMLInputElement).checked;
       setForm((prev) => ({ ...prev, [name]: checked }));
     } else {
       setForm((prev) => ({ ...prev, [name]: value }));
@@ -144,12 +150,22 @@ export default function AdminCertificationsPage() {
           {certs.map((c) => (
             <div key={c._id || c.name} className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 flex items-start justify-between">
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xs font-mono text-emerald-400 font-semibold">{c.issuer}</span>
                   <span className="text-xs font-mono text-zinc-500">• {c.issueDate}</span>
                   {c.featured && <span className="text-xs text-amber-400 font-bold">★ Featured</span>}
                 </div>
                 <div className="font-bold text-sm text-zinc-100">{c.name}</div>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {(c.categories && c.categories.length > 0
+                    ? c.categories
+                    : c.category ? [c.category] : ['Others']
+                  ).map((cat) => (
+                    <span key={cat} className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 text-[9px] uppercase font-semibold font-mono border border-zinc-700">
+                      {cat}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               <div className="flex items-center gap-2">
@@ -203,6 +219,34 @@ export default function AdminCertificationsPage() {
               <div>
                 <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Credential URL</label>
                 <input type="text" name="credentialUrl" value={form.credentialUrl} onChange={handleChange} placeholder="https://freecodecamp.org/verify/..." className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-emerald-500" />
+              </div>
+
+              <div>
+                <label className="block font-mono uppercase text-zinc-300 mb-1 font-bold">Categories *</label>
+                <div className="flex flex-wrap gap-3 mt-1 bg-zinc-950 p-3 rounded-lg border border-zinc-800">
+                  {['AI', 'UI', 'Development', 'Others'].map((cat) => {
+                    const checked = form.categories.includes(cat as any);
+                    return (
+                      <label key={cat} className="flex items-center gap-2 text-zinc-350 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={(e) => {
+                            let newCats = [...form.categories];
+                            if (e.target.checked) {
+                              newCats.push(cat as any);
+                            } else {
+                              newCats = newCats.filter((c) => c !== cat);
+                            }
+                            setForm((prev) => ({ ...prev, categories: newCats }));
+                          }}
+                          className="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
+                        />
+                        <span className="text-[10px] font-mono uppercase">{cat}</span>
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="flex items-center gap-2 pt-1">

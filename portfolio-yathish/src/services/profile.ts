@@ -23,13 +23,17 @@ export const DEFAULT_PROFILE: Profile = {
   heroVideoPosterLight: '',
   resumeUrl: '#resume',
   email: 'yathish120420@gmail.com',
-  location: 'Bengaluru, India',
+  phone: '+91 8296302220',
+  location: 'Jayanagar, Bengaluru',
   availability: 'Available for UX Enginner | Product Designer & Front-end Developer role',
   socialLinks: {
     github: 'https://github.com/yathish1204',
-    linkedin: 'https://www.linkedin.com/in/yathishshettigar?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+    linkedin: 'https://www.linkedin.com/in/yathishshettigar',
     twitter: 'https://x.com/YathishShe57208',
     website: 'https://yathishshettigar.site',
+    behance: 'https://www.behance.net/yathishshettigar',
+    instagram: 'https://www.instagram.com/y_shettigar_',
+    facebook: 'https://www.facebook.com/yathish.shettigar.165',
   },
 };
 
@@ -60,7 +64,7 @@ export const getProfile = cache(async function getProfile(): Promise<Profile> {
       : YATHISH_PHOTO;
 
     if (profileDoc.profileImage !== activeProfileImage) {
-      await ProfileModel.updateOne({ _id: profileDoc._id }, { $set: { profileImage: activeProfileImage } }).catch(() => {});
+      await ProfileModel.updateOne({ _id: profileDoc._id }, { $set: { profileImage: activeProfileImage } }).catch(() => { });
     }
 
     const formatted: Profile = {
@@ -77,7 +81,7 @@ export const getProfile = cache(async function getProfile(): Promise<Profile> {
       heroVideoPosterLight: profileDoc.heroVideoPosterLight || DEFAULT_PROFILE.heroVideoPosterLight,
       resumeUrl: profileDoc.resumeUrl || DEFAULT_PROFILE.resumeUrl,
       email: profileDoc.email,
-      phone: profileDoc.phone,
+      phone: profileDoc.phone || DEFAULT_PROFILE.phone,
       location: profileDoc.location,
       socialLinks: profileDoc.socialLinks || DEFAULT_PROFILE.socialLinks,
       availability: profileDoc.availability || DEFAULT_PROFILE.availability,

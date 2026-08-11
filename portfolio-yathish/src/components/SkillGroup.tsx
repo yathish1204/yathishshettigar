@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Skill, SkillCategory } from '@/types';
 import { TechIcon } from '@/components/TechIcon';
@@ -28,6 +30,43 @@ function getProficiencyDetails(prof?: number | string) {
 }
 
 export function SkillGroup({ category, skills }: SkillGroupProps) {
+  const [activeSkill, setActiveSkill] = React.useState<string | null>(null);
+  const [tooltipAlignment, setTooltipAlignment] = React.useState<Record<string, 'start' | 'end' | 'center'>>({});
+  const chipRefs = React.useRef<Record<string, HTMLDivElement | null>>({});
+
+  // Close popovers when clicking outside
+  React.useEffect(() => {
+    if (!activeSkill) return;
+
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.group\\/chip')) {
+        setActiveSkill(null);
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, [activeSkill]);
+
+  const handleMouseEnterOrClick = (skillKey: string) => {
+    const el = chipRefs.current[skillKey];
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1000;
+    const padding = 16; // minimum margin from screen edges
+    const halfTooltipWidth = 128; // 256px wide tooltip / 2
+    const centerX = rect.left + rect.width / 2;
+
+    if (centerX - halfTooltipWidth < padding) {
+      setTooltipAlignment((prev) => ({ ...prev, [skillKey]: 'start' }));
+    } else if (centerX + halfTooltipWidth > viewportWidth - padding) {
+      setTooltipAlignment((prev) => ({ ...prev, [skillKey]: 'end' }));
+    } else {
+      setTooltipAlignment((prev) => ({ ...prev, [skillKey]: 'center' }));
+    }
+  };
 
   const steps = [
     { level: 1, name: 'Basic' },
@@ -40,7 +79,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
     <div className="flex flex-col gap-4 py-4 md:py-2 md:px-6">
       {/* Category Heading */}
       <div className="flex items-center justify-between md:border-b md:border-zinc-200 md:dark:border-zinc-800/80 md:pb-2.5">
-        <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
+        <h3 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
           <span>{category}</span>
         </h3>
         <span
@@ -58,15 +97,31 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
           const svgIcon = TechIcon({ name: skill.name });
           const { activeStep, label } = getProficiencyDetails(skill.proficiency);
           const years = skill.yearsOfExperience || 3;
+          const skillKey = skill._id || skill.name;
+          const isClicked = activeSkill === skillKey;
 
           return (
-            <div key={skill._id || skill.name} className="relative group/chip" role="listitem">
+            <div
+              key={skillKey}
+              ref={(el) => { chipRefs.current[skillKey] = el; }}
+              onMouseEnter={() => handleMouseEnterOrClick(skillKey)}
+              className="relative group/chip"
+              role="listitem"
+            >
               {/* Skill Chip Trigger */}
               <div
                 tabIndex={0}
                 role="button"
                 aria-label={`${skill.name}: ${label} level, ${years} ${years === 1 ? 'year' : 'years'} experience`}
-                className="bg-zinc-100 dark:bg-zinc-900/90 border border-zinc-200/90 dark:border-zinc-800/90 text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-[#B45309]/50 dark:hover:border-[#FBBF24]/50 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] transition-all hover:scale-105 cursor-pointer"
+                onClick={() => {
+                  handleMouseEnterOrClick(skillKey);
+                  setActiveSkill(isClicked ? null : skillKey);
+                }}
+                className={`bg-zinc-100 dark:bg-zinc-900/90 border text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] transition-all hover:scale-105 cursor-pointer ${
+                  isClicked
+                    ? 'border-[#B45309] dark:border-[#FBBF24] bg-zinc-200/85 dark:bg-zinc-850'
+                    : 'border-zinc-200/90 dark:border-zinc-800/90 hover:border-[#B45309]/50 dark:hover:border-[#FBBF24]/50'
+                }`}
               >
                 {skill.icon ? (
                   <img
@@ -83,10 +138,20 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                 <span>{skill.name}</span>
               </div>
 
-              {/* Desktop Hover Popover Box (Hidden on touch devices to prevent mobile overlay boxes) */}
+              {/* Hover/Click Popover Box */}
               <div
-                aria-hidden="true"
-                className="hidden md:block absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl opacity-0 group-hover/chip:opacity-100 pointer-events-none group-hover/chip:pointer-events-auto transition-all duration-200 z-50 transform group-hover/chip:translate-y-0 translate-y-1"
+                aria-hidden={!isClicked}
+                className={`absolute bottom-full mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl transition-all duration-200 z-50 transform ${
+                  tooltipAlignment[skillKey] === 'start'
+                    ? 'left-0 translate-x-0 origin-bottom-left md:left-1/2 md:-translate-x-1/2 md:right-auto'
+                    : tooltipAlignment[skillKey] === 'end'
+                    ? 'right-0 left-auto translate-x-0 origin-bottom-right md:left-1/2 md:-translate-x-1/2 md:right-auto md:translate-x-0'
+                    : 'left-1/2 -translate-x-1/2 origin-bottom md:left-1/2 md:-translate-x-1/2'
+                } ${
+                  isClicked
+                    ? 'opacity-100 translate-y-0 pointer-events-auto'
+                    : 'opacity-0 translate-y-1 pointer-events-none md:group-hover/chip:opacity-100 md:group-hover/chip:translate-y-0 md:group-hover/chip:pointer-events-auto'
+                }`}
               >
                 {/* Popover Header: Skill Title & Experience Years */}
                 <div className="flex items-center justify-between gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 mb-2.5">
@@ -121,7 +186,13 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                 </div>
 
                 {/* Arrow Pointer */}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-4 border-transparent border-t-white dark:border-t-zinc-900/95" />
+                <div className={`absolute top-full -mt-[1px] border-4 border-transparent border-t-white dark:border-t-zinc-900/95 ${
+                  tooltipAlignment[skillKey] === 'start'
+                    ? 'left-6 translate-x-0 md:left-1/2 md:-translate-x-1/2'
+                    : tooltipAlignment[skillKey] === 'end'
+                    ? 'right-6 left-auto translate-x-0 md:left-1/2 md:-translate-x-1/2 md:right-auto'
+                    : 'left-1/2 -translate-x-1/2 md:left-1/2 md:-translate-x-1/2'
+                }`} />
               </div>
             </div>
           );

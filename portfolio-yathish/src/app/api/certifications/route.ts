@@ -12,7 +12,9 @@ export async function GET(request: NextRequest) {
       const all = await getAllCertificationsForAdmin();
       return apiSuccess(all);
     }
-    const publicList = await getCertifications();
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category') || undefined;
+    const publicList = await getCertifications(category);
     return apiSuccess(publicList);
   } catch (error) {
     return apiError('SERVER_ERROR', 'Failed to retrieve certifications', 500);

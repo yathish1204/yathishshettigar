@@ -22,7 +22,7 @@ export function SectionHeading({
     return (
       <div
         className={cn(
-          'mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 w-full',
+          'mb-4 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 w-full',
           align === 'center' ? 'text-center max-w-3xl mx-auto' : '',
           className
         )}
@@ -47,7 +47,7 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        'mb-12 md:mb-16',
+        'mb-4 md:mb-16',
         align === 'center' ? 'text-center max-w-3xl mx-auto' : 'max-w-3xl',
         className
       )}

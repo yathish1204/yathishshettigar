@@ -50,7 +50,7 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
 
     return (
       <>
-        <div className="flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-zinc-900/90 border border-zinc-200/90 dark:border-zinc-800/80 shadow-md h-full space-y-4 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all">
+        <div className="flex flex-col justify-between p-6 rounded-2xl bg-zinc-100 dark:bg-zinc-900/90 border border-zinc-200/90 dark:border-zinc-800/80 shadow-md h-full space-y-4 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all">
           <div className="space-y-3">
             {/* Header row: Title + Year */}
             <div className="flex items-start justify-between gap-3">

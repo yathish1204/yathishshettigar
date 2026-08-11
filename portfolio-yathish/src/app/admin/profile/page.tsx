@@ -187,8 +187,71 @@ export default function AdminProfilePage() {
         </div>
 
         <div>
-          <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Resume File Link (URL)</label>
-          <textarea name="resumeUrl" rows={2} value={formData.resumeUrl || ''} onChange={handleChange} placeholder="https://..." className="w-full px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] break-all resize-y focus:outline-none focus:border-emerald-500" />
+          <label className="block font-mono uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5 font-bold">Resume File (URL or Upload PDF)</label>
+          <div className="space-y-3 p-4 rounded-xl bg-slate-100/60 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800">
+            <div>
+              <label className="block font-mono uppercase text-[10px] text-zinc-500 mb-1">Option A: Enter Resume URL</label>
+              <input
+                type="text"
+                name="resumeUrl"
+                value={formData.resumeUrl && !formData.resumeUrl.startsWith('data:') ? formData.resumeUrl : ''}
+                onChange={handleChange}
+                placeholder="https://example.com/resume.pdf or /resume.pdf"
+                className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-mono text-[11px] focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            
+            <div className="flex items-center gap-4 py-2">
+              <div className="h-px bg-zinc-200 dark:bg-zinc-800 flex-1" />
+              <span className="font-mono text-[10px] text-zinc-400 font-bold uppercase">OR</span>
+              <div className="h-px bg-zinc-200 dark:bg-zinc-800 flex-1" />
+            </div>
+
+            <div>
+              <label className="block font-mono uppercase text-[10px] text-zinc-500 mb-1">Option B: Browse & Upload PDF File</label>
+              <div className="flex items-center gap-4">
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    
+                    if (file.type !== 'application/pdf') {
+                      alert('Please upload a PDF file only.');
+                      return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      const base64String = reader.result as string;
+                      setFormData((prev) => ({ ...prev, resumeUrl: base64String }));
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                  className="block w-full text-xs text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#B45309]/10 file:text-[#B45309] dark:file:bg-[#FBBF24]/10 dark:file:text-[#FBBF24] hover:file:bg-[#B45309]/20 dark:hover:file:bg-[#FBBF24]/20 file:cursor-pointer"
+                />
+                
+                {formData.resumeUrl && formData.resumeUrl.startsWith('data:application/pdf;base64,') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData((prev) => ({ ...prev, resumeUrl: '' }));
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-red-950/60 text-red-300 border border-red-800/40 hover:bg-red-900/40 font-mono text-[10px] cursor-pointer"
+                  >
+                    Remove File
+                  </button>
+                )}
+              </div>
+              
+              {formData.resumeUrl && formData.resumeUrl.startsWith('data:application/pdf;base64,') && (
+                <div className="mt-2 text-[10px] font-mono text-emerald-500 font-semibold flex items-center gap-1.5">
+                  <span>✓ PDF Attached successfully ({Math.round(formData.resumeUrl.length / 1024)} KB)</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div>

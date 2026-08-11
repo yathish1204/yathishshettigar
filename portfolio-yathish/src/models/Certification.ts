@@ -16,6 +16,7 @@ const CertificationSchema = new Schema<ICertificationDocument>(
     featured: { type: Boolean, default: false },
     order: { type: Number, default: 0, index: true },
     status: { type: String, enum: ['published', 'draft'], default: 'published', index: true },
+    categories: { type: [String], enum: ['AI', 'UI', 'Development', 'Others'], default: ['Others'], index: true },
   },
   { timestamps: true }
 );

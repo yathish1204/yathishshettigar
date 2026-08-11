@@ -6,7 +6,9 @@ import { ContactForm } from '@/components/ContactForm';
 
 export function ContactSection({ profile, isPage = false }: { profile: Profile; isPage?: boolean }) {
   const phoneDisplay = profile.phone || '+91 8296302220';
-  const phoneTel = profile.phone ? profile.phone.replace(/\s+/g, '') : '+919900000000';
+  const phoneTel = phoneDisplay.replace(/\s+/g, '');
+  const locationDisplay = 'Jayanagar, Bengaluru';
+  const mapsUrl = 'https://maps.app.goo.gl/y1xZvCQVkrrLhRXy8';
 
   return (
     <section id="contact" className={`${isPage ? 'py-6 md:py-10' : 'py-10 md:py-14'} border-b border-zinc-200 dark:border-zinc-900 bg-slate-100/50 dark:bg-zinc-950/40 transition-colors`}>
@@ -71,11 +73,11 @@ export function ContactSection({ profile, isPage = false }: { profile: Profile; 
 
               {/* 3. Location (Opens Google Maps) */}
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(profile.location)}`}
+                href={mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="View location on Google Maps"
-                aria-label={`Location: ${profile.location}`}
+                aria-label={`Location: ${locationDisplay}`}
                 className="flex items-center justify-between py-2 group cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -88,14 +90,14 @@ export function ContactSection({ profile, isPage = false }: { profile: Profile; 
                   <span className="text-zinc-500 dark:text-zinc-400 font-mono">Location</span>
                 </div>
                 <span className="font-semibold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-[#B45309] dark:group-hover:text-[#FBBF24] group-hover:underline group-hover:decoration-dashed group-hover:decoration-[#B45309] dark:group-hover:decoration-[#FBBF24] group-hover:underline-offset-[3px] transition-all ml-2">
-                  {profile.location}
+                  {locationDisplay}
                 </span>
               </a>
 
               {/* 4. Status */}
               <div className="flex items-start gap-3 py-2 text-xs sm:text-sm group cursor-default">
                 <div className="w-8 h-8 rounded-lg bg-[#B45309]/10 text-[#B45309] dark:bg-[#FBBF24]/10 dark:text-[#FBBF24] flex items-center justify-center shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#B45309]/10 dark:bg-[#FBBF24] animate-pulse" aria-hidden="true" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#B45309] dark:bg-[#FBBF24] animate-pulse" aria-hidden="true" />
                 </div>
                 <div className="flex flex-col min-w-0 flex-1">
                   <span className="text-zinc-500 dark:text-zinc-400 font-mono text-xs">Status</span>
@@ -108,7 +110,12 @@ export function ContactSection({ profile, isPage = false }: { profile: Profile; 
           </div>
 
           {/* RHS Form Side */}
-          <div className="lg:col-span-7 p-6 sm:p-8 rounded-3xl bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800/90 shadow-xl dark:shadow-none">
+          <div className="lg:col-span-7 p-6 sm:p-8 rounded-3xl bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800/90 shadow-xl dark:shadow-none space-y-6">
+            <div className="space-y-1">
+              <h3 className="text-lg sm:text-xl font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                Let's Collaborate
+              </h3>
+            </div>
             <ContactForm />
           </div>
         </div>

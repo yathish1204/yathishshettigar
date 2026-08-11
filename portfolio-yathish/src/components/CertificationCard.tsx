@@ -50,14 +50,14 @@ export function CertificationCard({ certification }: CertificationCardProps) {
         <div
           title={`Issue Date: ${displayDate}`}
           aria-label={`Issue date: ${displayDate}`}
-          className="absolute bottom-0 right-0 px-3.5 py-1 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white font-mono text-xs font-bold rounded-tl-xl shadow-lg z-10 border-t border-l border-zinc-800"
+          className="absolute bottom-0 right-0 px-3.5 py-1 bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-white font-mono text-xs font-bold rounded-tl-xl shadow-lg z-10 border-t border-l border-zinc-100 dark:border-zinc-800"
         >
           {displayDate}
         </div>
       </div>
 
       {/* Bottom Content Section: Title with Slant Arrow & Issuer */}
-      <div className="p-4 flex flex-col gap-1 bg-white dark:bg-zinc-900">
+      <div className="p-4 flex flex-col gap-1 bg-zinc-100 dark:bg-zinc-900">
         <div className="flex items-center justify-between gap-2">
           <h3
             className="text-base font-bold text-zinc-900 dark:text-white leading-snug group-hover:text-[#B45309] dark:group-hover:text-[#FBBF24] transition-colors line-clamp-1 min-w-0 flex-1"

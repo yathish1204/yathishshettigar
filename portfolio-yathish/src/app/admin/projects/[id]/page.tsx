@@ -375,6 +375,42 @@ export default function EditProjectPage({ params }: EditProjectProps) {
           </div>
         </div>
 
+        {/* Links & Settings */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-300 mb-1">Live URL (Optional)</label>
+            <input
+              type="text"
+              name="liveUrl"
+              value={formData.liveUrl}
+              onChange={handleChange}
+              placeholder="https://..."
+              className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-xs font-mono"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-300 mb-1">GitHub URL (Optional)</label>
+            <input
+              type="text"
+              name="githubUrl"
+              value={formData.githubUrl}
+              onChange={handleChange}
+              placeholder="https://github.com/..."
+              className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-xs font-mono"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-300 mb-1">Display Order</label>
+            <input
+              type="number"
+              name="order"
+              value={formData.order}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-100 text-xs"
+            />
+          </div>
+        </div>
+
         {/* Featured & Corporate Checkboxes */}
         <div className="flex flex-wrap items-center gap-6 pt-2">
           <div className="flex items-center gap-2">

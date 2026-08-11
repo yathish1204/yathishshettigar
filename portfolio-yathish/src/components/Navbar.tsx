@@ -114,7 +114,7 @@ export function Navbar() {
             className="relative w-10 h-10 sm:w-9 sm:h-9 rounded-sm bg-[#B45309] dark:bg-[#FBBF24] transition-colors duration-300 overflow-hidden shadow-sm shrink-0"
             aria-hidden="true"
           >
-            <span className="absolute bottom-[-1px] right-[2px] font-bold text-white dark:text-black font-sans text-lg sm:text-xl leading-none tracking-tighter select-none">
+            <span className="absolute bottom-[-1px] right-[2px] font-semibold text-white dark:text-black font-sans text-lg sm:text-xl leading-none tracking-tighter select-none">
               YS
             </span>
           </div>

@@ -121,6 +121,8 @@ export interface Certification {
   featured?: boolean;
   order: number;
   status: 'published' | 'draft';
+  categories?: ('AI' | 'UI' | 'Development' | 'Others')[];
+  category?: 'AI' | 'UI' | 'Development' | 'Others';
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }

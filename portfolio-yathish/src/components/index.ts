@@ -17,5 +17,6 @@ export * from './MethodologyGrid';
 export * from './ExperienceList';
 export * from './PageHeader';
 export * from './ProjectsTabGrid';
+export * from './CertificationsFilter';
 
 

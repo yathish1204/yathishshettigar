@@ -19,7 +19,7 @@ export function AboutSection({ profile, education }: { profile: Profile; educati
             />
           </div>
 
-          <div className="lg:col-span-7 space-y-4">
+          <div className="lg:col-span-7 space-y-2 md:space-y-4">
             <p className="text-base sm:text-lg md:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans font-normal">I’m a UX Engineer with 2 years of experience working at the intersection of design and frontend development. I turn user needs and design concepts into accessible, responsive, and high-performing web experiences using React, Next.js, and modern frontend technologies. For me, good engineering isn’t just about making things work — it’s about making them feel right, too.
             </p>
             <div className="pt-2 flex flex-wrap gap-4">

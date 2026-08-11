@@ -42,10 +42,8 @@ export function HeroSection({ profile }: { profile: Profile }) {
       setGreeting('Good Morning');
     } else if (hour >= 12 && hour < 16) {
       setGreeting('Good Afternoon');
-    } else if (hour >= 16 && hour < 21) {
+    } else if (hour >= 16 && hour < 24) {
       setGreeting('Good Evening');
-    } else {
-      setGreeting('Good Night');
     }
   }, []);
 
@@ -99,7 +97,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
     },
     {
       name: 'Instagram',
-      href: profile.socialLinks?.instagram || 'https://instagram.com/yathish',
+      href: profile.socialLinks?.instagram || 'https://www.instagram.com/y_shettigar_',
       icon: (
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
@@ -108,7 +106,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
     },
     {
       name: 'Behance',
-      href: profile.socialLinks?.behance || 'https://behance.net/yathish',
+      href: profile.socialLinks?.behance || 'https://www.behance.net/yathishshettigar',
       icon: (
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
           <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-4.813 3-3.111 0-5.385-2.221-5.385-5.518 0-3.477 2.371-5.482 5.253-5.482 3.167 0 4.88 2.155 4.88 5.241 0 .422-.053.844-.078 1.055h-7.391c.148 1.547 1.306 2.38 2.734 2.38 1.258 0 2.062-.57 2.384-1.348h2.416zm-4.966-5.414c-1.163 0-2.03.684-2.261 1.942h4.481c-.085-1.196-.89-1.942-2.22-1.942zm-10.76-6.586h-8.000v14h7.458c2.909 0 5.042-1.621 5.042-4.148 0-1.785-1.026-3.08-2.457-3.565 1.066-.486 1.776-1.549 1.776-3.036 0-2.115-1.662-3.251-3.819-3.251zm-4.789 2.456h2.247c1.173 0 1.907.502 1.907 1.394 0 .977-.82 1.488-2.029 1.488h-2.125v-2.882zm0 5.214h2.518c1.328 0 2.148.553 2.148 1.572 0 1.139-.938 1.697-2.277 1.697h-2.389v-4.269z"/>
@@ -116,6 +114,47 @@ export function HeroSection({ profile }: { profile: Profile }) {
       ),
     },
   ];
+
+  const handleViewResume = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const resumeUrl = profile.resumeUrl || '/resume.pdf';
+
+    if (resumeUrl.startsWith('data:application/pdf;base64,')) {
+      try {
+        const base64Data = resumeUrl.substring(resumeUrl.indexOf(',') + 1);
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const blobUrl = URL.createObjectURL(blob);
+
+        window.open(blobUrl, '_blank');
+
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = 'Yathish_Shettigar_Resume.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (err) {
+        console.error('Failed to parse base64 PDF:', err);
+        window.open(resumeUrl, '_blank');
+      }
+    } else {
+      window.open(resumeUrl, '_blank');
+
+      const link = document.createElement('a');
+      link.href = resumeUrl;
+      link.download = 'Yathish_Shettigar_Resume.pdf';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
 
   return (
     <section id="hero" className="relative w-full min-h-[calc(100vh-72px)] sm:h-[calc(100vh-72px)] flex flex-col justify-center py-8 sm:py-8 bg-slate-50 dark:bg-zinc-950 transition-colors overflow-hidden">
@@ -183,8 +222,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
               <Button
                 variant="outline"
                 size="md"
-                href={profile.resumeUrl || '/resume.pdf'}
-                external
+                onClick={handleViewResume}
                 className="relative overflow-hidden group cursor-pointer"
               >
                 {/* Shiny Light Beam (Translates left-to-right with 5-second interval) */}

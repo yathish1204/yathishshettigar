@@ -94,6 +94,7 @@ export const certificationSchema = z.object({
   featured: z.boolean().default(false),
   order: z.number().int().default(0),
   status: z.enum(['published', 'draft']).default('published'),
+  categories: z.array(z.enum(['AI', 'UI', 'Development', 'Others'])).min(1, 'At least one category must be selected').default(['Others']),
 });
 
 export const certificationUpdateSchema = certificationSchema.partial();
