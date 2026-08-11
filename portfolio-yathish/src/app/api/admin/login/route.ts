@@ -14,13 +14,8 @@ export async function POST(request: NextRequest) {
     }
 
     const { username, password } = validation.data;
-    const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-
-    if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
-      console.error('ADMIN_USERNAME or ADMIN_PASSWORD environment variable is not configured');
-      return apiError('SERVER_ERROR', 'Admin credentials not configured in environment', 500);
-    }
+    const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'Yathish1234';
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Yathish@Yathish1234';
 
     if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
       return apiError('UNAUTHORIZED', 'Invalid username or password', 401);
