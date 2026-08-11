@@ -12,7 +12,7 @@ export const DEFAULT_HOBBIES: Hobby[] = [
 
 let cachedHobbies: Hobby[] | null = null;
 let lastHobbyFetch = 0;
-const CACHE_TTL = 30000;
+const CACHE_TTL = 3600000;
 
 function sanitizeHobbyDoc(doc: any): Hobby {
   return {

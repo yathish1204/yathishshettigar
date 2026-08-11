@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     'Get in touch with Yathish Shettigar regarding Senior UX Engineer roles, frontend architecture consulting, or technical inquiries.',
 };
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export default async function ContactPage() {
   const profile = await getProfile();

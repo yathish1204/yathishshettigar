@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'Learn about Yathish Shettigar: UX Engineer & Frontend Architect combining human-centered design, React, Next.js, and design token pipelines.',
 };
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export default async function AboutPage() {
   const [profile, education] = await Promise.all([getProfile(), getEducation()]);

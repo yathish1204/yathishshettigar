@@ -132,7 +132,7 @@ export const DEFAULT_PROJECTS: Project[] = [
     year: 2023,
     thumbnail: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&q=80&w=1000',
     images: [
-      'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&q=80&w=1000',
+      'https://res.cloudinary.com/ddzrfwfsl/image/upload/v1786458708/defauult_thumbnail_pxbst9.png',
     ],
     technologies: ['TypeScript', 'Style Dictionary', 'Node.js', 'Figma API', 'Tailwind CSS'],
     responsibilities: [

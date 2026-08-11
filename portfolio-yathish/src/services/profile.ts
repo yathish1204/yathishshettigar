@@ -71,7 +71,7 @@ export const getProfile = cache(async function getProfile(): Promise<Profile> {
       : YATHISH_PHOTO;
 
     if (profileDoc.profileImage !== activeProfileImage) {
-      await ProfileModel.updateOne({ _id: profileDoc._id }, { $set: { profileImage: activeProfileImage } }).catch(() => { });
+      ProfileModel.updateOne({ _id: profileDoc._id }, { $set: { profileImage: activeProfileImage } }).catch(() => { });
     }
 
     const formatted: Profile = {

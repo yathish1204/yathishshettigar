@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     'Explore production projects and in-depth UX engineering case studies built with Next.js, React, TypeScript, and Tailwind CSS.',
 };
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export default async function ProjectsPage() {
   const projects = await getPublishedProjects();

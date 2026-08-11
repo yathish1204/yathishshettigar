@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     'Detailed career history, accomplishments, and tech stacks across senior UX engineering and frontend leadership roles.',
 };
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export default async function ExperiencePage() {
   const experiences = await getExperiences();

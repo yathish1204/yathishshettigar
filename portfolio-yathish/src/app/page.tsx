@@ -14,7 +14,7 @@ import { CertificationsSection } from '@/sections/CertificationsSection';
 import { HobbiesSection } from '@/sections/HobbiesSection';
 import { ContactSection } from '@/sections/ContactSection';
 
-export const revalidate = 60; // Revalidate static data every 60 seconds
+export const revalidate = 3600; // Cache static page output at CDN edge for 1 hour
 
 export default async function HomePage() {
   const [profile, projects, experiences, skills, certifications, education, hobbies] = await Promise.all([

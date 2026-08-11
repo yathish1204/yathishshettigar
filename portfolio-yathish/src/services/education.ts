@@ -9,7 +9,7 @@ export const DEFAULT_EDUCATION: Education[] = [
 
 let cachedEdu: Education[] | null = null;
 let lastEduFetch = 0;
-const CACHE_TTL = 30000;
+const CACHE_TTL = 3600000;
 
 function sanitizeEduDoc(doc: any): Education {
   return {

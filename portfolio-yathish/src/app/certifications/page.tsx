@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     'Formal industry certifications, technical accreditations, and verified credentials.',
 };
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 interface CertificationsPageProps {
   searchParams: Promise<{ category?: string }>;
