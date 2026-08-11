@@ -85,9 +85,9 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth overflow-x-hidden">
       <head>
-        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
-        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         {darkPoster && (
           <link rel="preload" href={darkPoster} as="image" fetchPriority="high" />

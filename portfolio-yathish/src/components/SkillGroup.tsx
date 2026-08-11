@@ -34,7 +34,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
   const [tooltipAlignment, setTooltipAlignment] = React.useState<Record<string, 'start' | 'end' | 'center'>>({});
   const chipRefs = React.useRef<Record<string, HTMLDivElement | null>>({});
 
-  // Close popovers when clicking/tapping outside
+  // Close popovers when clicking outside on desktop
   React.useEffect(() => {
     if (!activeSkill) return;
 
@@ -45,27 +45,27 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
       }
     };
 
-    // Use a tiny timeout so the event that opened the chip propagates before registering outside click listeners
     const timer = setTimeout(() => {
       document.addEventListener('click', handleOutsideClick);
-      document.addEventListener('touchstart', handleOutsideClick, { passive: true });
     }, 10);
 
     return () => {
       clearTimeout(timer);
       document.removeEventListener('click', handleOutsideClick);
-      document.removeEventListener('touchstart', handleOutsideClick);
     };
   }, [activeSkill]);
 
   const handleMouseEnterOrClick = (skillKey: string) => {
+    // Only calculate popover position on desktop screens
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+
     const el = chipRefs.current[skillKey];
     if (!el) return;
 
     const rect = el.getBoundingClientRect();
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1000;
-    const padding = 16; // minimum margin from screen edges
-    const halfTooltipWidth = 128; // 256px wide tooltip / 2
+    const padding = 16;
+    const halfTooltipWidth = 128;
     const centerX = rect.left + rect.width / 2;
 
     let align: 'start' | 'end' | 'center' = 'center';
@@ -87,15 +87,6 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
 
   return (
     <div className="flex flex-col gap-4 py-4 md:py-2 md:px-6 relative">
-      {/* Mobile Transparent Backdrop to ensure 100% reliable 1-tap dismiss outside active chip */}
-      {activeSkill && (
-        <div
-          onClick={() => setActiveSkill(null)}
-          className="fixed inset-0 z-40 md:hidden bg-transparent"
-          aria-hidden="true"
-        />
-      )}
-
       {/* Category Heading */}
       <div className="flex items-center justify-between md:border-b md:border-zinc-200 md:dark:border-zinc-800/80 md:pb-2.5">
         <h3 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
@@ -109,7 +100,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
         </span>
       </div>
 
-      {/* Skill Chips with Popovers */}
+      {/* Skill Chips */}
       {skills && skills.length > 0 ? (
         <div className="flex flex-wrap gap-2 pt-1" role="list" aria-label={`${category} skills`}>
           {skills.map((skill) => {
@@ -127,20 +118,22 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                 className="relative group/chip"
                 role="listitem"
               >
-                {/* Skill Chip Trigger */}
+                {/* Skill Chip Trigger (Click disabled on mobile < md) */}
                 <div
                   tabIndex={0}
                   role="button"
                   aria-label={`${skill.name}: ${label} level, ${years} ${years === 1 ? 'year' : 'years'} experience`}
                   onClick={(e) => {
+                    // Disable click event on mobile screens (< 768px)
+                    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
                     e.stopPropagation();
                     handleMouseEnterOrClick(skillKey);
                     setActiveSkill((prev) => (prev === skillKey ? null : skillKey));
                   }}
-                  className={`bg-zinc-100 dark:bg-zinc-900/90 border text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] transition-all md:hover:scale-105 active:scale-95 cursor-pointer ${
+                  className={`bg-zinc-100 dark:bg-zinc-900/90 border text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2 select-none md:hover:bg-zinc-200/60 md:dark:hover:bg-zinc-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B45309] dark:focus-visible:ring-[#FBBF24] transition-all md:hover:scale-105 md:cursor-pointer ${
                     isClicked
-                      ? 'border-[#B45309] dark:border-[#FBBF24] bg-zinc-200/85 dark:bg-zinc-800 z-50 relative'
-                      : 'border-zinc-200/90 dark:border-zinc-800/90 hover:border-[#B45309]/50 dark:hover:border-[#FBBF24]/50'
+                      ? 'md:border-[#B45309] md:dark:border-[#FBBF24] md:bg-zinc-200/85 md:dark:bg-zinc-800'
+                      : 'border-zinc-200/90 dark:border-zinc-800/90 md:hover:border-[#B45309]/50 md:dark:hover:border-[#FBBF24]/50'
                   }`}
                 >
                   {skill.icon ? (
@@ -159,19 +152,19 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                   <span>{skill.name}</span>
                 </div>
 
-                {/* Popover Box: Positions below chip (top-full) on mobile to prevent covering category titles, and above (bottom-full) on desktop */}
+                {/* Popover Box: Hidden completely on mobile (hidden md:block), visible only on desktop */}
                 <div
                   aria-hidden={!isClicked}
-                  className={`absolute top-full mt-2.5 md:top-auto md:bottom-full md:mt-0 md:mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl transition-all duration-200 z-50 transform ${
+                  className={`hidden md:block absolute bottom-full mb-3 w-64 p-3.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-2xl backdrop-blur-xl transition-all duration-200 z-50 transform ${
                     tooltipAlignment[skillKey] === 'start'
-                      ? 'left-0 translate-x-0 origin-top-left md:origin-bottom-left md:left-1/2 md:-translate-x-1/2 md:right-auto'
+                      ? 'left-0 translate-x-0 origin-bottom-left md:left-1/2 md:-translate-x-1/2 md:right-auto'
                       : tooltipAlignment[skillKey] === 'end'
-                      ? 'right-0 left-auto translate-x-0 origin-top-right md:origin-bottom-right md:left-1/2 md:-translate-x-1/2 md:right-auto'
-                      : 'left-1/2 -translate-x-1/2 origin-top md:origin-bottom'
+                      ? 'right-0 left-auto translate-x-0 origin-bottom-right md:left-1/2 md:-translate-x-1/2 md:right-auto'
+                      : 'left-1/2 -translate-x-1/2 origin-bottom'
                   } ${
                     isClicked
                       ? 'opacity-100 translate-y-0 pointer-events-auto'
-                      : 'opacity-0 translate-y-1 pointer-events-none md:group-hover/chip:opacity-100 md:group-hover/chip:translate-y-0 md:group-hover/chip:pointer-events-auto'
+                      : 'opacity-0 translate-y-1 pointer-events-none group-hover/chip:opacity-100 group-hover/chip:translate-y-0 group-hover/chip:pointer-events-auto'
                   }`}
                 >
                   {/* Popover Header: Skill Title & Experience Years */}
@@ -206,8 +199,8 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                     </div>
                   </div>
 
-                  {/* Arrow Pointer: points UP towards chip on mobile, points DOWN on desktop */}
-                  <div className={`absolute bottom-full -mb-[1px] md:bottom-auto md:top-full md:-mt-[1px] border-4 border-transparent border-b-white dark:border-b-zinc-900/95 md:border-b-transparent md:border-t-white md:dark:border-t-zinc-900/95 ${
+                  {/* Arrow Pointer */}
+                  <div className={`absolute top-full -mt-[1px] border-4 border-transparent border-t-white dark:border-t-zinc-900/95 ${
                     tooltipAlignment[skillKey] === 'start'
                       ? 'left-6 translate-x-0 md:left-1/2 md:-translate-x-1/2'
                       : tooltipAlignment[skillKey] === 'end'

@@ -34,7 +34,7 @@ export const DEFAULT_SKILLS: Skill[] = [
 
 let cachedSkills: Skill[] | null = null;
 let lastSkillFetch = 0;
-const CACHE_TTL = 30000;
+const CACHE_TTL = 3600000;
 
 function sanitizeSkillDoc(doc: any): Skill {
   return {

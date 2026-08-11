@@ -159,7 +159,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
   return (
     <section id="hero" className="relative w-full min-h-[calc(100vh-72px)] sm:h-[calc(100vh-72px)] flex flex-col justify-start sm:justify-center py-0 sm:py-8 bg-slate-50 dark:bg-zinc-950 transition-colors overflow-hidden">
       {/* Top 45vh Video/Poster Container for Mobile, Absolute for Desktop */}
-      <div className="relative w-full h-[45vh] sm:h-full sm:absolute sm:inset-0 sm:left-[30%] sm:w-[75%] shrink-0 overflow-hidden">
+      <div className="relative w-full h-[45vh] sm:h-full sm:absolute sm:inset-0 sm:left-[30%] sm:w-[75%] shrink-0 overflow-hidden aspect-[16/9] sm:aspect-auto">
         {activeVideoUrl ? (
           <video
             key={activeVideoUrl}
@@ -167,9 +167,9 @@ export function HeroSection({ profile }: { profile: Profile }) {
             autoPlay
             muted={isMuted}
             playsInline
-            preload="auto"
+            preload="metadata"
             poster={activeVideoPoster}
-            className="w-full h-full object-cover object-center md:object-right opacity-90 dark:opacity-90 pointer-events-none transition-all duration-500 [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] sm:[mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] sm:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
+            className="w-full h-full object-cover object-center md:object-right opacity-90 dark:opacity-90 pointer-events-none transition-opacity duration-300 [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] sm:[mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] sm:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.4)_30%,black_100%)]"
           >
             <source src={activeVideoUrl} type="video/mp4" />
           </video>

@@ -37,7 +37,7 @@ export const DEFAULT_CERTIFICATIONS: Certification[] = [
 ];
 
 let cachedCertsByCategory: Record<string, { certs: Certification[]; timestamp: number }> = {};
-const CACHE_TTL = 30000;
+const CACHE_TTL = 3600000;
 
 function sanitizeCertDoc(doc: any): Certification {
   return {

@@ -159,7 +159,7 @@ export const DEFAULT_PROJECTS: Project[] = [
 
 let cachedProjects: Project[] | null = null;
 let lastFetchTime = 0;
-const CACHE_TTL = 30000;
+const CACHE_TTL = 3600000;
 
 function sanitizeProjectDoc(doc: any): Project {
   return {

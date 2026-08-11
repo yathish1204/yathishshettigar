@@ -46,7 +46,7 @@ export const DEFAULT_PROFILE: Profile = {
 
 let cachedProfile: Profile | null = null;
 let lastProfileFetch = 0;
-const CACHE_TTL = 30000; // 30 seconds
+const CACHE_TTL = 3600000; // 1 hour
 
 export const getProfile = cache(async function getProfile(): Promise<Profile> {
   const now = Date.now();

@@ -31,7 +31,7 @@ export const DEFAULT_EXPERIENCES: Experience[] = [
 
 let cachedExp: Experience[] | null = null;
 let lastExpFetch = 0;
-const CACHE_TTL = 30000;
+const CACHE_TTL = 3600000;
 
 function sanitizeExpDoc(doc: any): Experience {
   return {

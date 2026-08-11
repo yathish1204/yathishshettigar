@@ -47,9 +47,6 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
         lenisRef.current = lenis;
 
-        // Reset scroll position upon load/initialization
-        lenis.scrollTo(0, { immediate: true });
-
         lenis.on('scroll', ScrollTrigger.update);
 
         tickerCallback = (time: number) => {
