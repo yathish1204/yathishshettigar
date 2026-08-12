@@ -26,14 +26,20 @@ export function PageHeader({
   const router = useRouter();
 
   const handleBack = (e: React.MouseEvent) => {
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem('navigating_back', 'true');
-    }
-
     if (onBack) {
       e.preventDefault();
       onBack();
       return;
+    }
+
+    // If backHref is '/', we want to perform a normal navigation to top of home page
+    // so we do not call router.back() or prevent default Link navigation.
+    if (backHref === '/') {
+      return;
+    }
+
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('navigating_back', 'true');
     }
 
     // If we have an internal referrer, go back in history to natively restore scroll position

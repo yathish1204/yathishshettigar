@@ -115,45 +115,14 @@ export function HeroSection({ profile }: { profile: Profile }) {
     },
   ];
 
-  const handleViewResume = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const resumeUrl = profile.resumeUrl || '/resume.pdf';
-
-    if (resumeUrl.startsWith('data:application/pdf;base64,')) {
-      try {
-        const base64Data = resumeUrl.substring(resumeUrl.indexOf(',') + 1);
-        const byteCharacters = atob(base64Data);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-        const blobUrl = URL.createObjectURL(blob);
-
-        window.open(blobUrl, '_blank');
-
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = 'Yathish_Shettigar_Resume.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (err) {
-        console.error('Failed to parse base64 PDF:', err);
-        window.open(resumeUrl, '_blank');
-      }
-    } else {
-      window.open(resumeUrl, '_blank');
-
-      const link = document.createElement('a');
-      link.href = resumeUrl;
-      link.download = 'Yathish_Shettigar_Resume.pdf';
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+  const handleViewResume = () => {
+    // Trigger download in current window using the download endpoint
+    const link = document.createElement('a');
+    link.href = '/api/resume?download=true';
+    link.download = 'Yathish_Shettigar_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -268,6 +237,8 @@ export function HeroSection({ profile }: { profile: Profile }) {
               <Button
                 variant="outline"
                 size="md"
+                href="/api/resume"
+                external
                 onClick={handleViewResume}
                 className="relative overflow-hidden group cursor-pointer"
               >

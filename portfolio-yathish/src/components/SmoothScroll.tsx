@@ -6,12 +6,34 @@ import { usePathname } from 'next/navigation';
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const lenisRef = useRef<any>(null);
+  const lastPathnameRef = useRef(pathname);
+  const isPopStateRef = useRef(false);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (typeof window !== 'undefined' && window.location.pathname !== lastPathnameRef.current) {
+        isPopStateRef.current = true;
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
 
   // Reset scroll position to top (0, 0) on any page navigation
   useEffect(() => {
+    // If popstate (browser back/forward) is active, reset flag and return early to keep native scroll history
+    if (isPopStateRef.current) {
+      isPopStateRef.current = false;
+      lastPathnameRef.current = pathname;
+      return;
+    }
+
     const isBack = typeof window !== 'undefined' && sessionStorage.getItem('navigating_back') === 'true';
     if (isBack) {
       sessionStorage.removeItem('navigating_back');
+      lastPathnameRef.current = pathname;
       return;
     }
 
@@ -24,6 +46,8 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true });
     }
+
+    lastPathnameRef.current = pathname;
   }, [pathname]);
 
   useEffect(() => {

@@ -49,6 +49,7 @@ export function Button({
           target="_blank"
           rel="noopener noreferrer"
           className={combinedClasses}
+          {...(props as any)}
         >
           {children}
         </a>
@@ -56,7 +57,7 @@ export function Button({
     }
 
     return (
-      <Link href={href} className={combinedClasses}>
+      <Link href={href} className={combinedClasses} {...(props as any)}>
         {children}
       </Link>
     );
