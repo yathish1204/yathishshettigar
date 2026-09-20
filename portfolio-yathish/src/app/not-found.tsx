@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { Button } from '@/components/Button';
+import { Button } from "@/components/Button";
 
 export default function NotFound() {
   return (
@@ -11,7 +10,8 @@ export default function NotFound() {
         Page Not Found
       </h1>
       <p className="text-zinc-400 max-w-md mb-8 leading-relaxed">
-        The requested portfolio case study or page could not be located. It may have been moved or archived.
+        The requested portfolio case study or page could not be located. It may
+        have been moved or archived.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-4">
         <Button href="/" variant="primary" size="md">

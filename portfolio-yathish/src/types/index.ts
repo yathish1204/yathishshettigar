@@ -163,6 +163,9 @@ export interface ContactInput {
   email: string;
   subject: string;
   message: string;
+  botcheck?: boolean | string;
+  emailAlreadySent?: boolean;
+  recaptchaToken?: string;
 }
 
 export interface ContactMessage extends ContactInput {
@@ -170,3 +173,6 @@ export interface ContactMessage extends ContactInput {
   read?: boolean;
   createdAt?: string | Date;
 }
+
+export * from './dataTypes';
+

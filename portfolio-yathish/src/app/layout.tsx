@@ -1,18 +1,21 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { getProfile } from '@/services/profile';
-import { ConditionalLayout } from '@/components/ConditionalLayout';
-import { SmoothScroll } from '@/components/SmoothScroll';
-import { GSAPScroll } from '@/components/GSAPScroll';
-import { getPersonJsonLd, getWebSiteJsonLd } from '@/utils/jsonLd';
+import type { Metadata } from "next";
+import "./globals.css";
+import { getProfile } from "@/services/profile";
+import { ConditionalLayout } from "@/components/ConditionalLayout";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { GSAPScroll } from "@/components/GSAPScroll";
+import { getPersonJsonLd, getWebSiteJsonLd } from "@/utils/jsonLd";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 
 export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yathishshettigar.site';
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://yathishshettigar.site";
 
-  const shareImage = 'https://res.cloudinary.com/ddzrfwfsl/image/upload/v1786337057/yathish-hero-poster-img_1_qfd3fd.png';
+  const shareImage =
+    "https://res.cloudinary.com/ddzrfwfsl/image/upload/v1786337057/yathish-hero-poster-img_1_qfd3fd.png";
 
   return {
     title: {
@@ -21,18 +24,20 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: profile.shortBio,
     keywords: [
-      'Yathish Shettigar',
-      'UX Engineer',
-      'Frontend Architect',
-      'Design Systems',
-      'React Developer',
-      'Next.js Developer',
-      'Human-Centered Design',
-      'Web Performance Optimization',
-      'UI/UX Engineering Portfolio'
+      "Yathish Shettigar",
+      "UX Engineer",
+      "Frontend Architect",
+      "Design Systems",
+      "React Developer",
+      "Next.js Developer",
+      "Human-Centered Design",
+      "Web Performance Optimization",
+      "UI/UX Engineering Portfolio",
+      "Full Stack Developer",
+      "Customer Obsession",
     ],
-    authors: [{ name: 'Yathish Shettigar', url: baseUrl }],
-    creator: 'Yathish Shettigar',
+    authors: [{ name: "Yathish Shettigar", url: baseUrl }],
+    creator: "Yathish Shettigar",
     alternates: {
       canonical: baseUrl,
     },
@@ -42,8 +47,8 @@ export async function generateMetadata(): Promise<Metadata> {
       description: profile.tagline,
       url: baseUrl,
       siteName: `${profile.name} Portfolio`,
-      locale: 'en_US',
-      type: 'website',
+      locale: "en_US",
+      type: "website",
       images: [
         {
           url: shareImage,
@@ -54,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: `${profile.name} — ${profile.title}`,
       description: profile.tagline,
       images: [shareImage],
@@ -64,9 +69,9 @@ export async function generateMetadata(): Promise<Metadata> {
       follow: true,
     },
     icons: {
-      icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
-      shortcut: '/icon.svg',
-      apple: '/icon.svg',
+      icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+      shortcut: "/icon.svg",
+      apple: "/icon.svg",
     },
   };
 }
@@ -77,7 +82,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const profile = await getProfile();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yathish.dev';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://yathish.dev";
   const personJsonLd = getPersonJsonLd(profile, baseUrl);
   const websiteJsonLd = getWebSiteJsonLd(profile, baseUrl);
   const darkPoster = profile.heroVideoPoster || profile.profileImage;
@@ -85,12 +90,26 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth overflow-x-hidden">
       <head>
-        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://res.cloudinary.com"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://images.unsplash.com"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         {darkPoster && (
-          <link rel="preload" href={darkPoster} as="image" fetchPriority="high" />
+          <link
+            rel="preload"
+            href={darkPoster}
+            as="image"
+            fetchPriority="high"
+            crossOrigin="anonymous"
+          />
         )}
         <script
           type="application/ld+json"
@@ -107,8 +126,9 @@ export default async function RootLayout({
             <ConditionalLayout profile={profile}>{children}</ConditionalLayout>
           </GSAPScroll>
         </SmoothScroll>
-        <SpeedInsights/>
-        <Analytics/>
+        <SpeedInsights />
+        <Analytics />
+        <GoogleAnalytics />
       </body>
     </html>
   );

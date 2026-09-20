@@ -615,3 +615,19 @@ Frontend is complete when:
 11. Prioritize UX clarity over visual effects.
 12. Prefer progressive enhancement.
 13. Keep components maintainable and reusable.
+
+## 32. React Server Component (RSC) Architecture & Component Splitting
+
+1. **Server Components by Default**:
+   - All page sections, layout wrappers, and structural containers (`src/sections/*.tsx`) MUST be React Server Components (RSC).
+   - Never add `'use client'` at the section level unless strictly required for section-wide client state.
+
+2. **Isolated Client Leaf Components**:
+   - Extract interactive logic (state, DOM refs, MutationObservers, event handlers, animations) into small leaf sub-components in `src/components/`.
+   - Apply `'use client'` ONLY to these leaf sub-components.
+   - Example Architecture (Hero Section):
+     - `HeroSection.tsx` (RSC): Renders server-side HTML structure, text layout, social links, static buttons, and grid backgrounds.
+     - `HeroVideoPlayer.tsx` (`'use client'`): Handles DOM mutation observer for theme changes, video play/pause, muting, and replay logic.
+     - `GreetingText.tsx` (`'use client'`): Computes time-based greetings on client mount.
+     - `ResumeButton.tsx` (`'use client'`): Handles interactive client-side resume download click and shine animation effects.
+

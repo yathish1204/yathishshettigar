@@ -1,42 +1,11 @@
 import React from 'react';
+import { MethodStep } from '@/types';
+import { METHODOLOGY_STEPS } from '@/constants/data';
 
-export interface MethodStep {
-  step: string;
-  title: string;
-  description: string;
-  tags: string[];
-}
+export type { MethodStep };
+export const METHOD_STEPS: MethodStep[] = METHODOLOGY_STEPS;
 
-export const METHOD_STEPS: MethodStep[] = [
-  {
-    step: '01',
-    title: 'Discover',
-    description:
-      'Stakeholder interviews, usability testing, journey mapping and competitive teardowns to find the real problem before a pixel exists.',
-    tags: ['User interviews', 'Journey maps', 'Heuristic audit'],
-  },
-  {
-    step: '02',
-    title: 'Define',
-    description:
-      'Information architecture, task flows and jobs-to-be-done framing that turn messy research into a defensible product direction.',
-    tags: ['IA & flows', 'JTBD framing', 'Success metrics'],
-  },
-  {
-    step: '03',
-    title: 'Design',
-    description:
-      'Wireframes to high-fidelity systems: tokens, components, motion specs and accessible states documented for engineering.',
-    tags: ['Design system', 'Prototypes', 'A11y specs'],
-  },
-  {
-    step: '04',
-    title: 'Develop',
-    description:
-      'Production React and TypeScript — component libraries, performance budgets and design-to-code parity enforced in review.',
-    tags: ['React + TS', 'Component library', 'Perf budgets'],
-  },
-];
+
 
 export function MethodologyGrid() {
   return (

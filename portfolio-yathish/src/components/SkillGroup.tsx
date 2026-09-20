@@ -142,6 +142,7 @@ export function SkillGroup({ category, skills }: SkillGroupProps) {
                       alt=""
                       aria-hidden="true"
                       loading="lazy"
+                      crossOrigin="anonymous"
                       className="w-4 h-4 object-contain shrink-0 rounded-sm"
                     />
                   ) : svgIcon ? (

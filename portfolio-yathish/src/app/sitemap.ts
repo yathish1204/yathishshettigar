@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getPublishedProjects } from '@/services/projects';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yathish.dev';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yathishshettigar.site';
   const projects = await getPublishedProjects();
 
   const projectUrls = projects.map((p) => ({

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Loading() {
   return (
     <div className="fixed inset-0 z-50 bg-slate-50/90 dark:bg-zinc-950/90 backdrop-blur-md flex flex-col items-center justify-center space-y-4 transition-colors">
@@ -19,7 +17,9 @@ export default function Loading() {
         <span className="w-2.5 h-2.5 rounded-full bg-[#123FD9] dark:bg-[#53B9F6] animate-bounce" />
       </div>
 
-      <p className="text-xs font-mono uppercase tracking-widest text-zinc-600 dark:text-zinc-400">Loading Portfolio...</p>
+      <p className="text-xs font-mono uppercase tracking-widest text-zinc-600 dark:text-zinc-400">
+        Loading Portfolio...
+      </p>
     </div>
   );
 }

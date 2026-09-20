@@ -42,7 +42,8 @@ export function ProjectsTabGrid({ projects }: ProjectsTabGridProps) {
   const displayedProjects = activeTab === 'personal' ? personalProjects : corporateProjects;
 
   const tabSwitcherAction = (
-    <div className="flex w-full md:w-auto p-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+    <div className="flex flex-nowrap overflow-x-auto scrollbar-none w-full md:w-auto p-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+
       <button
         type="button"
         onClick={() => handleTabChange('personal')}

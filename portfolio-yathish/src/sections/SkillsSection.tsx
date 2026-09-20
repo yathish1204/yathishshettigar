@@ -1,29 +1,16 @@
-import React from 'react';
-import { Skill, SkillCategory } from '@/types';
-import { SectionHeading } from '@/components/SectionHeading';
-import { SkillGroup } from '@/components/SkillGroup';
+import { Skill } from "@/types";
+import { SKILL_CATEGORIES_CONFIG } from "@/constants/data";
+import { SectionHeading } from "@/components/SectionHeading";
+import { SkillGroup } from "@/components/SkillGroup";
 
 export function SkillsSection({ skills }: { skills: Skill[] }) {
-  const mainCategories: { key: SkillCategory; title: SkillCategory; legacyMatches: string[] }[] = [
-    {
-      key: 'UX & Product Development',
-      title: 'UX & Product Development',
-      legacyMatches: ['UX & Product Development', 'UX / Product Design'],
-    },
-    {
-      key: 'Front End Development',
-      title: 'Front End Development',
-      legacyMatches: ['Front End Development', 'Frontend', 'Motion / Interaction'],
-    },
-    {
-      key: 'Tools & Technology',
-      title: 'Tools & Technology',
-      legacyMatches: ['Tools & Technology', 'Backend', 'Database', 'Tools'],
-    },
-  ];
+  const mainCategories = SKILL_CATEGORIES_CONFIG;
+
 
   const grouped = mainCategories.map((col) => {
-    const colSkills = skills.filter((s) => col.legacyMatches.includes(s.category));
+    const colSkills = skills.filter((s) =>
+      col.legacyMatches.includes(s.category),
+    );
     return {
       title: col.title,
       skills: colSkills,
@@ -31,7 +18,10 @@ export function SkillsSection({ skills }: { skills: Skill[] }) {
   });
 
   return (
-    <section id="skills" className="py-12 md:py-16 border-b border-zinc-200 dark:border-zinc-900 bg-slate-50 dark:bg-zinc-950 transition-colors">
+    <section
+      id="skills"
+      className="py-12 md:py-16 border-b border-zinc-200 dark:border-zinc-900 bg-slate-50 dark:bg-zinc-950 transition-colors"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Capabilities"

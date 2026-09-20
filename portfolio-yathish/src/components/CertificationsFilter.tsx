@@ -22,7 +22,8 @@ function FilterButtons() {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 w-full md:w-auto" role="tablist" aria-label="Filter certifications">
+    <div className="flex flex-nowrap items-center gap-2 w-full md:w-auto overflow-x-auto scrollbar-none pb-0.5" role="tablist" aria-label="Filter certifications">
+
       {categories.map((cat) => {
         const isActive = activeCategory === cat;
         return (
