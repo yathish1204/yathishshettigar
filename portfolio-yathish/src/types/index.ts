@@ -164,7 +164,6 @@ export interface ContactInput {
   subject: string;
   message: string;
   botcheck?: boolean | string;
-  emailAlreadySent?: boolean;
   recaptchaToken?: string;
 }
 

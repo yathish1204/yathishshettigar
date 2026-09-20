@@ -5,9 +5,13 @@ export interface ContactEmailProps {
   message: string;
 }
 
-export interface AutoResponseEmailProps {
-  name: string;
-  subject: string;
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 export function buildContactEmailHtml({
@@ -16,7 +20,10 @@ export function buildContactEmailHtml({
   subject,
   message,
 }: ContactEmailProps): string {
-  const formattedMessage = message.replace(/\n/g, '<br/>');
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safeSubject = escapeHtml(subject);
+  const formattedMessage = escapeHtml(message).replace(/\n/g, '<br/>');
   const now = new Date().toLocaleDateString('en-US', {
     weekday: 'short',
     year: 'numeric',
@@ -84,7 +91,7 @@ export function buildContactEmailHtml({
               <!-- Sender Name Card -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%; margin-bottom: 12px;">
                 <tr>
-                  <td style="padding: 16px; background-color: #18181b; border-radius: 14px; border: 1px solid #27272a; width: 100%;">
+                  <td style="padding: 16px; background-color: #18181b; border-radius: 14px; width: 100%;">
                     <span style="font-size: 10px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; font-family: monospace; display: block; margin-bottom: 4px;">
                       Sender Name
                     </span>
@@ -98,7 +105,7 @@ export function buildContactEmailHtml({
               <!-- Sender Email Card -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%; margin-bottom: 12px;">
                 <tr>
-                  <td style="padding: 16px; background-color: #18181b; border-radius: 14px; border: 1px solid #27272a; width: 100%;">
+                  <td style="padding: 16px; background-color: #18181b; border-radius: 14px; width: 100%;">
                     <span style="font-size: 10px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; font-family: monospace; display: block; margin-bottom: 4px;">
                       Sender Email Address
                     </span>
@@ -112,7 +119,7 @@ export function buildContactEmailHtml({
               <!-- Subject Card -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%; margin-bottom: 16px;">
                 <tr>
-                  <td style="padding: 16px; background-color: #18181b; border-radius: 14px; border: 1px solid #27272a; width: 100%;">
+                  <td style="padding: 16px; background-color: #18181b; border-radius: 14px;width: 100%;">
                     <span style="font-size: 10px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; font-family: monospace; display: block; margin-bottom: 4px;">
                       Inquiry Subject
                     </span>
@@ -141,8 +148,8 @@ export function buildContactEmailHtml({
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%;">
                 <tr>
                   <td style="width: 100%;">
-                    <a href="mailto:${email}?subject=Re:%20${encodeURIComponent(subject)}" style="display: block; width: 100%; text-align: center; padding: 16px 20px; background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%); color: #09090b; font-weight: 800; font-size: 15px; text-decoration: none; border-radius: 14px; box-sizing: border-box; letter-spacing: 0.5px; shadow: 0 10px 20px rgba(251, 191, 36, 0.25);">
-                      REPLY DIRECT TO SENDER &rarr;
+                    <a href="mailto:${email}?subject=Re:%20${encodeURIComponent(subject)}" style="display: block; width: 100%; text-align: center; padding: 16px 20px; background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%); color: #09090b; font-weight: 800; font-size: 15px; text-decoration: none; border-radius: 14px; box-sizing: border-box; letter-spacing: 0.5px; shadow: 0 10px 20px rgba(251, 191, 36, 0.25);text-wrap:wrap;">
+                      REPLY DIRECT TO ${name} &rarr;
                     </a>
                   </td>
                 </tr>
@@ -173,17 +180,36 @@ export function buildContactEmailHtml({
 </html>`;
 }
 
-export function buildAutoResponseEmailHtml({
+export interface AutoConfirmationEmailProps {
+  name: string;
+  email: string;
+  subject: string;
+}
+
+export function buildAutoConfirmationEmailHtml({
   name,
+  email,
   subject,
-}: AutoResponseEmailProps): string {
+}: AutoConfirmationEmailProps): string {
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safeSubject = escapeHtml(subject);
+  const now = new Date().toLocaleDateString('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Thank You for Reaching Out!</title>
+  <title>Thank you for reaching out, ${safeName}!</title>
   <style>
     body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
     table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
@@ -194,10 +220,12 @@ export function buildAutoResponseEmailHtml({
 </head>
 <body style="margin: 0; padding: 0; background-color: #09090b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f4f4f5; width: 100% !important;">
 
+  <!-- Outer Full-Width Wrapper -->
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100% !important; min-width: 100%; background-color: #09090b; margin: 0; padding: 0;">
     <tr>
       <td align="center" style="width: 100%; padding: 0;">
 
+        <!-- Main Full-Width Email Container -->
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100% !important; min-width: 100%; background-color: #09090b; margin: 0; padding: 0;">
           
           <!-- Glowing Top Accent Line -->
@@ -211,14 +239,14 @@ export function buildAutoResponseEmailHtml({
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%;">
                 <tr>
                   <td style="text-align: left;">
-                    <span style="display: inline-block; padding: 4px 12px; background-color: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 20px; font-size: 10px; font-weight: 700; color: #fbbf24; letter-spacing: 1px; text-transform: uppercase; font-family: monospace;">
-                      &bull; MESSAGE CONFIRMATION
+                    <span style="display: inline-block; padding: 4px 12px; background-color: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 20px; font-size: 11px; font-weight: 700; color: #fbbf24; letter-spacing: 1px; text-transform: uppercase; font-family: monospace;">
+                      &bull; INQUIRY RECEIVED &bull;
                     </span>
-                    <h1 style="margin: 14px 0 6px 0; font-size: 24px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; line-height: 1.2;">
-                      Thank You for Reaching Out!
+                    <h1 style="margin: 14px 0 6px 0; font-size: 24px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; line-height: 1.25;">
+                      Thank you for reaching out, ${safeName}!
                     </h1>
                     <p style="margin: 0; font-size: 13px; color: #a1a1aa; font-family: monospace;">
-                      I have received your inquiry and will get back to you soon.
+                      Your message has been received safely and is being processed.
                     </p>
                   </td>
                 </tr>
@@ -230,57 +258,108 @@ export function buildAutoResponseEmailHtml({
           <tr>
             <td style="padding: 28px 20px; width: 100%;">
 
-              <!-- Personal Greeting Card -->
+              <!-- Thank You & Next Steps Note -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%; margin-bottom: 20px;">
                 <tr>
-                  <td style="padding: 24px; background-color: #18181b; border-radius: 16px; border: 1px solid #27272a; width: 100%;">
-                    <p style="font-size: 17px; font-weight: 700; color: #ffffff; margin: 0 0 14px 0;">
-                      Hi ${name},
+                  <td style="padding: 20px; background-color: #18181b; border-radius: 14px; border: 1px solid #27272a; border-left: 4px solid #fbbf24; width: 100%;">
+                    <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.7; color: #f4f4f5;">
+                      Hi <strong>${safeName}</strong>,
                     </p>
-                    <p style="font-size: 15px; line-height: 1.7; color: #d4d4d8; margin: 0 0 16px 0;">
-                      Thank you for taking the time to write to me! I have received your message regarding <strong style="color: #fbbf24;">&ldquo;${subject}&rdquo;</strong> and will carefully review it.
+                    <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.7; color: #d4d4d8;">
+                      Thank you for visiting my portfolio website and getting in touch! I have received your enquiry regarding <strong style="color: #fbbf24;">&ldquo;${safeSubject}&rdquo;</strong>.
                     </p>
-                    <p style="font-size: 15px; line-height: 1.7; color: #d4d4d8; margin: 0;">
-                      I typically respond within 24 hours. I look forward to connecting with you soon!
+                    <p style="margin: 0; font-size: 14px; line-height: 1.7; color: #d4d4d8;">
+                      I personally review every message and will get back to you promptly, typically within <strong>24 business hours</strong>.
                     </p>
                   </td>
                 </tr>
               </table>
 
-              <!-- Keep Them Hooked Section -->
+              <!-- Inquiry Summary Card -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%; margin-bottom: 20px;">
+                <tr>
+                  <td style="padding: 18px; background-color: #121215; border-radius: 14px; width: 100%;">
+                    <span style="font-size: 10px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; font-family: monospace; display: block; margin-bottom: 12px;">
+                      Submission Details
+                    </span>
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                      <tr>
+                        <td style="padding: 6px 0; font-size: 13px; color: #a1a1aa; width: 120px; vertical-align: top;">Subject:</td>
+                        <td style="padding: 6px 0; font-size: 13px; color: #f4f4f5; font-weight: 600;">${safeSubject}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 6px 0; font-size: 13px; color: #a1a1aa; width: 120px; vertical-align: top;">Your Email:</td>
+                        <td style="padding: 6px 0; font-size: 13px; color: #fbbf24; font-weight: 600;">${safeEmail}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 6px 0; font-size: 13px; color: #a1a1aa; width: 120px; vertical-align: top;">Received At:</td>
+                        <td style="padding: 6px 0; font-size: 13px; color: #d4d4d8; font-family: monospace;">${now}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 6px 0; font-size: 13px; color: #a1a1aa; width: 120px; vertical-align: top;">Status:</td>
+                        <td style="padding: 6px 0; font-size: 13px; color: #10b981; font-weight: 700;">&#10003; Received &amp; In Review</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Direct Contact Information Card -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%; margin-bottom: 24px;">
                 <tr>
-                  <td style="padding: 24px; background-color: #121215; border-radius: 16px; border: 1px solid rgba(251, 191, 36, 0.25); border-left: 4px solid #fbbf24; width: 100%;">
-                    <span style="font-size: 10px; color: #fbbf24; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; font-family: monospace; display: block; margin-bottom: 8px;">
-                      WHILE YOU WAIT
+                  <td style="padding: 20px; background-color: #18181b; border-radius: 14px;width: 100%;">
+                    <span style="font-size: 10px; color: #fbbf24; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; font-family: monospace; display: block; margin-bottom: 12px;">
+                      My Direct Contact Channels
                     </span>
-                    <h2 style="font-size: 18px; font-weight: 700; color: #ffffff; margin: 0 0 10px 0;">
-                      Explore Recent Case Studies &amp; Projects
-                    </h2>
-                    <p style="font-size: 14px; line-height: 1.65; color: #a1a1aa; margin: 0 0 18px 0;">
-                      Feel free to check out my latest work in UX Engineering, Product Design, and Full Stack Web Development on my interactive portfolio.
+                    <p style="margin: 0 0 14px 0; font-size: 13px; color: #a1a1aa; line-height: 1.5;">
+                      If your inquiry is urgent or time-sensitive, feel free to reach out directly via phone or email:
                     </p>
-                    <a href="https://yathishshettigar.site" style="display: inline-block; padding: 12px 22px; background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%); color: #09090b; font-weight: 800; font-size: 13px; text-decoration: none; border-radius: 10px; letter-spacing: 0.5px;">
-                      EXPLORE PORTFOLIO &rarr;
-                    </a>
+
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                      <tr>
+                        <td style="padding: 8px 0; border-top: 1px solid #27272a;">
+                          <span style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 2px;">Direct Email</span>
+                          <a href="mailto:yathish120420@gmail.com" style="font-size: 14px; color: #fbbf24; text-decoration: none; font-weight: 600;">
+                            yathish120420@gmail.com &rarr;
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; border-top: 1px solid #27272a;">
+                          <span style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 2px;">Phone / WhatsApp</span>
+                          <a href="tel:+918296302220" style="font-size: 14px; color: #f4f4f5; text-decoration: none; font-weight: 600;">
+                            +91 8296302220
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; border-top: 1px solid #27272a;">
+                          <span style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 2px;">Location</span>
+                          <span style="font-size: 13px; color: #e4e4e7; font-weight: 500;">
+                            Jayanagar, Bengaluru, Karnataka, India
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; border-top: 1px solid #27272a;">
+                          <span style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 2px;">Portfolio Website</span>
+                          <a href="https://yathishshettigar.site" target="_blank" rel="noopener noreferrer" style="font-size: 13px; color: #fbbf24; text-decoration: none; font-weight: 600;">
+                            https://yathishshettigar.site &rarr;
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
 
-              <!-- Sign-off Section -->
+              <!-- Portfolio Visit CTA Button -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%;">
                 <tr>
-                  <td style="padding: 0 4px;">
-                    <p style="font-size: 14px; color: #a1a1aa; margin: 0 0 4px 0;">
-                      Warm regards,
-                    </p>
-                    <strong style="font-size: 16px; color: #ffffff; font-weight: 700; display: block;">
-                      Yathish Shettigar
-                    </strong>
-                    <strong ><a href="tel:+918296302220" > +91 8296302220</a></strong>
-                    <span style="font-size: 12px; color: #fbbf24; font-family: monospace; display: block; margin-top: 2px;">
-                      Senior UX / Product Engineer &bull; yathish120420@gmail.com
-                    </span>
+                  <td style="width: 100%;">
+                    <a href="https://yathishshettigar.site" target="_blank" rel="noopener noreferrer" style="display: block; width: 100%; text-align: center; padding: 15px 20px; background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%); color: #09090b; font-weight: 800; font-size: 14px; text-decoration: none; border-radius: 12px; box-sizing: border-box; letter-spacing: 0.5px;">
+                      EXPLORE PORTFOLIO &amp; PROJECTS &rarr;
+                    </a>
                   </td>
                 </tr>
               </table>
@@ -288,14 +367,24 @@ export function buildAutoResponseEmailHtml({
             </td>
           </tr>
 
-          <!-- Footer Section with Automated Mail Notice -->
+          <!-- Footer Metadata Section -->
           <tr>
-            <td style="padding: 20px 16px; background-color: #121215; border-top: 1px solid #27272a; text-align: center; width: 100%;">
-              <p style="margin: 0 0 6px 0; font-size: 11px; color: #fbbf24; font-family: monospace; font-weight: 600;">
-                &bull; THIS IS AN AUTOMATED CONFIRMATION EMAIL &bull;
+            <td style="padding: 24px 20px; background-color: #121215; border-top: 1px solid #27272a; text-align: center; width: 100%;">
+              <p style="margin: 0 0 6px 0; font-size: 13px; font-weight: 700; color: #f4f4f5;">
+                Yathish Shettigar
               </p>
-              <p style="margin: 0; font-size: 10px; color: #71717a; line-height: 1.5;">
-                This automated email confirms that your message was successfully received by Yathish Shettigar. Please do not reply directly to this automated notice.
+              <p style="margin: 0 0 12px 0; font-size: 11px; color: #a1a1aa; font-family: monospace;">
+                Senior UX Engineer &amp; Frontend Architect
+              </p>
+              <p style="margin: 0 0 10px 0; font-size: 12px; color: #a1a1aa;">
+                <a href="https://yathishshettigar.site" style="color: #fbbf24; text-decoration: none; margin: 0 8px;">Portfolio</a> &bull;
+                <a href="https://www.linkedin.com/in/yathishshettigar/" style="color: #fbbf24; text-decoration: none; margin: 0 8px;">LinkedIn</a> &bull;
+                <a href="https://github.com/yathish1204" style="color: #fbbf24; text-decoration: none; margin: 0 8px;">GitHub</a> &bull;
+                <a href="mailto:yathish120420@gmail.com" style="color: #fbbf24; text-decoration: none; margin: 0 8px;">Email</a>
+              </p>
+              <p style="margin: 0; font-size: 10px; color: #71717a; line-height: 1.4;">
+                This is an automated confirmation of your enquiry submitted on yathishshettigar.site.<br/>
+                &copy; ${new Date().getFullYear()} Yathish Shettigar. All rights reserved.
               </p>
             </td>
           </tr>
@@ -309,4 +398,3 @@ export function buildAutoResponseEmailHtml({
 </body>
 </html>`;
 }
-

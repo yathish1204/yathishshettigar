@@ -18,6 +18,7 @@ const cspHeader = `
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   productionBrowserSourceMaps: true,
+  serverExternalPackages: ['nodemailer', 'mongoose'],
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 31536000,

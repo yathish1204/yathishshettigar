@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { contactSchema } from "@/services/contact";
+import { contactSchema } from "@/lib/validations/contact";
 import { ContactInput } from "@/types";
 import { Button } from "@/components/Button";
 import { trackEvent } from "@/lib/gtag";
@@ -63,69 +63,25 @@ export function ContactForm() {
       label: data.subject,
     });
 
-    // Construct mailto: direct scheme to open Gmail app on mobile devices
+    // Construct mailto: direct scheme to open Gmail app on mobile devices as fallback
     const mailtoScheme = `mailto:yathish120420@gmail.com?subject=${encodeURIComponent(
       `[Portfolio Inquiry] ${data.subject}`,
     )}&body=${encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`)}`;
 
-    const web3Key =
-      process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
-      "ee76f41c-f4f2-4169-9250-7b8fb0f5cd86";
-    let web3Sent = false;
-
-    // Primary Email Dispatch: Call Web3Forms API directly from browser
-    if (web3Key && !data.botcheck) {
-      try {
-        const web3Res = await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            access_key: web3Key,
-            name: data.name,
-            email: data.email,
-            subject: `[Portfolio Inquiry] ${data.subject} - from ${data.name}`,
-            message: `From: ${data.name} <${data.email}>\n\n${data.message}`,
-            replyto: data.email,
-            "g-recaptcha-response": recaptchaToken || undefined,
-            botcheck: data.botcheck || undefined,
-          }),
-        });
-
-        const web3Result = await web3Res.json();
-        if (web3Res.ok && web3Result.success) {
-          web3Sent = true;
-        } else {
-          console.warn(
-            "Primary Web3Forms client dispatch warning:",
-            web3Result,
-          );
-        }
-      } catch (web3Err) {
-        console.warn(
-          "Web3Forms client fetch error, falling back to backend Resend:",
-          web3Err,
-        );
-      }
-    }
-
     try {
-      // 2. Save message to database & trigger secondary backend fallback (Resend) if Web3Forms failed
+      // Direct backend API submission
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
           recaptchaToken: recaptchaToken || undefined,
-          emailAlreadySent: web3Sent,
         }),
       });
 
       const result = await response.json();
 
-      if ((response.ok && result.success) || web3Sent) {
+      if (response.ok && result.success) {
         setStatus({
           submitting: false,
           success: true,
@@ -142,7 +98,7 @@ export function ContactForm() {
           message:
             result.error?.message ||
             result.message ||
-            "Form error. Opening Mail app...",
+            "Failed to send message. Please click below to email directly.",
           mailtoUrl: mailtoScheme,
         });
         recaptchaRef.current?.reset();
@@ -152,24 +108,13 @@ export function ContactForm() {
       console.error("Contact form submission error:", err);
       recaptchaRef.current?.reset();
       setRecaptchaToken(null);
-      if (web3Sent) {
-        setStatus({
-          submitting: false,
-          success: true,
-          message: `Thank you, ${data.name}! Your message has been sent to yathish120420@gmail.com.`,
-          mailtoUrl: mailtoScheme,
-        });
-        reset();
-      } else {
-        window.location.href = mailtoScheme;
-        setStatus({
-          submitting: false,
-          success: true,
-          message:
-            "Opening Mail app for direct email to yathish120420@gmail.com...",
-          mailtoUrl: mailtoScheme,
-        });
-      }
+      setStatus({
+        submitting: false,
+        success: false,
+        message:
+          "Network error submitting form. Click below to email directly.",
+        mailtoUrl: mailtoScheme,
+      });
     }
   };
 
